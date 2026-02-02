@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../Widget/Button/ActionButton.dart';
+import '../../Widget/Category/CategoryAppDealog.dart';
 import '../../Widget/TablePaginationFooter.dart';
 import '../../Widget/TextFild/CustemDropDownField.dart';
-import '../../Widget/TextFild/DropdownFild.dart';
-import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/TextFild/SearchFild.dart';
+import 'package:chafi_dashboard/data/model/CategoryModel.dart';
+
+import '../../../core/class/handlingview.dart';
+import '../../../core/functions/Dealog.dart';
 
 class Joiningcategoriesapp extends StatefulWidget {
   const Joiningcategoriesapp({super.key});
@@ -19,9 +22,11 @@ class Joiningcategoriesapp extends StatefulWidget {
 }
 
 class _JoiningcategoriesappState extends State<Joiningcategoriesapp> {
+  final ScrollController horizontalController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    Get.create(() =>  Joiningcategoriesappcontroller());
+    Get.create(() => Joiningcategoriesappcontroller());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
@@ -53,119 +58,9 @@ class _JoiningcategoriesappState extends State<Joiningcategoriesapp> {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 800,
-                            padding: const EdgeInsets.all(24),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'إضافة فئة جديدة'.tr,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-
-                                  // الصف الأول: نوع التصريح
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController: controller.typeAr,
-                                          label: 'إسم الفئة بي العربية'.tr,
-                                          hintText: 'إسم الفئة'.tr,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController: controller.typeFr,
-                                          label: 'إسم الفئة بي الفرنسية'.tr,
-                                          hintText: 'إسم الفئة'.tr,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 15),
-
-                                  Dropdownfild(
-                                    label: 'نظام الفئة'.tr,
-                                    hintText: 'إختر نظام الفئة'.tr,
-                                    items: controller.sestemTax
-                                        .map(
-                                          (f) => DropdownMenuItem<int>(
-                                            value: f['key'] as int,
-                                            child: Text(
-                                              f['label'].toString(),
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    value: controller.selectedsestemTax,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        controller.selectedsestemTax = value!;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(height: 15),
-
-                                  // أزرار التحكم
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: Text(
-                                          'cancel'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF6269F2,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 30,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'seve'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        builder: (context) => Categoryappdealog(
+                          mode: Categorydealogmode.add,
+                          controller: controller,
                         ),
                       );
                     },
@@ -220,33 +115,157 @@ class _JoiningcategoriesappState extends State<Joiningcategoriesapp> {
 
                 // الجدول
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width,
-                      ),
+                  child: Handlingview(
+                    statusrequest: controller.statusrequest,
+                    widget: Scrollbar(
+                      controller: horizontalController,
+                      thumbVisibility: true,
+                      trackVisibility: true,
                       child: SingleChildScrollView(
-                        child: DataTable(
-                          headingRowHeight: 50,
-                          dataRowHeight: 60,
-                          headingRowColor: MaterialStateProperty.all(
-                            const Color(0xFFF8F9FA),
+                        controller: horizontalController,
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width,
                           ),
-                          border: TableBorder(
-                            horizontalInside: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
-                            ),
-                            bottom: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              headingRowHeight: 50,
+                              dataRowHeight: 60,
+                              headingRowColor: MaterialStateProperty.all(
+                                const Color(0xFFF8F9FA),
+                              ),
+                              border: TableBorder(
+                                horizontalInside: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 1,
+                                ),
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 1,
+                                ),
+                              ),
+                              columns: buildColumns(),
+                              rows: controller.pagedData.asMap().entries.map((
+                                entry,
+                              ) {
+                                int index = entry.key;
+                                CategoryModel item = entry.value;
+
+                                int realIndex =
+                                    controller.currentPage *
+                                        controller.rowsPerPage +
+                                    index +
+                                    1;
+
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text((realIndex + 1).toString())),
+                                    DataCell(Text(item.localizedName)),
+                                    DataCell(
+                                      Text(
+                                        controller.sestemTax
+                                            .firstWhere(
+                                              (e) => e['key'] == item.taxId,
+                                              orElse: () => {'label': '-'},
+                                            )['label']
+                                            .toString(),
+                                      ),
+                                    ),
+                                    DataCell(
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              await showCustomConfirmationDialog(
+                                                context,
+                                                title: "تنبيه",
+                                                message:
+                                                    "هل أنت متأكد من الحذف؟",
+                                                onConfirmAction: () {
+                                                  controller.deletdata(item.id);
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.setEditData(item);
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    Categoryappdealog(
+                                                      mode: Categorydealogmode
+                                                          .edit,
+                                                      controller: controller,
+                                                      id: item.id,
+                                                    ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.edit,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.setIndexData(item);
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) =>
+                                                    CategoryIndexappDialog(
+                                                      controller: controller,
+                                                      categorymodel: item,
+                                                    ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.amber.shade700,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.swap_vert,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
                             ),
                           ),
-                          columns: buildColumns(),
-                          rows: controller.pagedData
-                              .map((item) => buildDataRow(item))
-                              .toList(),
                         ),
                       ),
                     ),
@@ -311,4 +330,3 @@ class _JoiningcategoriesappState extends State<Joiningcategoriesapp> {
     );
   }
 }
-

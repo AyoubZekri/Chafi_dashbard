@@ -11,204 +11,204 @@ import '../services/Services.dart';
 import 'Statusrequest.dart';
 
 class Crud {
-  Future<Either<Statusrequest, Map>> postDataheaders(
-      String linkurl, Map data) async {
-    try {
-      if (await checkInternet()) {
-        var uri = Uri.parse(linkurl);
-        var request = http.Request("POST", uri);
+  // =========================
+  // Helpers (TOKEN + HEADERS)
+  // =========================
 
-        String? token =
-            Get.find<Myservices>().sharedPreferences?.getString("token");
-
-        Map<String, String> _myheaders = {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          if (token != null) "Authorization": "Bearer $token",
-        };
-        request.headers.addAll(_myheaders);
-
-        request.body = jsonEncode(data);
-
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
-
-        print(response.statusCode);
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          Map responsebody = jsonDecode(response.body);
-          print(responsebody);
-          return Right(responsebody);
-        } else {
-          Map responsebody = jsonDecode(response.body);
-          print("============================$responsebody");
-
-          return const Left(Statusrequest.failure);
-        }
-      } else {
-        return const Left(Statusrequest.serverfailure);
-      }
-    } catch (_) {
-      return const Left(Statusrequest.failure);
-    }
+  String? _getToken() {
+    return Get.find<Myservices>().sharedPreferences?.getString("token");
   }
 
-  Future<Either<Statusrequest, Map>> postDataheadersLogout(
-      String linkurl) async {
-    try {
-      if (await checkInternet()) {
-        var uri = Uri.parse(linkurl);
-        var request = http.Request("POST", uri);
-
-        String? token =
-            Get.find<Myservices>().sharedPreferences?.getString("token");
-
-        Map<String, String> _myheaders = {
-          "Accept": "application/json",
-          if (token != null) "Authorization": "Bearer $token",
-        };
-        request.headers.addAll(_myheaders);
-
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
-
-        print(response.statusCode);
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          Map responsebody = jsonDecode(response.body);
-          print(responsebody);
-          return Right(responsebody);
-        } else {
-          Map responsebody = jsonDecode(response.body);
-          print("============================$responsebody");
-          return const Left(Statusrequest.failure);
-        }
-      } else {
-        return const Left(Statusrequest.serverfailure);
-      }
-    } catch (_) {
-      return const Left(Statusrequest.failure);
-    }
+  Map<String, String> _jsonHeadersWithToken() {
+    final token = _getToken();
+    return {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      if (token != null) "Authorization": "Bearer $token",
+    };
   }
 
-  Future<Either<Statusrequest, Map>> postData(String linkurl, Map data) async {
-    try {
-      if (await checkInternet()) {
-        var response = await http.post(
-          Uri.parse(linkurl),
-          body: data,
-          headers: {
-            'Accept': 'application/json',
-          },
-        );
-
-        print(response.statusCode);
-
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          Map responsebody = jsonDecode(response.body);
-          print(responsebody);
-          return Right(responsebody);
-        } else {
-          Map responsebody = jsonDecode(response.body);
-          print("❌ API Error Response: $responsebody");
-
-          return const Left(Statusrequest.failure);
-        }
-      } else {
-        return const Left(Statusrequest.serverfailure);
-      }
-    } catch (e, stackTrace) {
-      print("❌ Exception caught in Crud: $e");
-      print("🔍 StackTrace: $stackTrace");
-      return const Left(Statusrequest.failure);
-    }
-  }
-
-  Future<Either<Statusrequest, Map>> getData(String linkurl) async {
-    try {
-      if (await checkInternet()) {
-        var uri = Uri.parse(linkurl);
-        var request = http.Request("GET", uri);
-
-        String? token =
-            Get.find<Myservices>().sharedPreferences?.getString("token");
-
-        Map<String, String> _myheaders = {
-          "Accept": "application/json",
-          if (token != null) "Authorization": "Bearer $token",
-        };
-
-        request.headers.addAll(_myheaders);
-
-        var streamedResponse = await request.send();
-        var response = await http.Response.fromStream(streamedResponse);
-
-        print(response.statusCode);
-
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          Map responsebody = jsonDecode(response.body);
-          return Right(responsebody);
-        } else {
-          Map responsebody = jsonDecode(response.body);
-          print(responsebody);
-
-          return const Left(Statusrequest.failure);
-        }
-      } else {
-        return const Left(Statusrequest.serverfailure);
-      }
-    } catch (e) {
-      print("Exception: $e");
-      return const Left(Statusrequest.failure);
-    }
-  }
-
-  Future<Either<Statusrequest, Map>> addRequestWithImageOne(
-      String url, Map data, File? image,
-      [String? namerequest]) async {
-    namerequest ??= "image";
-
-    String? token =
-        Get.find<Myservices>().sharedPreferences?.getString("token");
-
-    Map<String, String> _myheaders = {
+  Map<String, String> _headersWithToken() {
+    final token = _getToken();
+    return {
       "Accept": "application/json",
       if (token != null) "Authorization": "Bearer $token",
     };
+  }
 
-    if (await checkInternet()) {
-      var uri = Uri.parse(url);
-      var request = http.MultipartRequest("POST", uri);
-      request.headers.addAll(_myheaders);
+  // =========================
+  // POST JSON WITH TOKEN
+  // =========================
+
+  Future<Either<Statusrequest, Map>> postWithheaders(
+    String linkurl,
+    Map data,
+  ) async {
+    try {
+      if (!await checkInternet()) {
+        return const Left(Statusrequest.serverfailure);
+      }
+
+      final request = http.Request("POST", Uri.parse(linkurl));
+
+      request.headers.addAll(_jsonHeadersWithToken());
+      request.body = jsonEncode(data);
+
+      final streamed = await request.send();
+      final response = await http.Response.fromStream(streamed);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(jsonDecode(response.body));
+      }
+
+      print("❌ API Error: ${response.body}");
+      return const Left(Statusrequest.failure);
+    } catch (e) {
+      print("❌ Exception postDataheaders: $e");
+      return const Left(Statusrequest.failure);
+    }
+  }
+
+  // =========================
+  // POST LOGOUT (TOKEN ONLY)
+  // =========================
+
+  Future<Either<Statusrequest, Map>> postWithheadersLogout(
+    String linkurl,
+  ) async {
+    try {
+      if (!await checkInternet()) {
+        return const Left(Statusrequest.serverfailure);
+      }
+
+      final request = http.Request("POST", Uri.parse(linkurl));
+
+      request.headers.addAll(_headersWithToken());
+
+      final streamed = await request.send();
+      final response = await http.Response.fromStream(streamed);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(jsonDecode(response.body));
+      }
+
+      print("❌ Logout Error: ${response.body}");
+      return const Left(Statusrequest.failure);
+    } catch (e) {
+      print("❌ Exception postDataheadersLogout: $e");
+      return const Left(Statusrequest.failure);
+    }
+  }
+
+  // =========================
+  // POST WITHOUT TOKEN
+  // =========================
+
+  Future<Either<Statusrequest, Map>> postWithout(
+    String linkurl,
+    Map data,
+  ) async {
+    try {
+      if (!await checkInternet()) {
+        return const Left(Statusrequest.serverfailure);
+      }
+
+      final response = await http.post(
+        Uri.parse(linkurl),
+        headers: {"Accept": "application/json"},
+        body: data,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(jsonDecode(response.body));
+      }
+
+      print("❌ API Error: ${response.body}");
+      return const Left(Statusrequest.failure);
+    } catch (e, s) {
+      print("❌ Exception postData: $e");
+      print("🔍 $s");
+      return const Left(Statusrequest.failure);
+    }
+  }
+
+  // =========================
+  // GET WITH TOKEN
+  // =========================
+
+  Future<Either<Statusrequest, Map>> getWithheaders(String linkurl) async {
+    try {
+      if (!await checkInternet()) {
+        return const Left(Statusrequest.serverfailure);
+      }
+
+      final request = http.Request("GET", Uri.parse(linkurl));
+
+      request.headers.addAll(_headersWithToken());
+
+      final streamed = await request.send();
+      final response = await http.Response.fromStream(streamed);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return Right(jsonDecode(response.body));
+      }
+
+      print("❌ GET Error: ${response.body}");
+      return const Left(Statusrequest.failure);
+    } catch (e) {
+      print("❌ Exception getData: $e");
+      return const Left(Statusrequest.failure);
+    }
+  }
+
+  // =========================
+  // POST MULTIPART WITH TOKEN
+  // =========================
+
+  Future<Either<Statusrequest, Map>> addRequestWithImageOne(
+    String url,
+    Map data,
+    int type,
+    File? image, [
+    String? namerequest,
+  ]) async {
+    type == 1 ? namerequest ??= "pdf" : namerequest ??= "image";
+
+    try {
+      if (!await checkInternet()) {
+        return const Left(Statusrequest.serverfailure);
+      }
+
+      final request = http.MultipartRequest("POST", Uri.parse(url));
+
+      request.headers.addAll(_headersWithToken());
 
       if (image != null) {
-        var length = await image.length();
-        var stream = http.ByteStream(image.openRead());
-        stream.cast();
-        var multipartFile = http.MultipartFile(
-          namerequest,
-          stream,
-          length,
-          filename: basename(image.path),
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            namerequest,
+            image.path,
+            filename: basename(image.path),
+          ),
         );
-        request.files.add(multipartFile);
       }
 
       data.forEach((key, value) {
         request.fields[key] = value.toString();
       });
 
-      var myrequest = await request.send();
-      var response = await http.Response.fromStream(myrequest);
+      final streamed = await request.send();
+      final response = await http.Response.fromStream(streamed);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        print(response.body);
-        Map responsebody = jsonDecode(response.body);
-        return Right(responsebody);
-      } else {
-        print("Server failure: ${response.statusCode} - ${response.body}");
-        return const Left(Statusrequest.failure);
+        return Right(jsonDecode(response.body));
       }
-    } else {
-      return const Left(Statusrequest.serverfailure);
+
+      print("❌ Multipart Error: ${response.statusCode} - ${response.body}");
+      return const Left(Statusrequest.failure);
+    } catch (e) {
+      print("❌ Exception addRequestWithImageOne: $e");
+      return const Left(Statusrequest.failure);
     }
   }
 }

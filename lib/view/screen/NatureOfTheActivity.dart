@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/NatureoftheactivityController.dart';
+import '../../core/class/handlingview.dart';
+import '../../core/functions/Dealog.dart';
+import '../../data/model/NatureoftheactivityModel.dart';
 import '../Widget/Button/ActionButton.dart';
+import '../Widget/Natureoftheactivity/CstuemNatureoftheactivityDealog.dart';
+import '../Widget/Natureoftheactivity/CustemEditindexnatureoftheactivity.dart';
 import '../Widget/TablePaginationFooter.dart';
 import '../Widget/TextFild/CustemDropDownField.dart';
-import '../Widget/TextFild/LabeledTextField.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Natureoftheactivity extends StatefulWidget {
@@ -18,6 +22,8 @@ class Natureoftheactivity extends StatefulWidget {
 }
 
 class _NatureoftheactivityState extends State<Natureoftheactivity> {
+  final ScrollController horizontalController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     Get.create(() => Natureoftheactivitycontroller());
@@ -53,84 +59,9 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 800,
-                            padding: const EdgeInsets.all(24),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'add_new'.tr,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-
-                                  CustemtextfromfildInfoUser(
-                                    myController: controller.namear,
-                                    label: "name_ar".tr,
-                                    hintText: 'enter_name_here'.tr,
-                                  ),
-
-                                  const SizedBox(height: 15),
-                                  CustemtextfromfildInfoUser(
-                                    myController: controller.namefr,
-                                    label: "name_fr".tr,
-                                    hintText: 'enter_name_here'.tr,
-                                  ),
-                                  const SizedBox(height: 30),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: Text(
-                                          'cancel'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF6269F2,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 30,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'save'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        builder: (context) => NatureoftheactivityDialog(
+                          mode: NatureoftheactivityDialogMode.add,
+                          controller: controller,
                         ),
                       );
                     },
@@ -186,38 +117,161 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
 
                 // الجدول
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width,
-                      ),
-                      child: SingleChildScrollView(
-                        child: DataTable(
-                          headingRowHeight: 50,
-                          dataRowHeight: 60,
-                          headingRowColor: MaterialStateProperty.all(
-                            const Color(0xFFF8F9FA),
-                          ),
-                          border: TableBorder(
-                            horizontalInside: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
+                  child: Handlingview(
+                    statusrequest: controller.statusrequest,
+                    widget: Scrollbar(
+                    controller: horizontalController,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    child: SingleChildScrollView(
+                      controller: horizontalController,
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width,
+                        ),
+                        child: SingleChildScrollView(
+                          child: DataTable(
+                            headingRowHeight: 50,
+                            dataRowHeight: 60,
+                            headingRowColor: MaterialStateProperty.all(
+                              const Color(0xFFF8F9FA),
                             ),
-                            bottom: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
+                            border: TableBorder(
+                              horizontalInside: BorderSide(
+                                color: Colors.grey.shade200,
+                                width: 1,
+                              ),
+                              bottom: BorderSide(
+                                color: Colors.grey.shade200,
+                                width: 1,
+                              ),
                             ),
+                            columns: buildColumns(),
+                            rows: controller.pagedData.asMap().entries.map((
+                              entry,
+                            ) {
+                              int index = entry.key;
+                              Natureoftheactivitymodel item = entry.value;
+
+                              int realIndex =
+                                  controller.currentPage *
+                                      controller.rowsPerPage +
+                                  index +
+                                  1;
+
+                              return DataRow(
+                                cells: [
+                                  DataCell(Text((realIndex + 1).toString())),
+                                  DataCell(Text(item.localizedName)),
+                                  DataCell(
+                                    Text(
+                                      item.createdAt.toString().substring(
+                                        0,
+                                        10,
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    Row(
+                                      children: [
+                                        InkWell(
+                                          onTap: () async {
+                                            await showCustomConfirmationDialog(
+                                              context,
+                                              title: "تنبيه",
+                                              message: "هل أنت متأكد من الحذف؟",
+                                              onConfirmAction: () {
+                                                controller.deletdata(item.id);
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: const Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        InkWell(
+                                          onTap: () {
+                                            controller.setEditData(item);
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  NatureoftheactivityDialog(
+                                                    mode:
+                                                        NatureoftheactivityDialogMode
+                                                            .edit,
+                                                    controller: controller,
+                                                    id: item.id,
+                                                  ),
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: const Icon(
+                                              Icons.edit,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        ),
+
+                                        const SizedBox(width: 10),
+                                        InkWell(
+                                          onTap: () {
+                                            controller.setIndexData(item);
+                                            showDialog(
+                                              context: context,
+                                              builder: (_) =>
+                                                  Custemeditindexnatureoftheactivity(
+                                                    controller: controller,
+                                                    law: item,
+                                                  ),
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color: Colors.amber.shade700,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: const Icon(
+                                              Icons.swap_vert,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
                           ),
-                          columns: buildColumns(),
-                          rows: controller.pagedData
-                              .map((item) => buildDataRow(item))
-                              .toList(),
                         ),
                       ),
                     ),
                   ),
+                  ),
                 ),
+             
                 TablePaginationFooter(
                   currentPage: controller.currentPage,
                   rowsPerPage: controller.rowsPerPage,
@@ -243,39 +297,4 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
       DataColumn(label: Text('actions'.tr)),
     ];
   }
-
-  DataRow buildDataRow(Map<String, String> item) {
-    return DataRow(
-      cells: [
-        DataCell(Text(item['id']!)),
-        DataCell(Text(item['name']!)),
-        DataCell(Text(item['created_at']!)),
-        DataCell(
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.delete, color: Colors.white, size: 18),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.edit, color: Colors.white, size: 18),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
-
-// Pagination Footer

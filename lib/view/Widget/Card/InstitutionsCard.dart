@@ -10,6 +10,7 @@ class InstitutionsCard extends StatelessWidget {
   final bool buttomcare;
   final String creationDate;
   final VoidCallback? onEdit;
+  final VoidCallback? onEditindex;
   final VoidCallback? onDelete;
 
   const InstitutionsCard({
@@ -20,6 +21,7 @@ class InstitutionsCard extends StatelessWidget {
     required this.isActiveLaw,
     required this.creationDate,
     this.onEdit,
+    this.onEditindex,
     this.onDelete,
     this.buttomcare = true,
   });
@@ -51,6 +53,8 @@ class InstitutionsCard extends StatelessWidget {
                     if (onEdit != null) onEdit!();
                   } else if (value == 'delete') {
                     if (onDelete != null) onDelete!();
+                  } else if (value == 'editindex') {
+                    if (onEditindex != null) onEditindex!();
                   }
                 },
                 itemBuilder: (context) => [
@@ -67,6 +71,26 @@ class InstitutionsCard extends StatelessWidget {
                         Text(
                           'Edit',
                           style: TextStyle(color: Colors.blue, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'editindex',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.swap_vert,
+                          size: 16,
+                          color: Colors.amber.shade700,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'Edit index',
+                          style: TextStyle(
+                            color: Colors.amber.shade700,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),

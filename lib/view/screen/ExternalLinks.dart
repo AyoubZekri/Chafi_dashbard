@@ -1,13 +1,16 @@
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
+import 'package:chafi_dashboard/data/model/DifferantModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/ExternallinksController.dart';
+import '../../core/class/handlingview.dart';
+import '../../core/functions/Dealog.dart';
 import '../Widget/Button/ActionButton.dart';
+import '../Widget/Externallink/CustemActivitysDealog.dart';
 import '../Widget/TablePaginationFooter.dart';
 import '../Widget/TextFild/CustemDropDownField.dart';
-import '../Widget/TextFild/LabeledTextField.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Externallinks extends StatefulWidget {
@@ -18,6 +21,8 @@ class Externallinks extends StatefulWidget {
 }
 
 class _ExternallinksState extends State<Externallinks> {
+  final ScrollController horizontalController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     Get.create(() => ExternallinkscontrollerImp());
@@ -53,101 +58,9 @@ class _ExternallinksState extends State<Externallinks> {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 800,
-                            padding: const EdgeInsets.all(24),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'إضافة رابط جديد'.tr,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController: controller.namear,
-                                          label: 'إسم الموقع بالعربية'.tr,
-                                          hintText: 'إدخل إسم الموقع هنا'.tr,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController: controller.namefr,
-                                          label: 'إسم الموقع بالفرنسية'.tr,
-                                          hintText: 'إدخل إسم الموقع هنا'.tr,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  const SizedBox(height: 15),
-
-                                  // الصف الثالث: التبعيات
-                                  CustemtextfromfildInfoUser(
-                                    myController: controller.link,
-                                    label: 'الرابط'.tr,
-                                    hintText: 'أدخل الرابط هنا'.tr,
-                                  ),
-
-                                  const SizedBox(height: 30),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: Text(
-                                          'cancel'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF6269F2,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 30,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'save'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        builder: (context) => Externallinkdealog(
+                          mode: ExternallinkdealogMode.add,
+                          controller: controller,
                         ),
                       );
                     },
@@ -203,33 +116,157 @@ class _ExternallinksState extends State<Externallinks> {
 
                 // الجدول
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width,
-                      ),
+                  child: Handlingview(
+                    statusrequest: controller.statusrequest,
+                    widget: Scrollbar(
+                      controller: horizontalController,
+                      thumbVisibility: true,
+                      trackVisibility: true,
                       child: SingleChildScrollView(
-                        child: DataTable(
-                          headingRowHeight: 50,
-                          dataRowHeight: 60,
-                          headingRowColor: MaterialStateProperty.all(
-                            const Color(0xFFF8F9FA),
+                        controller: horizontalController,
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width,
                           ),
-                          border: TableBorder(
-                            horizontalInside: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
-                            ),
-                            bottom: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              headingRowHeight: 50,
+                              dataRowHeight: 60,
+                              headingRowColor: MaterialStateProperty.all(
+                                const Color(0xFFF8F9FA),
+                              ),
+                              border: TableBorder(
+                                horizontalInside: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 1,
+                                ),
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 1,
+                                ),
+                              ),
+                              columns: buildColumns(),
+                              rows: controller.pagedData.asMap().entries.map((
+                                entry,
+                              ) {
+                                int index = entry.key;
+                                DifferentsModel item = entry.value;
+
+                                int realIndex =
+                                    controller.currentPage *
+                                        controller.rowsPerPage +
+                                    index +
+                                    1;
+
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text((realIndex + 1).toString())),
+                                    DataCell(Text(item.localizedName)),
+                                    DataCell(Text(item.indexLink)),
+                                    DataCell(
+                                      Text(
+                                        item.createdAt.toString().substring(
+                                          0,
+                                          10,
+                                        ),
+                                      ),
+                                    ),
+                                    DataCell(
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              await showCustomConfirmationDialog(
+                                                context,
+                                                title: "تنبيه",
+                                                message:
+                                                    "هل أنت متأكد من الحذف؟",
+                                                onConfirmAction: () {
+                                                  controller.deletdata(item.id);
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.setEditData(item);
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    Externallinkdealog(
+                                                      mode:
+                                                          ExternallinkdealogMode
+                                                              .edit,
+                                                      controller: controller,
+                                                      id: item.id,
+                                                    ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.edit,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.setIndexData(item);
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) =>
+                                                    ExternallinkdealogIndexDialog(
+                                                      controller: controller,
+                                                      appointmentsmodel: item,
+                                                    ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.amber.shade700,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.swap_vert,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
                             ),
                           ),
-                          columns: buildColumns(),
-                          rows: controller.pagedData
-                              .map((item) => buildDataRow(item))
-                              .toList(),
                         ),
                       ),
                     ),

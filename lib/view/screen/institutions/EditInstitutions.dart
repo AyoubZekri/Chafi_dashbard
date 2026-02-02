@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../controller/Institutions/AddinstitutionsController.dart';
 import '../../../controller/Institutions/EditinstitutionsController.dart';
+import '../../../core/class/Statusrequest.dart';
 import '../../../core/constant/Colorapp.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
@@ -58,7 +58,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                     children: [
                       Expanded(
                         child: CustemtextfromfildInfoUser(
-                          myController: controller.titlear,
+                          myController: controller.titleAr,
                           label: "title_ar".tr,
                           hintText: "enter_title_here".tr,
                         ),
@@ -66,7 +66,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                       SizedBox(width: 24),
                       Expanded(
                         child: CustemtextfromfildInfoUser(
-                          myController: controller.titlefr,
+                          myController: controller.titleFr,
                           label: "title_fr".tr,
                           hintText: "enter_title_here".tr,
                         ),
@@ -80,7 +80,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                     children: [
                       Expanded(
                         child: CustemtextfromfildInfoUser(
-                          myController: controller.infoar,
+                          myController: controller.infoAr,
                           label: "content_ar".tr,
                           hintText: "enter_content_here".tr,
                           maxLines: 5,
@@ -89,7 +89,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                       SizedBox(width: 20),
                       Expanded(
                         child: CustemtextfromfildInfoUser(
-                          myController: controller.infofr,
+                          myController: controller.infoFr,
                           label: "content_fr".tr,
                           hintText: "enter_content_here".tr,
                           maxLines: 5,
@@ -120,10 +120,10 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                 ),
                               )
                               .toList(),
-                      value: controller.selectedCalculator,
+                      value: controller.selectedInstitutions,
                       onChanged: (val) {
                         setState(() {
-                          controller.selectedCalculator = val;
+                          controller.selectedInstitutions = val;
                         });
                       },
                     ),
@@ -145,7 +145,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                     Dropdownfild(
                       label: "choose_calculator".tr,
                       hintText: "choose_calculator".tr,
-                      items: controller.calcelators
+                      items: controller.calculators
                           .map(
                             (f) => DropdownMenuItem<int>(
                               value: f['key'] as int,
@@ -184,12 +184,12 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                           child: Dropdownfild(
                             label: "law_label".tr,
                             hintText: "law_hint".tr,
-                            items: controller.law
+                            items: controller.laws
                                 .map(
                                   (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
+                                    value: f.id,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f.name.toString(),
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -207,7 +207,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                         Expanded(
                           flex: 1,
                           child: CustemtextfromfildInfoUser(
-                            myController: controller.numperindex,
+                            myController: controller.numPerIndex,
                             label: "page_number".tr,
                             hintText: "مثال: 145",
                           ),
@@ -221,14 +221,26 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.editData();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2D62ED),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
+                      child:controller.statusRequest ==
+                              Statusrequest.loadeng
+                          ? const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
                         "save".tr,
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),

@@ -169,6 +169,7 @@ class MyTranslation extends Translations {
       "sign_up": "إنشاء حساب",
       "new_on_platform": "جديد في منصتنا؟",
       "create_account": "إنشاء حساب",
+      "classement": "التصنيف",
     },
 
     ///////////////////////////////////////
@@ -350,6 +351,7 @@ class MyTranslation extends Translations {
       "sign_in": "Se connecter",
       "already_have_account": "Vous avez déjà un compte ?",
       "sign_in_instead": "Connectez-vous à la place",
+      "classement": "classement",
     },
   };
 }

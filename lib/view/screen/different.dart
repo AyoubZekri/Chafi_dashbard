@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/controller/Different/AddDifferentController.dart';
+import 'package:chafi_dashboard/controller/Different/EditDifferentController.dart';
 import 'package:chafi_dashboard/controller/NavigationBarcontroller.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/view/screen/Different/AddDifferent.dart';
@@ -8,8 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/DifferentController.dart';
+import '../../core/class/handlingview.dart';
+import '../../core/functions/Dealog.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/Card/InstitutionsCard.dart';
+import '../Widget/Differente/CustemDifferentedealog.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Different extends StatefulWidget {
@@ -96,31 +100,65 @@ class _DifferentState extends State<Different> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 0.55, // تناسب الطول مع العرض
-                        ),
-                    itemCount: 6,
-                    itemBuilder: (context, index) => InstitutionsCard(
-                      onEdit: () {
-                        Get.find<NavigationBarcontrollerImp>().changeSubPage(
-                          99,
-                          () => Editdifferent(),
+                  child: Handlingview(
+                    statusrequest: controller.statusrequest,
+                    widget: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 0.6,
+                          ),
+                      itemCount: controller.filteredData.length,
+                      itemBuilder: (context, index) {
+                        final item = controller.filteredData[index];
+                        return InstitutionsCard(
+                          onEdit: () {
+                            final controller = Get.put(
+                              EditdifferentcontrollerImp(),
+                              permanent: true,
+                            );
+                            controller.fillDataFromModel(item);
+                            Get.find<NavigationBarcontrollerImp>()
+                                .changeSubPage(99, () => Editdifferent());
+                          },
+                          onDelete: () async {
+                            await showCustomConfirmationDialog(
+                              context,
+                              title: "تنبيه",
+                              message: "هل أنت متأكد من الحذف؟",
+                              onConfirmAction: () {
+                                controller.deletLaw(item.id);
+                              },
+                            );
+                          },
+                          onEditindex: () {
+                            controller.setIndexData(item);
+                            showDialog(
+                              context: context,
+                              builder: (_) => Custemdifferentedealog(
+                                controller: controller,
+                                law: item,
+                              ),
+                            );
+                          },
+                          title:item.localizedName,
+                          info: item.localizedBody,
+                          isActiveCalculator: item.calcul != null,
+                          isActiveLaw: item.lawId != null,
+                          creationDate: item.updatedAt.toString().substring(
+                            0,
+                            10,
+                          ),
                         );
                       },
-                      title: "1_كيف تُحتسب الجباية السنوية للمؤسسات:",
-                      info:
-                          "تُعدّ الجباية السنوية من أهم الالتزامات التي يجب على كل مؤسسة احترامها، سواء كانت صغيرة، متوسطة، أو كبيرة. فهم طريقة حساب الجباية يجنّب المؤسسات الأخطاء والغرامات ويُساعدها على التخطيط المالي بشكل أفضل. في هذا المقال، نقدّم شرحًا مبسّطًا وواضحًا لكيفية احتساب الجباية السنوية وفق أهم المبادئ العامة.",
-                      isActiveCalculator: true,
-                      isActiveLaw: false,
-                      creationDate: '',
                     ),
+                    iconData: Icons.error,
+                    title: "حدث خطأ أثناء تحميل البيانات",
                   ),
                 ),
+          
               ],
             ),
           );

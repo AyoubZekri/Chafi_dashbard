@@ -3,6 +3,7 @@ import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/class/Statusrequest.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
@@ -143,12 +144,12 @@ class _AdddifferentState extends State<Adddifferent> {
                           child: Dropdownfild(
                             label: "law_label".tr,
                             hintText: "law_hint".tr,
-                            items: controller.law
+                            items: controller.data
                                 .map(
                                   (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
+                                    value: f.id,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f.localizedName.toString(),
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -178,17 +179,31 @@ class _AdddifferentState extends State<Adddifferent> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.adddata();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2D62ED),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
-                        "save".tr,
-                        style: const TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                      child: controller.statusrequest == Statusrequest.loadeng
+                          ? const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              "save".tr,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
                     ),
                   ),
                 ],

@@ -1,68 +1,54 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'Snacpar.dart';
-
-validInput(String val, int max, int min, String type) {
-  if (Type == 'username') {
-    if (GetUtils.isUsername(val)) {
-      return "not valid username";
-    }
-  }
-  if (Type == 'Email') {
-    if (GetUtils.isUsername(val)) {
-      return "not valid Email";
-    }
-  }
-  if (Type == 'phone') {
-    if (GetUtils.isUsername(val)) {
-      return "not valid phone".tr;
-    }
-  }
+/// Validation function
+/// [val] : القيمة  
+/// [min] : الحد الأدنى للطول  
+/// [max] : الحد الأقصى للطول  
+/// [type] : نوع الحقل: 'username', 'email', 'phone', 'text', 'number'
+String? validateInput(String val, int min, int max, String type) {
   if (val.isEmpty) {
-    return "Can't be Empty".tr;
-  }
-
-  if (val.length > max) {
-    return "${"Can't be larger than".tr} $max";
-  }
-  if (val.length < min) {
-    return "${"Can't be less than".tr} $min";
-  }
-}
-
-bool validInputsnak(String val, int min, int max, String type) {
-  if (val.isEmpty) {
-    showSnackbar("error".tr, "لا يمكن أن يكون الحقل فارغًا".tr, Colors.red);
-    return false;
-  }
-
-  if (val.length > max) {
-    showSnackbar(
-        "error".tr, "${'لا يمكن أن يكون حقل'.tr} $type ${'أطول من'.tr} $max ${'حرف'.tr}", Colors.red);
-    return false;
+    return "الحقل لا يمكن أن يكون فارغًا".tr;
   }
 
   if (val.length < min) {
-    showSnackbar(
-        "error".tr, "${'لا يمكن أن يكون حقل'.tr} $type ${'أقل من'.tr}  $min ${'حرف'.tr}", Colors.red);
-    return false;
+    return "الحقل يجب أن يكون على الأقل $min حرفًا".tr;
   }
 
-  if (type == 'username' && !GetUtils.isUsername(val)) {
-    showSnackbar("error".tr, "اسم المستخدم غير صالح".tr, Colors.red);
-    return false;
+  if (val.length > max) {
+    return "الحقل يجب ألا يزيد عن $max حرفًا".tr;
   }
 
-  if (type == 'email' && !GetUtils.isEmail(val)) {
-    showSnackbar("error".tr, "البريد الإلكتروني غير صالح".tr, Colors.red);
-    return false;
+  switch (type.toLowerCase()) {
+    case 'username':
+      if (!GetUtils.isUsername(val)) {
+        return "اسم المستخدم غير صالح".tr;
+      }
+      break;
+
+    case 'email':
+      if (!GetUtils.isEmail(val)) {
+        return "البريد الإلكتروني غير صالح".tr;
+      }
+      break;
+
+    case 'phone':
+      if (!GetUtils.isPhoneNumber(val)) {
+        return "رقم الهاتف غير صالح".tr;
+      }
+      break;
+
+    case 'number':
+      if (int.tryParse(val) == null) {
+        return "يجب أن يكون رقماً صحيحاً".tr;
+      }
+      break;
+
+    case 'text':
+    default:
+      // أي نص عادي
+      break;
   }
 
-  if (type == 'phone' && !GetUtils.isPhoneNumber(val)) {
-    showSnackbar("error".tr, "رقم الهاتف غير صالح".tr, Colors.red);
-    return false;
-  }
-
-  return true;
+  // null = لا يوجد خطأ
+  return null;
 }

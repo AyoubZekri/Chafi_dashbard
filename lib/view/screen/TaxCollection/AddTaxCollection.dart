@@ -100,21 +100,21 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                     Dropdownfild(
                       label: "الفئة".tr,
                       hintText: "إختر الفئة".tr,
-                      items: controller.categores
+                      items: controller.category
                           .map(
                             (f) => DropdownMenuItem<int>(
-                              value: f['key'] as int,
+                              value: f.id,
                               child: Text(
-                                f['label'].toString(),
+                                f.localizedName.toString(),
                                 style: const TextStyle(fontSize: 14),
                               ),
                             ),
                           )
                           .toList(),
-                      value: controller.selectedCalculator,
+                      value: controller.selectedCategory,
                       onChanged: (val) {
                         setState(() {
-                          controller.selectedCalculator = val;
+                          controller.selectedCategory = val;
                         });
                       },
                     ),
@@ -212,7 +212,9 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.adddata();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2D62ED),
                         shape: RoundedRectangleBorder(

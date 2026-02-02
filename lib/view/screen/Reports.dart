@@ -1,8 +1,6 @@
-import 'package:chafi_dashboard/controller/Different/AddDifferentController.dart';
-import 'package:chafi_dashboard/controller/NavigationBarcontroller.dart';
+import 'package:chafi_dashboard/LinkApi.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
-import 'package:chafi_dashboard/core/constant/imageassets.dart';
-import 'package:chafi_dashboard/view/screen/Different/AddDifferent.dart';
+import 'package:chafi_dashboard/view/Widget/Post/PostDealog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +9,6 @@ import '../../controller/ReportsController.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/Card/CustemPost.dart';
 import '../Widget/Card/CustemShwoDealog.dart';
-import '../Widget/TextFild/LabeledTextField.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Reports extends StatefulWidget {
@@ -70,181 +67,9 @@ class _ReportsState extends State<Reports> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Container(
-                              width: 800,
-                              padding: const EdgeInsets.all(24),
-                              child: GetBuilder<ReportscontrollerImp>(
-                                builder: (controller) {
-                                  return SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'إضافة تقرير جديد'.tr,
-                                          style: const TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                            horizontal: 30,
-                                          ),
-                                          height: 250,
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: AppColor.white,
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                            border: Border.all(width: 2),
-                                          ),
-                                          child: controller.file == null
-                                              ? MaterialButton(
-                                                  onPressed: () {
-                                                    controller
-                                                        .uploadimagefile();
-                                                  },
-                                                  child: Text("اضافة صورة".tr),
-                                                )
-                                              : Stack(
-                                                  children: [
-                                                    Center(
-                                                      child: SizedBox(
-                                                        height: 120,
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                10,
-                                                              ),
-                                                          child: Image.file(
-                                                            controller.file!,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Positioned(
-                                                      bottom: 5,
-                                                      right: 5,
-                                                      child: IconButton(
-                                                        icon: const Icon(
-                                                          Icons.edit,
-                                                          color: Colors.white,
-                                                        ),
-                                                        onPressed: () {
-                                                          controller
-                                                              .uploadimagefile();
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                        ),
-
-                                        const SizedBox(height: 20),
-
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                // myController: controller.,
-                                                label: 'title_ar'.tr,
-                                                hintText: 'title_hint'.tr,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                // myController: controller.namefr,
-                                                label: 'title_fr'.tr,
-                                                hintText: 'title_hint'.tr,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        const SizedBox(height: 15),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                maxLines: 3,
-                                                // myController: controller.namear,
-                                                label:
-                                                    'الحتوى بالغة العربية'.tr,
-                                                hintText: 'أدخل المحتوى هنا'.tr,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                maxLines: 3,
-                                                // myController: controller.namefr,
-                                                label:
-                                                    'الحتوى بالغة الفرنسية'.tr,
-                                                hintText: 'أدخل المحتوى هنا'.tr,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        // الصف الثالث: التبعيات
-                                        const SizedBox(height: 30),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () => Get.back(),
-                                              child: Text(
-                                                'cancel'.tr,
-                                                style: const TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: const Color(
-                                                  0xFF6269F2,
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 30,
-                                                      vertical: 12,
-                                                    ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              onPressed: () {},
-                                              child: Text(
-                                                'save'.tr,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                          builder: (context) => PostDialog(
+                            mode: PostDialogMode.add,
+                            controller: controller,
                           ),
                         );
                       },
@@ -276,26 +101,50 @@ class _ReportsState extends State<Reports> {
                           crossAxisCount: 3,
                           crossAxisSpacing: 20,
                           mainAxisSpacing: 20,
-                          childAspectRatio: 0.75,
+                          childAspectRatio: 0.65,
                         ),
-                    itemCount: 6,
+                    itemCount: controller.filteredData.length,
                     itemBuilder: (context, index) {
                       return ReportPostCard(
-                        title: controller.reportsData[index]['title']!,
+                        title: controller.filteredData[index].localizedTitle,
                         description:
-                            controller.reportsData[index]['description']!,
-                        imageUrl: Appimageassets.one,
-                        createdAt: controller.reportsData[index]['created_at']!,
-                        onEdit: () {},
-                        onDelete: () {},
+                            controller.filteredData[index].localizedBody,
+                        imageUrl:
+                            "${Applink.image}${controller.filteredData[index].image}",
+                        createdAt: controller.filteredData[index].createdAt
+                            .toString()
+                            .substring(0, 10),
+                        onEdit: () {
+                          controller.setEditData(
+                            controller.filteredData[index],
+                          );
+
+                          showDialog(
+                            context: context,
+                            builder: (context) => PostDialog(
+                              mode: PostDialogMode.edit,
+                              controller: controller,
+                              id: controller.filteredData[index].id,
+                            ),
+                          );
+                        },
+                        onDelete: () {
+                          controller.deletdata(
+                            controller.filteredData[index].id,
+                          );
+                        },
                         onShwo: () {
                           showReportDialog(
                             context: context,
-                            title: controller.reportsData[index]['title']!,
+                            title:
+                                controller.filteredData[index].localizedTitle,
                             description:
-                                controller.reportsData[index]['description']!,
-                            imageUrl: Appimageassets.one,
-                            createdAt: '2026-01-05',
+                                controller.filteredData[index].localizedBody,
+                            imageUrl:
+                                "${Applink.image}${controller.filteredData[index].image}",
+                            createdAt: controller.filteredData[index].createdAt
+                                .toString()
+                                .substring(0, 10),
                           );
                         },
                       );

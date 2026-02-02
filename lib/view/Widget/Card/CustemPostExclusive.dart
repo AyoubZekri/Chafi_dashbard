@@ -30,9 +30,9 @@ class Custempostexclusive extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
+              child: Image.network(
                 imageUrl,
-                fit: BoxFit.cover, // تملأ الكارد كامل
+                fit: BoxFit.contain,
                 errorBuilder: (_, __, ___) => Container(
                   color: Colors.grey.shade200,
                   child: const Icon(Icons.image, size: 40, color: Colors.grey),

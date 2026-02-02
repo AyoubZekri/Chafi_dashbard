@@ -36,13 +36,13 @@ class ReportPostCard extends StatelessWidget {
           // الصورة
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
+            child: Image.network(
               imageUrl,
-              height: 180,
+              height: 250,
               width: double.infinity,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => Container(
-                height: 180,
+                height: 250,
                 color: Colors.grey.shade200,
                 child: const Icon(Icons.image, size: 40, color: Colors.grey),
               ),

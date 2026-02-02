@@ -17,7 +17,7 @@ class Editapp extends StatefulWidget {
 class _EditappState extends State<Editapp> {
   @override
   Widget build(BuildContext context) {
-    Get.create(() =>  EditappcontrollerImp());
+    Get.create(() => EditappcontrollerImp());
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       body: GetBuilder<EditappcontrollerImp>(
@@ -100,21 +100,21 @@ class _EditappState extends State<Editapp> {
                   Dropdownfild(
                     label: "الفئة".tr,
                     hintText: "إختر الفئة".tr,
-                    items: controller.categores
+                    items: controller.category
                         .map(
                           (f) => DropdownMenuItem<int>(
-                            value: f['key'] as int,
+                            value: f.id,
                             child: Text(
-                              f['label'].toString(),
+                              f.localizedName.toString(),
                               style: const TextStyle(fontSize: 14),
                             ),
                           ),
                         )
                         .toList(),
-                    value: controller.selectedCalculator,
+                    value: controller.selectedCategory,
                     onChanged: (val) {
                       setState(() {
-                        controller.selectedCalculator = val;
+                        controller.selectedCategory = val;
                       });
                     },
                   ),
@@ -175,12 +175,12 @@ class _EditappState extends State<Editapp> {
                           child: Dropdownfild(
                             label: "law_label".tr,
                             hintText: "law_hint".tr,
-                            items: controller.law
+                            items: controller.datalaw
                                 .map(
                                   (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
+                                    value: f.id,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f.localizedName.toString(),
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),

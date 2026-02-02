@@ -23,11 +23,11 @@ class ReportPostDialogContent extends StatelessWidget {
         // الصورة
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: Image.asset(
+          child: Image.network(
             imageUrl,
-            height: 220,
+            height: 300,
             width: double.infinity,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
 
@@ -63,10 +63,7 @@ class ReportPostDialogContent extends StatelessWidget {
               // التاريخ
               Text(
                 'تاريخ النشر : $createdAt',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade500,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
               ),
             ],
           ),

@@ -1,15 +1,16 @@
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
+import 'package:chafi_dashboard/data/model/AppointmentsModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/AppointmentscommitmentsController.dart';
+import '../../core/class/handlingview.dart';
+import '../../core/functions/Dealog.dart';
+import '../Widget/Appointments/AppointmentsDealog.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/TablePaginationFooter.dart';
-import '../Widget/TextFild/CustemDatePickerInfoUser.dart';
 import '../Widget/TextFild/CustemDropDownField.dart';
-import '../Widget/TextFild/DropdownFild.dart';
-import '../Widget/TextFild/LabeledTextField.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Appointmentscommitments extends StatefulWidget {
@@ -21,6 +22,8 @@ class Appointmentscommitments extends StatefulWidget {
 }
 
 class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
+  final ScrollController horizontalController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     Get.create(() => AppointmentscommitmentscontrollerImp());
@@ -56,160 +59,9 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            width: 800,
-                            padding: const EdgeInsets.all(24),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'add_new_commitment'.tr,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-
-                                  // الصف الأول: نوع التصريح
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController: controller.typeAr,
-                                          label: 'type_ar'.tr,
-                                          hintText: 'type_hint_ar'.tr,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController: controller.typeFr,
-                                          label: 'type_fr'.tr,
-                                          hintText: 'type_hint_fr'.tr,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 15),
-
-                                  Dropdownfild(
-                                    label: 'system_tax'.tr,
-                                    hintText: 'system_tax_hint'.tr,
-                                    items: controller.sestemTax
-                                        .map(
-                                          (f) => DropdownMenuItem<int>(
-                                            value: f['key'] as int,
-                                            child: Text(
-                                              f['label'].toString(),
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    value: controller.selectedsestemTax,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        controller.selectedsestemTax = value!;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(height: 15),
-
-                                  CustemDatePickerInfoUser(
-                                    label: 'deadline'.tr,
-                                    hintText: 'deadline_hint'.tr,
-                                    myController: controller.deadline,
-                                    context: context,
-                                  ),
-                                  const SizedBox(height: 15),
-
-                                  // الصف الثالث: التبعيات
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController:
-                                              controller.consequencesAr,
-                                          label: 'consequences_ar'.tr,
-                                          hintText: 'ماذا يحدث عند التأخير؟',
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      Expanded(
-                                        child: CustemtextfromfildInfoUser(
-                                          myController:
-                                              controller.consequencesFr,
-                                          label: 'consequences_fr'.tr,
-                                          hintText: 'consequences_fr'.tr,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 15),
-
-                                  CustemDatePickerInfoUser(
-                                    label: 'notice_date'.tr,
-                                    hintText: 'notice_date_hint'.tr,
-                                    myController: controller.noticeDate,
-                                    context: context,
-                                  ),
-
-                                  const SizedBox(height: 30),
-
-                                  // أزرار التحكم
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: Text(
-                                          'cancel'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF6269F2,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 30,
-                                            vertical: 12,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
-                                        ),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'add_commitment'.tr,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                        builder: (context) => Appointmentsdealog(
+                          mode: AppointmentsdealogMode.add,
+                          controller: controller,
                         ),
                       );
                     },
@@ -265,33 +117,163 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
 
                 // الجدول
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width,
-                      ),
+                  child: Handlingview(
+                    statusrequest: controller.statusrequest,
+                    widget: Scrollbar(
+                      controller: horizontalController,
+                      thumbVisibility: true,
+                      trackVisibility: true,
                       child: SingleChildScrollView(
-                        child: DataTable(
-                          headingRowHeight: 50,
-                          dataRowHeight: 60,
-                          headingRowColor: MaterialStateProperty.all(
-                            const Color(0xFFF8F9FA),
+                        controller: horizontalController,
+                        scrollDirection: Axis.horizontal,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width,
                           ),
-                          border: TableBorder(
-                            horizontalInside: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
-                            ),
-                            bottom: BorderSide(
-                              color: Colors.grey.shade200,
-                              width: 1,
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              headingRowHeight: 50,
+                              dataRowHeight: 60,
+                              headingRowColor: MaterialStateProperty.all(
+                                const Color(0xFFF8F9FA),
+                              ),
+                              border: TableBorder(
+                                horizontalInside: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 1,
+                                ),
+                                bottom: BorderSide(
+                                  color: Colors.grey.shade200,
+                                  width: 1,
+                                ),
+                              ),
+                              columns: buildColumns(),
+                              rows: controller.pagedData.asMap().entries.map((
+                                entry,
+                              ) {
+                                int index = entry.key;
+                                Appointmentsmodel item = entry.value;
+
+                                int realIndex =
+                                    controller.currentPage *
+                                        controller.rowsPerPage +
+                                    index +
+                                    1;
+
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text((realIndex + 1).toString())),
+                                    DataCell(Text(item.declaration)),
+                                    DataCell(
+                                      Text(
+                                        controller.sestemTax
+                                            .firstWhere(
+                                              (e) => e['key'] == item.taxId,
+                                              orElse: () => {'label': '-'},
+                                            )['label']
+                                            .toString(),
+                                      ),
+                                    ),
+
+                                    DataCell(Text(item.deadline)),
+                                    DataCell(Text(item.dependencies)),
+                                    DataCell(Text(item.noticeDate)),
+
+                                    DataCell(
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              await showCustomConfirmationDialog(
+                                                context,
+                                                title: "تنبيه",
+                                                message:
+                                                    "هل أنت متأكد من الحذف؟",
+                                                onConfirmAction: () {
+                                                  controller.deletdata(item.id);
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.setEditData(item);
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    Appointmentsdealog(
+                                                      mode:
+                                                          AppointmentsdealogMode
+                                                              .edit,
+                                                      controller: controller,
+                                                      id: item.id,
+                                                    ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.edit,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.setIndexData(item);
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) =>
+                                                    AppointmentsIndexDialog(
+                                                      controller: controller,
+                                                      appointmentsmodel: item,
+                                                    ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.amber.shade700,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.swap_vert,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
                             ),
                           ),
-                          columns: buildColumns(),
-                          rows: controller.pagedData
-                              .map((item) => buildDataRow(item))
-                              .toList(),
                         ),
                       ),
                     ),
@@ -318,46 +300,12 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
     return [
       DataColumn(label: Text("#")),
       DataColumn(label: Text('declaration_type'.tr)),
+      DataColumn(label: Text('نوع النضام'.tr)),
       DataColumn(label: Text('deadline'.tr)),
       DataColumn(label: Text('consequences'.tr)),
       DataColumn(label: Text('notice_date'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];
-  }
-
-  DataRow buildDataRow(Map<String, String> item) {
-    return DataRow(
-      cells: [
-        DataCell(Text(item['id']!)),
-        DataCell(Text(item['type']!)),
-        DataCell(Text(item['deadline']!)),
-        DataCell(Text(item['consequences']!)),
-        DataCell(Text(item['notice_date']!)),
-        DataCell(
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.delete, color: Colors.white, size: 18),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.edit, color: Colors.white, size: 18),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }
 

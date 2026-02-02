@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controller/Institutions/AddinstitutionsController.dart';
+import '../../../core/class/Statusrequest.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
@@ -121,10 +122,10 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                 ),
                               )
                               .toList(),
-                      value: controller.selectedCalculator,
+                      value: controller.selectedinstitutions,
                       onChanged: (val) {
                         setState(() {
-                          controller.selectedCalculator = val;
+                          controller.selectedinstitutions = val;
                         });
                       },
                     ),
@@ -185,12 +186,12 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                           child: Dropdownfild(
                             label: "law_label".tr,
                             hintText: "law_hint".tr,
-                            items: controller.law
+                            items: controller.data
                                 .map(
                                   (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
+                                    value: f.id,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f.name.toString(),
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -222,14 +223,26 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.adddata();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2D62ED),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Text(
+                      child:controller.statusrequest ==
+                              Statusrequest.loadeng
+                          ? const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
                         "save".tr,
                         style: TextStyle(color: Colors.white, fontSize: 18),
                       ),

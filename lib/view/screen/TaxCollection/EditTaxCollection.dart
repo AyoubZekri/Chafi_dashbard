@@ -100,21 +100,21 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                   Dropdownfild(
                     label: "الفئة".tr,
                     hintText: "إختر الفئة".tr,
-                    items: controller.categores
+                    items: controller.category
                         .map(
                           (f) => DropdownMenuItem<int>(
-                            value: f['key'] as int,
+                            value: f.id,
                             child: Text(
-                              f['label'].toString(),
+                              f.localizedName.toString(),
                               style: const TextStyle(fontSize: 14),
                             ),
                           ),
                         )
                         .toList(),
-                    value: controller.selectedCalculator,
+                    value: controller.selectedCategory,
                     onChanged: (val) {
                       setState(() {
-                        controller.selectedCalculator = val;
+                        controller.selectedCategory = val;
                       });
                     },
                   ),
@@ -175,12 +175,12 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                           child: Dropdownfild(
                             label: "law_label".tr,
                             hintText: "law_hint".tr,
-                            items: controller.law
+                            items: controller.datalaw
                                 .map(
                                   (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
+                                    value: f.id,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f.localizedName.toString(),
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -212,7 +212,7 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {controller.editdata();},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2D62ED),
                         shape: RoundedRectangleBorder(

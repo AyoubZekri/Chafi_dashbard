@@ -1,8 +1,7 @@
-import 'package:chafi_dashboard/core/constant/Colorapp.dart';
+import 'package:chafi_dashboard/core/constant/imageassets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/NavigationBarcontroller.dart';
-import '../../core/constant/imageassets.dart';
 
 class SidebarWidget extends StatelessWidget {
   const SidebarWidget({super.key});
@@ -96,7 +95,6 @@ class SidebarWidget extends StatelessWidget {
                           ),
                         ),
 
-                        // 🔵 Indicator ملتصق بآخر Sidebar
                         Positioned(
                           left: Get.locale == Locale("ar") ? -2 : null,
                           right: Get.locale == Locale("fr") ? -2 : null,
@@ -287,7 +285,7 @@ class TopBar extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       leading: const CircleAvatar(
                         radius: 20,
-                        backgroundImage: AssetImage("assets/images/avatar.png"),
+                        backgroundImage: AssetImage(Appimageassets.avater),
                       ),
                       title: const Text(
                         "John Doe",
@@ -313,7 +311,7 @@ class TopBar extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage("assets/images/avatar.png"),
+                  backgroundImage: AssetImage(Appimageassets.avater),
                 ),
                 Positioned(
                   bottom: 0,

@@ -1,20 +1,129 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:chafi_dashboard/data/datasource/Remote/institution.dart';
+
+import '../core/class/Statusrequest.dart';
+import '../core/functions/Snacpar copy.dart';
+import '../core/functions/handlingdatacontroller.dart';
+import '../core/services/Services.dart';
+import '../data/model/InstitutionModel.dart';
 
 abstract class Regulatedcontroller extends GetxController {}
 
 class RegulatedcontrollerImp extends Regulatedcontroller {
+  String currentLang = Get.locale?.languageCode ?? 'ar';
+
+  late TextEditingController index;
+  late TextEditingController searchController;
   int selectedFilter = 0;
 
   final List<Map<String, Object>> filters = [
     {'key': 0, 'label': "all".tr},
-    {'key': 1, 'label': "filter_innovative".tr},
-    {'key': 2, 'label': "filter_startup".tr},
-    {'key': 3, 'label': "filter_incubator".tr},
+    {'key': 6, 'label': "filter_innovative".tr},
+    {'key': 7, 'label': "filter_startup".tr},
+    {'key': 8, 'label': "filter_incubator".tr},
   ];
+
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
+
+  InstitutionData institutionData = InstitutionData(Get.find());
+  Myservices myServices = Get.find();
+  Statusrequest statusrequest = Statusrequest.none;
+
+  List<InstitutionModel> data = [];
+  List<InstitutionModel> filteredData = [];
+
+  Future<void> viewdata() async {
+    statusrequest = Statusrequest.loadeng;
+    update();
+    final dat = {"scope": selectedFilter, "type_institution": 2};
+
+    var response = await institutionData.viewdata(dat);
+    print("Response: $response");
+
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        data.clear();
+        List listdata = response['data'];
+        data.addAll(listdata.map((e) => InstitutionModel.fromJson(e)));
+        filteredData = List.from(data);
+        if (filteredData.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
+        print("==========================$filteredData");
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
+    }
+
+    update();
+  }
+
+  void search(String query) {
+    if (query.isEmpty) {
+      filteredData = List.from(data);
+    } else {
+      filteredData = data
+          .where(
+            (element) =>
+                element.title.toLowerCase().contains(query.toLowerCase()) ||
+                (element.body.toLowerCase().contains(query.toLowerCase())),
+          )
+          .toList();
+    }
+    update();
+  }
+
+  void editindex(int id) async {
+    if (formState.currentState!.validate()) {
+      statusrequest = Statusrequest.loadeng;
+      update();
+      Map data = {"id": id, "index": index.text};
+      var response = await institutionData.editdata(data);
+      print("=====================================$response");
+      statusrequest = handlingData(response);
+      if (Statusrequest.success == statusrequest) {
+        if (response["status"] == 1) {
+          index.clear();
+          Get.back();
+          viewdata();
+        } else {
+          statusrequest = Statusrequest.failure;
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> deletLaw(int id) async {
+    statusrequest = Statusrequest.loadeng;
+    update();
+
+    var response = await institutionData.deletdata({"id": id.toString()});
+    statusrequest = handlingData(response);
+    if (statusrequest == Statusrequest.success && response["status"] == 1) {
+      data = data.where((element) => element.id != id).toList();
+      update();
+
+      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+    } else {
+      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+    }
+  }
+
+  void setIndexData(InstitutionModel item) {
+    index.text = item.index.toString();
+  }
 
   @override
   void onInit() {
-    print("Regulated");
+    index = TextEditingController();
+    searchController = TextEditingController();
+    viewdata();
+    print("Institutions");
     super.onInit();
   }
 }

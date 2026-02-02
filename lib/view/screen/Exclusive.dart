@@ -1,13 +1,14 @@
+import 'package:chafi_dashboard/LinkApi.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
-import 'package:chafi_dashboard/core/constant/imageassets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/ReportsController.dart';
+import '../../controller/Exclusivecontroller.dart';
+import '../../core/class/handlingview.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/Card/CustemPostExclusive.dart';
-import '../Widget/TextFild/LabeledTextField.dart';
+import '../Widget/Post/PostDealog.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Exclusive extends StatefulWidget {
@@ -20,10 +21,10 @@ class Exclusive extends StatefulWidget {
 class _ExclusiveState extends State<Exclusive> {
   @override
   Widget build(BuildContext context) {
-    Get.create(() => ReportscontrollerImp());
+    Get.create(() => Exclusivecontroller());
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: GetBuilder<ReportscontrollerImp>(
+      body: GetBuilder<Exclusivecontroller>(
         builder: (controller) {
           return Container(
             padding: const EdgeInsets.all(24.0),
@@ -66,181 +67,9 @@ class _ExclusiveState extends State<Exclusive> {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (context) => Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Container(
-                              width: 800,
-                              padding: const EdgeInsets.all(24),
-                              child: GetBuilder<ReportscontrollerImp>(
-                                builder: (controller) {
-                                  return SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'إضافة تقرير جديد'.tr,
-                                          style: const TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(
-                                            horizontal: 30,
-                                          ),
-                                          height: 250,
-                                          width: 300,
-                                          decoration: BoxDecoration(
-                                            color: AppColor.white,
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                            border: Border.all(width: 2),
-                                          ),
-                                          child: controller.file == null
-                                              ? MaterialButton(
-                                                  onPressed: () {
-                                                    controller
-                                                        .uploadimagefile();
-                                                  },
-                                                  child: Text("اضافة صورة".tr),
-                                                )
-                                              : Stack(
-                                                  children: [
-                                                    Center(
-                                                      child: SizedBox(
-                                                        height: 120,
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                10,
-                                                              ),
-                                                          child: Image.file(
-                                                            controller.file!,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Positioned(
-                                                      bottom: 5,
-                                                      right: 5,
-                                                      child: IconButton(
-                                                        icon: const Icon(
-                                                          Icons.edit,
-                                                          color: Colors.white,
-                                                        ),
-                                                        onPressed: () {
-                                                          controller
-                                                              .uploadimagefile();
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                        ),
-
-                                        const SizedBox(height: 20),
-
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                // myController: controller.,
-                                                label: 'title_ar'.tr,
-                                                hintText: 'title_hint'.tr,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                // myController: controller.namefr,
-                                                label: 'title_fr'.tr,
-                                                hintText: 'title_hint'.tr,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        const SizedBox(height: 15),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                maxLines: 3,
-                                                // myController: controller.namear,
-                                                label:
-                                                    'الحتوى بالغة العربية'.tr,
-                                                hintText: 'أدخل المحتوى هنا'.tr,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            Expanded(
-                                              child: CustemtextfromfildInfoUser(
-                                                maxLines: 3,
-                                                // myController: controller.namefr,
-                                                label:
-                                                    'الحتوى بالغة الفرنسية'.tr,
-                                                hintText: 'أدخل المحتوى هنا'.tr,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        // الصف الثالث: التبعيات
-                                        const SizedBox(height: 30),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () => Get.back(),
-                                              child: Text(
-                                                'cancel'.tr,
-                                                style: const TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: const Color(
-                                                  0xFF6269F2,
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 30,
-                                                      vertical: 12,
-                                                    ),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                              onPressed: () {},
-                                              child: Text(
-                                                'save'.tr,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                          builder: (context) => PostImgDialog(
+                            mode: PostDialogMode.add,
+                            controller: controller,
                           ),
                         );
                       },
@@ -266,22 +95,39 @@ class _ExclusiveState extends State<Exclusive> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 1.7,
-                        ),
-                    itemCount: 6,
-                    itemBuilder: (context, index) {
-                      return Custempostexclusive(
-                        imageUrl: Appimageassets.one,
-                        onEdit: () {},
-                        onDelete: () {},
-                      );
-                    },
+                  child: Handlingview(
+                    statusrequest: controller.statusrequest,
+                    widget: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 1.7,
+                          ),
+                      itemCount: controller.data.length,
+                      itemBuilder: (context, index) {
+                        return Custempostexclusive(
+                          imageUrl:
+                              "${Applink.image}${controller.data[index].image}",
+                          onEdit: () {
+                            controller.setEditData(controller.data[index]);
+
+                            showDialog(
+                              context: context,
+                              builder: (context) => PostImgDialog(
+                                mode: PostDialogMode.edit,
+                                controller: controller,
+                                id: controller.data[index].id,
+                              ),
+                            );
+                          },
+                          onDelete: () {
+                            controller.deletdata(controller.data[index].id);
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
