@@ -53,4 +53,12 @@ class Applink {
   static const String taxAndAppadd = "$server/TaxAndApp/add";
   static const String taxAndAppedit = "$server/TaxAndApp/Edit";
   static const String taxAndAppdelet = "$server/TaxAndApp/Delete";
+  static const String usersShow = "$server/User/Show";
+
+  static const String login = "$server/login";
+  static const String signIn = "$server/Register";
+  static const String logout = "$server/logout";
+  static const String resetPassword = "$server/admin/ResetPassword";
+
+
 }

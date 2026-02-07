@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../controller/Exclusivecontroller.dart';
 import '../../../core/class/Statusrequest.dart';
 import '../../../core/constant/Colorapp.dart';
+import '../../../core/functions/valiedinput.dart';
 import '../TextFild/LabeledTextField.dart';
 
 class PostDialog extends StatefulWidget {
@@ -120,6 +121,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlear1,
                         label: 'title_ar'.tr,
                         hintText: 'title_hint'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -130,6 +132,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlefr1,
                         label: 'title_fr'.tr,
                         hintText: 'title_hint'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                   ],
@@ -146,6 +149,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlear2,
                         label: 'title_ar2'.tr,
                         hintText: 'title_hint'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -156,6 +160,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlefr2,
                         label: 'title_fr2'.tr,
                         hintText: 'title_hint'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                   ],
@@ -174,6 +179,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.infoar,
                         label: 'الحتوى بالغة العربية'.tr,
                         hintText: 'أدخل المحتوى هنا'.tr,
+                        valid: (val) =>validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -185,6 +191,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.infofr,
                         label: 'الحتوى بالغة الفرنسية'.tr,
                         hintText: 'أدخل المحتوى هنا'.tr,
+                        valid: (val) =>validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                   ],
@@ -292,7 +299,7 @@ class _PostImgDialogState extends State<PostImgDialog> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                isEdit ? 'تعديل'.tr : 'إضافة حصري جديد'.tr,
+                isEdit ? 'edit'.tr : 'إضافة حصري جديد'.tr,
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,

@@ -37,7 +37,7 @@ class Externallinkdealog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  isEdit ? "edit" : 'إضافة رابط جديد'.tr,
+                  isEdit ? "edit".tr : 'إضافة رابط جديد'.tr,
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -54,6 +54,7 @@ class Externallinkdealog extends StatelessWidget {
                             : controller.namear,
                         label: 'إسم الموقع بالعربية'.tr,
                         hintText: 'إدخل إسم الموقع هنا'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -64,6 +65,7 @@ class Externallinkdealog extends StatelessWidget {
                             : controller.namefr,
                         label: 'إسم الموقع بالفرنسية'.tr,
                         hintText: 'إدخل إسم الموقع هنا'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                   ],
@@ -76,6 +78,7 @@ class Externallinkdealog extends StatelessWidget {
                   myController: isEdit ? controller.editlink : controller.link,
                   label: 'الرابط'.tr,
                   hintText: 'أدخل الرابط هنا'.tr,
+                  valid: (val) =>validateInput(val!, 5, 500, "link") ,
                 ),
 
                 const SizedBox(height: 30),
@@ -165,7 +168,7 @@ class ExternallinkdealogIndexDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'تعديل الترتيب',
+                'تعديل الترتيب'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

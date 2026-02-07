@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:chafi_dashboard/data/datasource/Remote/Differentdata.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
@@ -47,15 +48,17 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
   List<LawModel> data = [];
 
   Future<void> editdata() async {
-    // if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
 
     if (isLawActive == true && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+
       return;
     }
 
     if (isCalculatorActive == true && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red );
+      
       return;
     }
 
@@ -102,7 +105,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
-      Get.find<NavigationBarcontrollerImp>().changePage(6);
+      Get.find<NavigationBarcontrollerImp>().changePage(7);
     } else {
       statusrequest = Statusrequest.failure;
     }
@@ -142,8 +145,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
     infoar.text = model.body;
     titlefr.text = model.titleFr;
     infofr.text = model.bodyFr;
-    numperindex.text = model.indexLink ;
-
+    numperindex.text = model.indexLink;
 
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive

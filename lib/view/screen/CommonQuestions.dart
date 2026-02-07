@@ -112,8 +112,8 @@ class _CommonquestionsState extends State<Commonquestions> {
                           onDelete: () async {
                             await showCustomConfirmationDialog(
                               context,
-                              title: "تنبيه",
-                              message: "هل أنت متأكد من الحذف؟",
+                              title: "تنبيه".tr,
+                              message: "هل أنت متأكد من الحذف؟".tr,
                               onConfirmAction: () {
                                 controller.deletLaw(item.id);
                               },

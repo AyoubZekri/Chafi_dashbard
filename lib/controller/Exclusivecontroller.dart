@@ -16,6 +16,7 @@ class Exclusivecontroller extends GetxController {
   String? editfile;
 
   Postdata postdata = Postdata(Get.find());
+
   Myservices myServices = Get.find();
   Statusrequest statusrequest = Statusrequest.none;
   List<PostModel> data = [];
@@ -48,6 +49,7 @@ class Exclusivecontroller extends GetxController {
   }
 
   Future<void> adddata() async {
+
     statusrequest = Statusrequest.loadeng;
 
     var response = await postdata.adddata({'type': '2'}, file!);
@@ -76,9 +78,9 @@ class Exclusivecontroller extends GetxController {
       data = data.where((element) => element.id != id).toList();
       update();
 
-      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
-      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
     }
   }
 

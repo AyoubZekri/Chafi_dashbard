@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../controller/Exclusivecontroller.dart';
 import '../../core/class/handlingview.dart';
+import '../../core/functions/Dealog.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/Card/CustemPostExclusive.dart';
 import '../Widget/Post/PostDealog.dart';
@@ -122,8 +123,15 @@ class _ExclusiveState extends State<Exclusive> {
                               ),
                             );
                           },
-                          onDelete: () {
-                            controller.deletdata(controller.data[index].id);
+                          onDelete: () async {
+                            await showCustomConfirmationDialog(
+                              context,
+                              title: "تنبيه".tr,
+                              message: "هل أنت متأكد من الحذف؟".tr,
+                              onConfirmAction: () {
+                                controller.deletdata(controller.data[index].id);
+                              },
+                            );
                           },
                         );
                       },

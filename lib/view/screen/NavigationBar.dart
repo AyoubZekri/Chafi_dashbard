@@ -1,7 +1,11 @@
 import 'package:chafi_dashboard/core/constant/imageassets.dart';
+import 'package:chafi_dashboard/core/services/Services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/NavigationBarcontroller.dart';
+import '../../core/constant/Colorapp.dart';
+import '../../core/functions/valiedinput.dart';
+import '../Widget/TextFild/CustemTextFildAuth.dart';
 
 class SidebarWidget extends StatelessWidget {
   const SidebarWidget({super.key});
@@ -227,9 +231,10 @@ class MainLayout extends StatelessWidget {
 
 class TopBar extends StatelessWidget {
   const TopBar({super.key});
-
   void changeLang(String code) {
     Get.updateLocale(Locale(code));
+
+    Get.find<Myservices>().sharedPreferences?.setString("lang", code);
   }
 
   @override
@@ -303,9 +308,32 @@ class TopBar extends StatelessWidget {
                   ],
                 ),
               ),
-              // خيارات القائمة
-              _buildProfileItem(Icons.person_outline, "reest password"),
-              _buildProfileItem(Icons.power_settings_new, "Log Out"),
+              PopupMenuItem(
+                enabled: false,
+                child: _buildProfileButton(
+                  icon: Icons.person_outline,
+                  title: "Reset password",
+                  onPressed: () {
+                    Get.back();
+
+                    Get.dialog(
+                      Center(child: resetpassword()),
+                      barrierDismissible: true,
+                    );
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                enabled: false,
+                child: _buildProfileButton(
+                  icon: Icons.power_settings_new,
+                  title: "Log Out",
+                  onPressed: () {
+                    Get.back();
+                    Get.find<NavigationBarcontrollerImp>().logout();
+                  },
+                ),
+              ),
             ],
             child: Stack(
               children: [
@@ -334,40 +362,238 @@ class TopBar extends StatelessWidget {
     );
   }
 
-  // دالة مساعدة لبناء عناصر القائمة بشكل موحد
-  PopupMenuItem _buildProfileItem(
-    IconData icon,
-    String title, {
+  Widget _buildProfileButton({
+    required IconData icon,
+    required String title,
+    VoidCallback? onPressed,
     String? badge,
   }) {
-    return PopupMenuItem(
-      child: Row(
-        children: [
-          Icon(icon, color: const Color(0xFF6F6B7D), size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(color: Color(0xFF6F6B7D), fontSize: 15),
-            ),
-          ),
-          if (badge != null)
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
+    return InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+        child: Row(
+          children: [
+            Icon(icon, color: const Color(0xFF6F6B7D), size: 20),
+            const SizedBox(width: 12),
+            Expanded(
               child: Text(
-                badge,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
+                title,
+                style: const TextStyle(color: Color(0xFF6F6B7D), fontSize: 15),
+              ),
+            ),
+            if (badge != null)
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  badge,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class resetpassword extends StatelessWidget {
+  resetpassword({super.key});
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: GetBuilder<NavigationBarcontrollerImp>(
+        builder: (controller) {
+          return Container(
+            width: 450,
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(40),
+
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // الشعار (Logo)
+                      Center(
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(Appimageassets.logo),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+
+                      Text(
+                        "لإعادة كلمة السر".tr,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5D596C),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "يجب إدخال البريد الإلكتروني صحيح".tr,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF6F6B7D),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Text(
+                        "email_label".tr,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5D596C),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Custemtextfildauth(
+                        myController: controller.email,
+                        hintText: "enter_email_here".tr,
+                        iconData: Icons.email_outlined,
+                        keyboardType: TextInputType.emailAddress,
+                        valid: (val) => validateInput(val!, 0, 300, "email"),
+                      ),
+                      const SizedBox(height: 20),
+
+                      Text(
+                        "password_label".tr,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5D596C),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Custemtextfildauth(
+                        myController: controller.password,
+                        hintText: "enter_password".tr,
+                        obscureText: controller.issobscureText,
+                        iconData: controller.issobscureText == true
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        onTap: () {
+                          controller.showPassword();
+                        },
+                        valid: (val) => validateInput(val!, 6, 100, "text"),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        "تأكيد كلمة السر".tr,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF5D596C),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Custemtextfildauth(
+                        myController: controller.confirmPassword,
+                        hintText: "enter_password".tr,
+                        obscureText: controller.issobscureText2,
+                        iconData: controller.issobscureText2 == true
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        onTap: () {
+                          controller.showPassword2();
+                        },
+                        valid: (val) => validateInput(val!, 6, 100, "text"),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.typography,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 2,
+                          ),
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) return;
+                            controller.reset();
+                          },
+                          child: Text(
+                            "تاكيد".tr,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.typography,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 2,
+                          ),
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "عودة".tr,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-        ],
+          );
+        },
       ),
     );
   }

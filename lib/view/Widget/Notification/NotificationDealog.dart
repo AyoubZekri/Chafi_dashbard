@@ -1,11 +1,10 @@
-import 'package:chafi_dashboard/controller/ExternallinksController.dart';
-import 'package:chafi_dashboard/data/model/DifferantModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/NotificationController.dart';
 import '../../../core/class/Statusrequest.dart';
+import '../../../core/functions/valiedinput.dart';
 import '../TextFild/CustemDatePickerInfoUser.dart';
 import '../TextFild/DropdownFild.dart';
 import '../TextFild/LabeledTextField.dart';
@@ -63,6 +62,7 @@ class _NotificationdealogState extends State<Notificationdealog> {
                             : widget.controller.namear,
                         label: 'title_ar'.tr,
                         hintText: 'title_hint'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -73,6 +73,7 @@ class _NotificationdealogState extends State<Notificationdealog> {
                             : widget.controller.namefr,
                         label: 'title_fr'.tr,
                         hintText: 'title_hint'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                   ],
@@ -91,6 +92,7 @@ class _NotificationdealogState extends State<Notificationdealog> {
                             : widget.controller.bodyar,
                         label: 'الحتوى بالغة العربية'.tr,
                         hintText: 'أدخل المحتوى هنا'.tr,
+                      valid: (val) =>validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -102,6 +104,7 @@ class _NotificationdealogState extends State<Notificationdealog> {
                             : widget.controller.bodyfr,
                         label: 'الحتوى بالغة الفرنسية'.tr,
                         hintText: 'أدخل المحتوى هنا'.tr,
+                      valid: (val) =>validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                   ],

@@ -179,9 +179,9 @@ class _NotificationState extends State<NotificationBar> {
                                             onTap: () async {
                                               await showCustomConfirmationDialog(
                                                 context,
-                                                title: "تنبيه",
+                                                title: "تنبيه".tr,
                                                 message:
-                                                    "هل أنت متأكد من الحذف؟",
+                                                    "هل أنت متأكد من الحذف؟".tr,
                                                 onConfirmAction: () {
                                                   controller.deletdata(item.id);
                                                 },
@@ -290,39 +290,6 @@ class _NotificationState extends State<NotificationBar> {
     ];
   }
 
-  DataRow buildDataRow(Map<String, String> item) {
-    return DataRow(
-      cells: [
-        DataCell(Text(item['id']!)),
-        DataCell(Text(item['title']!)),
-        DataCell(Text(item['content']!)),
-        DataCell(Text(item['system']!)),
-        DataCell(
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.delete, color: Colors.white, size: 18),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Icon(Icons.edit, color: Colors.white, size: 18),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 // Pagination Footer

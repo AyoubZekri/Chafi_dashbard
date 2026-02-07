@@ -31,7 +31,7 @@ class Custemdifferentedealog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'تعديل الترتيب',
+                'تعديل الترتيب'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -46,9 +46,7 @@ class Custemdifferentedealog extends StatelessWidget {
                 hintText: 'classement'.tr,
                 valid: (val) => validateInput(val!, 1, 6, "number"),
               ),
-
               const SizedBox(height: 25),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

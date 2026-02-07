@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
@@ -56,15 +57,16 @@ class AddinstitutionscontrollerImp extends GetxController {
   ];
 
   Future<void> adddata() async {
-    // if (!formState.currentState!.validate()) return;
+     if (!formState.currentState!.validate()) return;
 
     if (isLawActive == true && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+      
       return;
     }
 
     if (isCalculatorActive == true && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red);
       return;
     }
 

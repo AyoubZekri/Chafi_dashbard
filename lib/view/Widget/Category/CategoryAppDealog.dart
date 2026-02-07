@@ -60,6 +60,7 @@ class _CategoryappdealogState extends State<Categoryappdealog> {
                             : widget.controller.titleAr,
                         label: 'إسم الفئة بي العربية'.tr,
                         hintText: 'إسم الفئة'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -70,6 +71,7 @@ class _CategoryappdealogState extends State<Categoryappdealog> {
                             : widget.controller.titleFr,
                         label: 'إسم الفئة بي الفرنسية'.tr,
                         hintText: 'إسم الفئة'.tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                   ],
@@ -190,7 +192,7 @@ class CategoryIndexappDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'تعديل الترتيب',
+                'تعديل الترتيب'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

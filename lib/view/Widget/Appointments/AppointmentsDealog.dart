@@ -46,7 +46,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  isEdit ? "edit" : 'add_new_commitment'.tr,
+                  isEdit ? "edit".tr : 'add_new_commitment'.tr,
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -64,6 +64,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                             : widget.controller.typeAr,
                         label: 'type_ar'.tr,
                         hintText: 'type_hint_ar'.tr,
+                        valid: (val) => validateInput(val!, 2, 100, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -74,6 +75,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                             : widget.controller.typeFr,
                         label: 'type_fr'.tr,
                         hintText: 'type_hint_fr'.tr,
+                        valid: (val) => validateInput(val!, 2, 100, "text"),
                       ),
                     ),
                   ],
@@ -127,6 +129,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                             : widget.controller.consequencesAr,
                         label: 'consequences_ar'.tr,
                         hintText: "consequences_ar".tr,
+                        valid: (val) => validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -137,6 +140,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                             : widget.controller.consequencesFr,
                         label: 'consequences_fr'.tr,
                         hintText: 'consequences_fr'.tr,
+                        valid: (val) => validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                   ],
@@ -239,7 +243,7 @@ class AppointmentsIndexDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'تعديل الترتيب',
+                'تعديل الترتيب'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

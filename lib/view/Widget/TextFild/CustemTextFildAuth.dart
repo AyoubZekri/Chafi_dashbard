@@ -10,6 +10,8 @@ class Custemtextfildauth extends StatelessWidget {
   final bool? obscureText;
   final IconData iconData;
   final void Function()? onTap;
+  final String? Function(String?) valid;
+
   const Custemtextfildauth({
     super.key,
     required this.hintText,
@@ -19,6 +21,7 @@ class Custemtextfildauth extends StatelessWidget {
     this.maxLines,
     required this.iconData,
     this.onTap,
+    required this.valid,
   });
 
   @override
@@ -31,6 +34,7 @@ class Custemtextfildauth extends StatelessWidget {
               ? false
               : true,
           controller: myController,
+          validator: valid,
           keyboardType: keyboardType,
           maxLines: maxLines ?? 1,
           style: const TextStyle(

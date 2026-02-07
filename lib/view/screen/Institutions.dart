@@ -164,8 +164,8 @@ class _InstitutionsState extends State<Institutions> {
                           onDelete: () async {
                             await showCustomConfirmationDialog(
                               context,
-                              title: "تنبيه",
-                              message: "هل أنت متأكد من الحذف؟",
+                              title: "تنبيه".tr,
+                              message: "هل أنت متأكد من الحذف؟".tr,
                               onConfirmAction: () {
                                 Get.find<InstitutionscontrollerImp>().deletLaw(
                                   item.id,
@@ -199,7 +199,7 @@ class _InstitutionsState extends State<Institutions> {
                       },
                     ),
                     iconData: Icons.error,
-                    title: "حدث خطأ أثناء تحميل البيانات",
+                    title: "حدث خطأ أثناء تحميل البيانات".tr,
                   ),
                 ),
              

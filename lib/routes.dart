@@ -1,3 +1,5 @@
+
+import 'package:chafi_dashboard/core/Mymiddleware/Mymiddleware.dart';
 import 'package:chafi_dashboard/core/constant/routes.dart';
 import 'package:chafi_dashboard/view/screen/NavigationBar.dart';
 import 'package:get/get.dart';
@@ -30,7 +32,7 @@ import 'view/screen/different.dart';
 
 List<GetPage<dynamic>> routes = [
   // Auth routes
-  GetPage(name: "/", page: () => Login(), participatesInRootNavigator: true),
+  GetPage(name: "/", page: () => Login(), middlewares: [Mymiddleware()]),
   GetPage(name: Approutes.login, page: () => Login()),
   GetPage(name: Approutes.signup, page: () => Signup()),
   GetPage(name: Approutes.forgenPassword, page: () => Forgenpassword()),
@@ -40,7 +42,10 @@ List<GetPage<dynamic>> routes = [
 
   // Dashboard pages
   GetPage(name: Approutes.nav_home, page: () => DashboardHome()),
-  GetPage(name: Approutes.natureoftheactivity, page: () => Natureoftheactivity()),
+  GetPage(
+    name: Approutes.natureoftheactivity,
+    page: () => Natureoftheactivity(),
+  ),
   GetPage(name: Approutes.activities, page: () => Activities()),
 
   // Institutions
@@ -54,9 +59,15 @@ List<GetPage<dynamic>> routes = [
   GetPage(name: Approutes.realSystem, page: () => Realsystem()),
 
   // Applications
-  GetPage(name: Approutes.joiningCategoriesApp, page: () => Joiningcategoriesapp()),
+  GetPage(
+    name: Approutes.joiningCategoriesApp,
+    page: () => Joiningcategoriesapp(),
+  ),
   GetPage(name: Approutes.partialSystemApp, page: () => Partialsystemapp()),
-  GetPage(name: Approutes.simplifiedSystemApp, page: () => Simplifiedsystemapp()),
+  GetPage(
+    name: Approutes.simplifiedSystemApp,
+    page: () => Simplifiedsystemapp(),
+  ),
   GetPage(name: Approutes.realSystemApp, page: () => Realsystemapp()),
 
   // Other pages

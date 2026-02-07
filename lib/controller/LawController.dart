@@ -83,7 +83,7 @@ class Lawcontroller extends GetxController {
     if (!formState.currentState!.validate()) return;
 
     if (file == null) {
-      showSnackbar("تنبيه", "يجب إضافة الملف", Colors.red);
+      showSnackbar("خطأ".tr, "يجب إضافة الملف".tr, Colors.red);
       return;
     }
 
@@ -177,9 +177,9 @@ class Lawcontroller extends GetxController {
       filteredData = data;
       update();
 
-      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
-      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
     }
   }
 

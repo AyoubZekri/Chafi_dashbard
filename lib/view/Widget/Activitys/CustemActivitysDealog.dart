@@ -61,6 +61,7 @@ class _CustemactivitysdealogState extends State<Custemactivitysdealog> {
                             : widget.controller.namear,
                         label: "name_ar".tr,
                         hintText: "enter_name_here".tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -71,6 +72,7 @@ class _CustemactivitysdealogState extends State<Custemactivitysdealog> {
                             : widget.controller.namefr,
                         label: "name_fr".tr,
                         hintText: "enter_name_here".tr,
+                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
                       ),
                     ),
                   ],
@@ -89,6 +91,7 @@ class _CustemactivitysdealogState extends State<Custemactivitysdealog> {
                         maxLines: 3,
                         label: "وصف لي النشاط بي العربية".tr,
                         hintText: "ادخل وصف لي نشاط بي العربية".tr,
+                        valid: (val) =>validateInput(val!, 2, 1000, "text") ,
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -100,6 +103,7 @@ class _CustemactivitysdealogState extends State<Custemactivitysdealog> {
                         maxLines: 3,
                         label: "وصف لي النشاط بي الفرنسية".tr,
                         hintText: "ادخل وصف لي نشاط بي الفرنسية".tr,
+                        valid: (val) =>validateInput(val!, 2, 1000, "text") ,
                       ),
                     ),
                   ],
@@ -111,6 +115,7 @@ class _CustemactivitysdealogState extends State<Custemactivitysdealog> {
                       : widget.controller.codeActeve,
                   label: "رمز النشاط".tr,
                   hintText: "رمز النشاط".tr,
+                  valid: (val) =>validateInput(val!, 2, 50, "text") ,
                 ),
 
                 const SizedBox(height: 15),
@@ -277,7 +282,7 @@ class ActivityIndexDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'تعديل الترتيب',
+                'تعديل الترتيب'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

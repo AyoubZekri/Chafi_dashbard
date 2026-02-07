@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
@@ -49,19 +50,19 @@ class AddappcontrollerImp extends Addappcontroller {
   List<CategoryModel> category = [];
 
   Future<void> adddata() async {
-    // if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
     if (selectedCategory == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الفئة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
       return;
     }
 
     if (isLawActive == true && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
       return;
     }
 
     if (isCalculatorActive == true && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red);
       return;
     }
 
@@ -113,13 +114,13 @@ class AddappcontrollerImp extends Addappcontroller {
         type == 0
             ? 1
             : type == 1
-                ? 2
-                : 3,
+            ? 2
+            : 3,
         () => type == 1
             ? Simplifiedsystemapp()
             : type == 0
-                ? Partialsystemapp()
-                : Realsystemapp(),
+            ? Partialsystemapp()
+            : Realsystemapp(),
       );
     } else {
       statusrequest = Statusrequest.failure;

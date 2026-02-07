@@ -1,11 +1,10 @@
-import 'package:chafi_dashboard/data/model/AppointmentsModel.dart';
+import 'package:chafi_dashboard/controller/UsersController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/AppointmentscommitmentsController.dart';
 import '../../core/class/handlingview.dart';
 import '../../core/functions/Dealog.dart';
-import '../Widget/Appointments/AppointmentsDealog.dart';
+import '../../data/model/UsersModel.dart';
 import '../Widget/TablePaginationFooter.dart';
 import '../Widget/TextFild/CustemDropDownField.dart';
 import '../Widget/TextFild/SearchFild.dart';
@@ -22,11 +21,11 @@ class _UsersState extends State<Users> {
 
   @override
   Widget build(BuildContext context) {
-    Get.create(() => AppointmentscommitmentscontrollerImp());
+    Get.create(() => Userscontroller());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: GetBuilder<AppointmentscommitmentscontrollerImp>(
+      body: GetBuilder<Userscontroller>(
         builder: (controller) {
           return Container(
             padding: const EdgeInsets.all(24.0),
@@ -130,7 +129,7 @@ class _UsersState extends State<Users> {
                                 entry,
                               ) {
                                 int index = entry.key;
-                                Appointmentsmodel item = entry.value;
+                                UserModel item = entry.value;
 
                                 int realIndex =
                                     controller.currentPage *
@@ -141,21 +140,13 @@ class _UsersState extends State<Users> {
                                 return DataRow(
                                   cells: [
                                     DataCell(Text((realIndex + 1).toString())),
-                                    DataCell(Text(item.declaration)),
-                                    DataCell(
-                                      Text(
-                                        controller.sestemTax
-                                            .firstWhere(
-                                              (e) => e['key'] == item.taxId,
-                                              orElse: () => {'label': '-'},
-                                            )['label']
-                                            .toString(),
-                                      ),
-                                    ),
+                                    DataCell(Text(item.username)),
 
-                                    DataCell(Text(item.deadline)),
-                                    DataCell(Text(item.dependencies)),
-                                    DataCell(Text(item.noticeDate)),
+                                    DataCell(Text(item.numperPhone)),
+                                    DataCell(Text(item.wilaya)),
+
+                                    DataCell(Text(item.email)),
+                                    DataCell(Text(item.createdAt.toString())),
 
                                     DataCell(
                                       Row(
@@ -167,9 +158,7 @@ class _UsersState extends State<Users> {
                                                 title: "تنبيه",
                                                 message:
                                                     "هل أنت متأكد من الحذف؟",
-                                                onConfirmAction: () {
-                                                  controller.deletdata(item.id);
-                                                },
+                                                onConfirmAction: () {},
                                               );
                                             },
                                             child: Container(
@@ -188,20 +177,7 @@ class _UsersState extends State<Users> {
                                           ),
                                           const SizedBox(width: 10),
                                           InkWell(
-                                            onTap: () {
-                                              controller.setEditData(item);
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    Appointmentsdealog(
-                                                      mode:
-                                                          AppointmentsdealogMode
-                                                              .edit,
-                                                      controller: controller,
-                                                      id: item.id,
-                                                    ),
-                                              );
-                                            },
+                                            onTap: () {},
                                             child: Container(
                                               padding: const EdgeInsets.all(6),
                                               decoration: BoxDecoration(
@@ -219,17 +195,7 @@ class _UsersState extends State<Users> {
 
                                           const SizedBox(width: 10),
                                           InkWell(
-                                            onTap: () {
-                                              controller.setIndexData(item);
-                                              showDialog(
-                                                context: context,
-                                                builder: (_) =>
-                                                    AppointmentsIndexDialog(
-                                                      controller: controller,
-                                                      appointmentsmodel: item,
-                                                    ),
-                                              );
-                                            },
+                                            onTap: () {},
                                             child: Container(
                                               padding: const EdgeInsets.all(6),
                                               decoration: BoxDecoration(
@@ -277,11 +243,11 @@ class _UsersState extends State<Users> {
   List<DataColumn> buildColumns() {
     return [
       DataColumn(label: Text("#")),
-      DataColumn(label: Text('declaration_type'.tr)),
       DataColumn(label: Text("الإسم".tr)),
       DataColumn(label: Text('رقم الهاتف'.tr)),
       DataColumn(label: Text('الولاية'.tr)),
       DataColumn(label: Text('بريد الإلكتروني'.tr)),
+      DataColumn(label: Text('created_at'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];
   }

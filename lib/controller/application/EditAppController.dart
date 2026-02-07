@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
@@ -38,7 +39,6 @@ class EditappcontrollerImp extends Editappcontroller {
     {'key': 2, 'label': 'Hassba3'},
   ];
 
-
   Lawdata lawdata = Lawdata(Get.find());
   Categorydata categorydata = Categorydata(Get.find());
   Taxandappdata taxandappdata = Taxandappdata(Get.find());
@@ -49,22 +49,22 @@ class EditappcontrollerImp extends Editappcontroller {
 
   List<LawModel> datalaw = [];
   List<CategoryModel> category = [];
-  
 
-  Future<void> adddata() async {
-    // if (!formState.currentState!.validate()) return;
+  Future<void> editdata() async {
+    if (!formState.currentState!.validate()) return;
     if (selectedCategory == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الفئة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
+
       return;
     }
 
     if (isLawActive == true && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
       return;
     }
 
     if (isCalculatorActive == true && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red);
       return;
     }
 
@@ -85,6 +85,7 @@ class EditappcontrollerImp extends Editappcontroller {
     }
 
     Map<String, dynamic> requestData = {
+      "id": id,
       "cat_id": selectedCategory,
       "title": titlear.text,
       "body": infoar.text,
@@ -116,13 +117,13 @@ class EditappcontrollerImp extends Editappcontroller {
         type == 0
             ? 1
             : type == 1
-                ? 2
-                : 3,
+            ? 2
+            : 3,
         () => type == 1
             ? Simplifiedsystemapp()
             : type == 0
-                ? Partialsystemapp()
-                : Realsystemapp(),
+            ? Partialsystemapp()
+            : Realsystemapp(),
       );
     } else {
       statusrequest = Statusrequest.failure;
@@ -199,7 +200,6 @@ class EditappcontrollerImp extends Editappcontroller {
     isLawActive = model.lawId != null;
     selectedLaw = model.lawId;
     selectedCategory = model.catId;
-    
 
     update();
   }

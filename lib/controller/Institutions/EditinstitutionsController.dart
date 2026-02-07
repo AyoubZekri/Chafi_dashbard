@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
@@ -18,6 +19,7 @@ class EditinstitutionscontrollerImp extends GetxController {
   final infoFr = TextEditingController();
   final numPerIndex = TextEditingController();
   int? id;
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   bool isCalculatorActive = false;
   bool isLawActive = false;
@@ -76,12 +78,16 @@ class EditinstitutionscontrollerImp extends GetxController {
   }
 
   Future<void> editData() async {
-    if (isLawActive && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+    if (!formState.currentState!.validate()) return;
+
+    if (isLawActive == true && selectedLaw == null) {
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+
       return;
     }
-    if (isCalculatorActive && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+
+    if (isCalculatorActive == true && selectedCalculator == null) {
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red);
       return;
     }
 

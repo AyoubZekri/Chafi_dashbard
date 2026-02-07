@@ -1,22 +1,23 @@
-// import 'package:Silaaty/core/services/Services.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:get/get.dart';
-// import 'package:Silaaty/core/constant/routes.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
-// class Mymiddleware extends GetMiddleware {
-//   @override
-//   int? get priority => 1;
+import '../constant/routes.dart';
+import '../services/Services.dart';
 
-//   final Myservices myServices = Get.find();
+class Mymiddleware extends GetMiddleware {
+  @override
+  int? get priority => 1;
 
-//   @override
-//   RouteSettings? redirect(String? route) {
-//     final token = myServices.sharedPreferences?.getString("token");
+  final Myservices myServices = Get.find();
 
-//     if (token == null || token.isEmpty) {
-//       return const RouteSettings(name: Approutes.Login);
-//     } else {
-//       return const RouteSettings(name: Approutes.HomeScreen);
-//     }
-//   }
-// }
+  @override
+  RouteSettings? redirect(String? route) {
+    final token = myServices.sharedPreferences?.getString("token");
+
+    if (token == null || token.isEmpty) {
+      return const RouteSettings(name: Approutes.login);
+    } else {
+      return const RouteSettings(name: Approutes.sidbar);
+    }
+  }
+}

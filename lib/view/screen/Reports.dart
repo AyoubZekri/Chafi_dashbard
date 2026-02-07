@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controller/ReportsController.dart';
+import '../../core/functions/Dealog.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/Card/CustemPost.dart';
 import '../Widget/Card/CustemShwoDealog.dart';
@@ -128,9 +129,16 @@ class _ReportsState extends State<Reports> {
                             ),
                           );
                         },
-                        onDelete: () {
-                          controller.deletdata(
-                            controller.filteredData[index].id,
+                        onDelete: () async {
+                          await showCustomConfirmationDialog(
+                            context,
+                            title: "تنبيه".tr,
+                            message: "هل أنت متأكد من الحذف؟".tr,
+                            onConfirmAction: () {
+                              controller.deletdata(
+                                controller.filteredData[index].id,
+                              );
+                            },
                           );
                         },
                         onShwo: () {

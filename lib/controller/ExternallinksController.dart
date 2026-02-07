@@ -31,7 +31,7 @@ class ExternallinkscontrollerImp extends GetxController {
   List<DifferentsModel> filteredData = [];
 
   Future<void> adddata() async {
-    // if (!formState.currentState!.validate()) return;
+     if (!formState.currentState!.validate()) return;
     statusrequest = Statusrequest.loadeng;
     update();
     Map<String, dynamic> requestData = {
@@ -61,7 +61,7 @@ class ExternallinkscontrollerImp extends GetxController {
   }
 
   Future<void> editdata(int id) async {
-    // if (!formState.currentState!.validate()) return;
+     if (!formState.currentState!.validate()) return;
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -176,9 +176,9 @@ class ExternallinkscontrollerImp extends GetxController {
       data = data.where((element) => element.id != id).toList();
       update();
 
-      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
-      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
     }
   }
 

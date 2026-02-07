@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
@@ -50,22 +51,21 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
   List<CategoryModel> category = [];
 
   Future<void> editdata() async {
-    // if (!formState.currentState!.validate()) return;
+     if (!formState.currentState!.validate()) return;
     if (selectedCategory == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الفئة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
       return;
     }
 
     if (isLawActive == true && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
       return;
     }
 
     if (isCalculatorActive == true && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red);
       return;
     }
-
     statusrequest = Statusrequest.loadeng;
     update();
 

@@ -188,9 +188,9 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
       filteredData = data;
       update();
 
-      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
-      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
     }
   }
 

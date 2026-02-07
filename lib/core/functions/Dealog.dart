@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../constant/Colorapp.dart';
 
 Future<bool> showCustomConfirmationDialog(
   BuildContext context, {
   required String title,
   required String message,
-  String confirmText = "موافق",
-  String cancelText = "إلغاء",
+  String? confirmText,
+  String? cancelText,
   VoidCallback? onConfirmAction,
   VoidCallback? onCancelAction,
 }) async {
+  final String _confirmText = confirmText ?? "موافق".tr;
+  final String _cancelText = cancelText ?? "إلغاء".tr;
+
   bool? result = await showDialog<bool>(
     context: context,
     builder: (BuildContext context) {
@@ -17,28 +21,23 @@ Future<bool> showCustomConfirmationDialog(
         child: Material(
           color: Colors.transparent,
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.4, // 40% من عرض الشاشة
-            constraints: const BoxConstraints(
-              minHeight: 150,
-              maxHeight: 400, // يمنع overflow في الشاشات الصغيرة
-            ),
+            width: MediaQuery.of(context).size.width * 0.4,
+            constraints: const BoxConstraints(minHeight: 150, maxHeight: 400),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: AppColor.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black26,
                   blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
             child: SingleChildScrollView(
-              // يمنع overflow
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     title,
@@ -65,7 +64,7 @@ Future<bool> showCustomConfirmationDialog(
                           Navigator.of(context).pop(false);
                         },
                         child: Text(
-                          cancelText,
+                          _cancelText,
                           style: const TextStyle(
                             color: AppColor.typography,
                             fontSize: 16,
@@ -89,7 +88,7 @@ Future<bool> showCustomConfirmationDialog(
                           Navigator.of(context).pop(true);
                         },
                         child: Text(
-                          confirmText,
+                          _confirmText,
                           style: const TextStyle(
                             color: AppColor.white,
                             fontSize: 16,

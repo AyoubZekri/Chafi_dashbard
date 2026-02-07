@@ -38,7 +38,7 @@ class Commonquestionsdealog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  isEdit ? "edit" : 'new_question'.tr,
+                  isEdit ? "edit".tr : 'new_question'.tr,
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -56,6 +56,7 @@ class Commonquestionsdealog extends StatelessWidget {
                             : controller.titlear,
                         label: 'question_ar'.tr,
                         hintText: 'question_hint_ar'.tr,
+                        valid: (val) => validateInput(val!, 2, 100, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -66,6 +67,7 @@ class Commonquestionsdealog extends StatelessWidget {
                             : controller.titlefr,
                         label: 'question_fr'.tr,
                         hintText: 'question_hint_fr'.tr,
+                        valid: (val) => validateInput(val!, 2, 100, "text"),
                       ),
                     ),
                   ],
@@ -84,6 +86,7 @@ class Commonquestionsdealog extends StatelessWidget {
                         label: 'answer_ar'.tr,
                         hintText: 'answer_hint_ar'.tr,
                         maxLines: 4,
+                        valid: (val) => validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -95,6 +98,7 @@ class Commonquestionsdealog extends StatelessWidget {
                         label: 'answer_fr'.tr,
                         hintText: 'answer_hint_fr'.tr,
                         maxLines: 4,
+                        valid: (val) => validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                   ],
@@ -167,7 +171,6 @@ class Commonquestionsdealog extends StatelessWidget {
 
 enum CommonquestionsdealogMode { add, edit }
 
-
 class AppointmentsIndexDialog extends StatelessWidget {
   final CommonquestionscontrollerImp controller;
   final DifferentsModel appointmentsmodel;
@@ -192,7 +195,7 @@ class AppointmentsIndexDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'تعديل الترتيب',
+                'تعديل الترتيب'.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,

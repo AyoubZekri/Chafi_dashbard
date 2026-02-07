@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
+import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
@@ -44,15 +45,17 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
   List<LawModel> data = [];
 
   Future<void> adddata() async {
-    // if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
 
     if (isLawActive == true && selectedLaw == null) {
-      Get.snackbar("خطأ", "يرجى اختيار القانون");
+      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+
       return;
     }
 
     if (isCalculatorActive == true && selectedCalculator == null) {
-      Get.snackbar("خطأ", "يرجى اختيار الحاسبة");
+      showSnackbar("خطأ".tr, "يرجى اختيار الحاسبة".tr, Colors.red);
+      
       return;
     }
 
@@ -99,7 +102,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
-      Get.find<NavigationBarcontrollerImp>().changePage(6);
+      Get.find<NavigationBarcontrollerImp>().changePage(7);
     } else {
       statusrequest = Statusrequest.failure;
     }

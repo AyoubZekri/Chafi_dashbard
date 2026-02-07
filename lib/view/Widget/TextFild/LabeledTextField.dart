@@ -9,7 +9,7 @@ class CustemtextfromfildInfoUser extends StatelessWidget {
   final TextEditingController? myController;
   final TextInputType? keyboardType;
   final bool? obscureText;
-  final String? Function(String?)? valid;
+  final String? Function(String?) valid;
 
   const CustemtextfromfildInfoUser({
     super.key,
@@ -19,7 +19,7 @@ class CustemtextfromfildInfoUser extends StatelessWidget {
     this.obscureText,
     required this.label,
     this.maxLines,
-    this.valid,
+    required this.valid,
   });
 
   @override

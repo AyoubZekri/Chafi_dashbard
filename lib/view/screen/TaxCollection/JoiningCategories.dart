@@ -178,9 +178,9 @@ class _JoiningcategoriesState extends State<Joiningcategories> {
                                             onTap: () async {
                                               await showCustomConfirmationDialog(
                                                 context,
-                                                title: "تنبيه",
+                                                title: "تنبيه".tr,
                                                 message:
-                                                    "هل أنت متأكد من الحذف؟",
+                                                    "هل أنت متأكد من الحذف؟".tr,
                                                 onConfirmAction: () {
                                                   controller.deletdata(item.id);
                                                 },

@@ -131,9 +131,9 @@ class ReportscontrollerImp extends Reportscontroller {
       data = data.where((element) => element.id != id).toList();
       update();
 
-      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
-      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
     }
   }
 
@@ -148,7 +148,7 @@ class ReportscontrollerImp extends Reportscontroller {
 
     statusrequest = Statusrequest.loadeng;
     Map<String, dynamic> requestData = {
-      "id":id,
+      "id": id,
       'type': '1',
       'title': edittitlear1.text,
       'title2': edittitlear2.text,

@@ -68,7 +68,7 @@ class Joiningcategoriesappcontroller extends GetxController {
   // إضافة قانون
   Future<void> adddata() async {
     if (selectedsestemTax == null) {
-      Get.snackbar("خطأ", "يرجى اختيار النظام الضريبي");
+      showSnackbar("خطأ".tr, "يرجى اختيار النظام الضريبي".tr, Colors.red);
       return;
     }
     if (!formState.currentState!.validate()) return;
@@ -165,9 +165,9 @@ class Joiningcategoriesappcontroller extends GetxController {
       filteredData = data;
       update();
 
-      showSnackbar("نجاح", "تم الحذف بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
-      showSnackbar("خطأ", "فشل الحذف", Colors.red);
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
     }
   }
 

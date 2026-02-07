@@ -7,6 +7,11 @@ import 'package:chafi_dashboard/view/screen/application/SimplifiedSystemapp.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../core/class/Statusrequest.dart';
+import '../core/functions/Snacpar copy.dart';
+import '../core/functions/handlingdatacontroller.dart';
+import '../core/services/Services.dart';
+import '../data/datasource/Remote/AuthData.dart';
 import '../view/screen/Activities.dart';
 import '../view/screen/AppointmentsCommitments.dart';
 import '../view/screen/CommonQuestions.dart';
@@ -31,10 +36,18 @@ abstract class NavigationBarcontroller extends GetxController {
 }
 
 class NavigationBarcontrollerImp extends GetxController {
+  late TextEditingController email;
+  late TextEditingController password;
+  late TextEditingController confirmPassword;
+
+  bool issobscureText = true;
+  bool issobscureText2 = true;
   RxInt currentPage = 0.obs;
   RxnInt expandedIndex = RxnInt();
   RxnInt currentSubIndex = RxnInt();
   Rx<Widget Function()?> currentSubPage = Rx<Widget Function()?>(null);
+  Authdata authdata = Authdata(Get.find());
+  Myservices myServices = Get.find();
 
   final List<Map<String, dynamic>> screens = [
     {
@@ -44,7 +57,6 @@ class NavigationBarcontrollerImp extends GetxController {
       'page': () => DashboardHome(),
       'subPages': [],
     },
-
     {
       'name': 'Users'.tr,
       'icon': Icons.people,
@@ -240,5 +252,65 @@ class NavigationBarcontrollerImp extends GetxController {
   void changeSubPage(int subIndex, Widget Function() page) {
     currentSubIndex.value = subIndex;
     currentSubPage.value = page;
+  }
+
+  void showPassword() {
+    issobscureText = issobscureText == true ? false : true;
+    update();
+  }
+
+  void showPassword2() {
+    issobscureText2 = issobscureText2 == true ? false : true;
+    update();
+  }
+
+  void reset() async {
+    Statusrequest statusrequest = Statusrequest.loadeng;
+    update();
+    var response = await authdata.resetPassword({
+      "password": password.text,
+      "email": email.text,
+      "password_confirmation": confirmPassword.text,
+    });
+    if (response == Statusrequest.serverfailure) {
+      return showSnackbar("خطأ".tr, "لا يوجد اتصال بالإنترنت".tr, Colors.red);
+    }
+    print("Response: $response");
+    statusrequest = handlingData(response);
+    if (Statusrequest.success == statusrequest) {
+      if (response["status"] == 1) {
+        Get.back();
+      } else {
+        showSnackbar("خطأ".tr, "حدث خطأ ما".tr, Colors.orange);
+        statusrequest = Statusrequest.failure;
+      }
+    } else {
+      showSnackbar("خطأ".tr, "حدث خطأ ما".tr, Colors.orange);
+    }
+    update();
+  }
+
+  logout() async {
+    Statusrequest statusrequest = Statusrequest.loadeng;
+    update();
+    var response = await authdata.logout();
+
+    statusrequest = handlingData(response);
+    print("=============================== Controller $response ");
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        myServices.sharedPreferences!.clear();
+        Get.offNamed(Approutes.login);
+      }
+    } else {}
+    update();
+  }
+
+  @override
+  void onInit() {
+    email = TextEditingController();
+    password = TextEditingController();
+    confirmPassword = TextEditingController();
+    super.onInit();
   }
 }
