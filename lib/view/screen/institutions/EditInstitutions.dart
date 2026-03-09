@@ -127,7 +127,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                   (f) => DropdownMenuItem<int>(
                                     value: f['key'] as int,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f['label'].toString().tr,
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -158,12 +158,12 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                       Dropdownfild(
                         label: "choose_calculator".tr,
                         hintText: "choose_calculator".tr,
-                        items: controller.calculators
+                        items: controller.calcelators
                             .map(
                               (f) => DropdownMenuItem<int>(
                                 value: f['key'] as int,
                                 child: Text(
-                                  f['label'].toString(),
+                                  f['label'].toString().tr,
                                   style: const TextStyle(fontSize: 14),
                                 ),
                               ),

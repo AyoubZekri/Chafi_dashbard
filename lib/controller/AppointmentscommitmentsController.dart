@@ -31,9 +31,9 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   int? editselectedsestemTax;
 
   final List<Map<String, Object>> sestemTax = [
-    {'key': 0, 'label': "tax_flat_system".tr},
-    {'key': 1, 'label': "tax_simplified_system".tr},
-    {'key': 2, 'label': "tax_real_system".tr},
+    {'key': 0, 'label': "tax_flat_system"},
+    {'key': 1, 'label': "tax_simplified_system"},
+    {'key': 2, 'label': "tax_real_system"},
   ];
 
   Appointmentscommitmentsdata lawdata = Appointmentscommitmentsdata(Get.find());
@@ -191,6 +191,21 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
       showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
       showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
+    }
+  }
+
+  Future<void> nptificationsend(int id, String body) async {
+
+    var response = await lawdata.Notification({
+      "id": id.toString(),
+      "title": "تنبيه".tr,
+      "body": "${"إقتراب موعد".tr} $body",
+    });
+    statusrequest = handlingData(response);
+    if (statusrequest == Statusrequest.success && response["status"] == 1) {
+      showSnackbar("نجاح".tr, "تم الإرسال بنجاح".tr, Colors.green);
+    } else {
+      showSnackbar("خطأ".tr, "فشل الإرسال".tr, Colors.red);
     }
   }
 

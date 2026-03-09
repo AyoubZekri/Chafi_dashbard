@@ -1,4 +1,3 @@
-
 import '../../../LinkApi.dart';
 import '../../../core/class/Crud.dart';
 
@@ -13,6 +12,11 @@ class Appointmentscommitmentsdata {
 
   adddata(Map data) async {
     var response = await crud.postWithheaders(Applink.appointmentsadd, data);
+    return response.fold((l) => l, (r) => r);
+  }
+
+  Notification(Map data) async {
+    var response = await crud.postWithheaders(Applink.appointmentsNotification, data);
     return response.fold((l) => l, (r) => r);
   }
 

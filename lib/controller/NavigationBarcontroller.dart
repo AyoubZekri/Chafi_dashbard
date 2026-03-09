@@ -28,6 +28,7 @@ import '../view/screen/TaxCollection/PartialSystem.dart';
 import '../view/screen/TaxCollection/SimplifiedSystem.dart';
 import '../view/screen/Users.dart';
 import '../view/screen/application/RealSystemapp.dart';
+import '../view/screen/bonuses_and_compensations.dart';
 import '../view/screen/different.dart';
 
 abstract class NavigationBarcontroller extends GetxController {
@@ -51,21 +52,21 @@ class NavigationBarcontrollerImp extends GetxController {
 
   final List<Map<String, dynamic>> screens = [
     {
-      'name': 'nav_home'.tr,
+      'name': 'nav_home',
       'icon': Icons.dashboard,
       'route': Approutes.nav_home,
       'page': () => DashboardHome(),
       'subPages': [],
     },
     {
-      'name': 'Users'.tr,
+      'name': 'Users',
       'icon': Icons.people,
       'page': () => Users(),
       'subPages': [],
     },
 
     {
-      'name': 'طبيعة النشاط'.tr,
+      'name': 'طبيعة النشاط',
       'icon': Icons.nature_people,
       'route': Approutes.natureoftheactivity,
       'page': () => Natureoftheactivity(),
@@ -73,7 +74,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': 'النشاطات'.tr,
+      'name': 'النشاطات',
       'icon': Icons.work_outline,
       'route': Approutes.activities,
 
@@ -82,20 +83,27 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': 'nav_institutions'.tr,
+      'name': 'العلوات والتعويضات',
+      'icon': Icons.work_outline,
+      'route': Approutes.activities,
+      'page': () => BonusesAndCompensations(),
+      'subPages': [],
+    },
+    {
+      'name': 'nav_institutions',
       'icon': Icons.apartment,
       'route': Approutes.institutions,
 
       'page': "",
       'subPages': [
         {
-          'name': 'nav_institutions'.tr,
+          'name': 'nav_institutions',
           'route': Approutes.institutions,
           'icon': Icons.business,
           'page': () => Institutions(),
         },
         {
-          'name': "nav_regulated".tr,
+          'name': "nav_regulated",
           'route': Approutes.regulated,
           'icon': Icons.verified_outlined,
           'page': () => Regulated(),
@@ -104,32 +112,32 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': 'الأنظمة الجبائية'.tr,
+      'name': 'الأنظمة الجبائية',
       'icon': Icons.account_balance,
       'route': Approutes.joiningCategories,
       'page': "",
       'subPages': [
         {
-          'name': 'فئات'.tr,
+          'name': 'فئات',
           'icon': Icons.category,
           'route': Approutes.joiningCategories,
 
           'page': () => Joiningcategories(),
         },
         {
-          'name': 'النضام الجزافي'.tr,
+          'name': 'النضام الجزافي',
           'route': Approutes.partialSystem,
           'icon': Icons.payments_outlined,
           'page': () => Partialsystem(),
         },
         {
-          'name': 'النضام المبسط'.tr,
+          'name': 'النضام المبسط',
           'route': Approutes.simplifiedSystem,
           'icon': Icons.rule_folder_outlined,
           'page': () => Simplifiedsystem(),
         },
         {
-          'name': 'النضام الحقيقي'.tr,
+          'name': 'النضام الحقيقي',
           'icon': Icons.analytics_outlined,
           'route': Approutes.realSystem,
 
@@ -139,34 +147,34 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': 'التطبيقات'.tr,
+      'name': 'التطبيقات',
       'icon': Icons.apps,
       'route': Approutes.joiningCategoriesApp,
 
       'page': "",
       'subPages': [
         {
-          'name': 'فئات'.tr,
+          'name': 'فئات',
           'icon': Icons.category_outlined,
           'route': Approutes.joiningCategoriesApp,
           'page': () => Joiningcategoriesapp(),
         },
         {
-          'name': 'النضام الجزافي'.tr,
+          'name': 'النضام الجزافي',
           'route': Approutes.partialSystemApp,
 
           'icon': Icons.request_quote_outlined,
           'page': () => Partialsystemapp(),
         },
         {
-          'name': 'النضام المبسط'.tr,
+          'name': 'النضام المبسط',
           'route': Approutes.simplifiedSystemApp,
 
           'icon': Icons.tune_outlined,
           'page': () => Simplifiedsystemapp(),
         },
         {
-          'name': 'النضام الحقيقي'.tr,
+          'name': 'النضام الحقيقي',
           'route': Approutes.realSystemApp,
 
           'icon': Icons.insights_outlined,
@@ -176,7 +184,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "nav_different".tr,
+      'name': "nav_different",
       'icon': Icons.extension_outlined,
       'route': Approutes.different,
       'page': () => Different(),
@@ -184,7 +192,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "nav_appointments".tr,
+      'name': "nav_appointments",
       'icon': Icons.event_note,
       'route': Approutes.appointments,
 
@@ -193,7 +201,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "nav_faq".tr,
+      'name': "nav_faq",
       'icon': Icons.help_outline,
       'route': Approutes.faq,
       'page': () => Commonquestions(),
@@ -201,7 +209,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "external_links".tr,
+      'name': "external_links",
       'icon': Icons.link_outlined,
       'route': Approutes.externalLinks,
       'page': () => Externallinks(),
@@ -209,7 +217,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "قوانين".tr,
+      'name': "قوانين",
       'icon': Icons.gavel_outlined,
       'route': Approutes.law,
 
@@ -218,7 +226,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "الإشعارات".tr,
+      'name': "الإشعارات",
       'route': Approutes.notification,
       'icon': Icons.notifications_active_outlined,
       'page': () => NotificationBar(),
@@ -226,14 +234,14 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "التقارير".tr,
+      'name': "التقارير",
       'icon': Icons.description_outlined,
       'page': () => Reports(),
       'subPages': [],
     },
 
     {
-      'name': "الحصري".tr,
+      'name': "الحصري",
       'icon': Icons.star_outline,
       'page': () => Exclusive(),
       'subPages': [],
@@ -273,7 +281,7 @@ class NavigationBarcontrollerImp extends GetxController {
       "password_confirmation": confirmPassword.text,
     });
     if (response == Statusrequest.serverfailure) {
-      return showSnackbar("خطأ".tr, "لا يوجد اتصال بالإنترنت".tr, Colors.red);
+      return showSnackbar("خطأ", "لا يوجد اتصال بالإنترنت", Colors.red);
     }
     print("Response: $response");
     statusrequest = handlingData(response);
@@ -281,11 +289,11 @@ class NavigationBarcontrollerImp extends GetxController {
       if (response["status"] == 1) {
         Get.back();
       } else {
-        showSnackbar("خطأ".tr, "حدث خطأ ما".tr, Colors.orange);
+        showSnackbar("خطأ", "حدث خطأ ما", Colors.orange);
         statusrequest = Statusrequest.failure;
       }
     } else {
-      showSnackbar("خطأ".tr, "حدث خطأ ما".tr, Colors.orange);
+      showSnackbar("خطأ", "حدث خطأ ما", Colors.orange);
     }
     update();
   }

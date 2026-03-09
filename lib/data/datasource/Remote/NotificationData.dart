@@ -1,4 +1,3 @@
-
 import '../../../LinkApi.dart';
 import '../../../core/class/Crud.dart';
 
@@ -12,18 +11,17 @@ class Notificationdata {
   }
 
   adddata(Map data) async {
-    var response = await crud.postWithheaders(
-      Applink.notificationadd,
-      data,
-    );
+    var response = await crud.postWithheaders(Applink.notificationadd, data);
+    return response.fold((l) => l, (r) => r);
+  }
+
+  Notification(Map data) async {
+    var response = await crud.postWithheaders(Applink.notificationSend, data);
     return response.fold((l) => l, (r) => r);
   }
 
   deletdata(Map data) async {
-    var response = await crud.postWithheaders(
-      Applink.notificationdelet,
-      data,
-    );
+    var response = await crud.postWithheaders(Applink.notificationdelet, data);
     return response.fold((l) => l, (r) => r);
   }
 

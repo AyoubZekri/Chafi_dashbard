@@ -1,49 +1,49 @@
-import 'package:chafi_dashboard/data/model/CategoryModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/class/Statusrequest.dart';
-import '../../core/functions/Snacpar copy.dart';
-import '../../core/functions/handlingdatacontroller.dart';
-import '../../core/services/Services.dart';
-import '../../data/datasource/Remote/Categorydata.dart';
+import '../core/class/Statusrequest.dart';
+import '../core/functions/Snacpar copy.dart';
+import '../core/functions/handlingdatacontroller.dart';
+import '../core/services/Services.dart';
+import '../data/datasource/Remote/BonusesAndCompensationsData.dart';
+import '../data/model/BonusModel.dart';
+import '../data/model/NatureoftheactivityModel.dart';
 
-class JoiningcategoriescontrollerImp extends GetxController {
-  late TextEditingController titleAr;
-  late TextEditingController titleFr;
+class Bonusesandcompensationscontroller extends GetxController {
+  String currentLang = Get.locale?.languageCode ?? 'ar';
+
+  late TextEditingController namear;
+  late TextEditingController namefr;
+  late TextEditingController editnamear;
+  late TextEditingController editnamefr;
   late TextEditingController index;
 
-  late TextEditingController edittitleAr;
-  late TextEditingController edittitleFr;
+  int? selectcats;
+  int? editselectcats;
 
-  int? selectedsestemTax;
-  int? editselectedsestemTax;
+  final List<Map<String, Object>> cat = [
+    {'key': 1, 'label': "الخاضعة لي الإشتراك والضريبة"},
+    {'key': 2, 'label': "الخاضعة لي الضريبة"},
+    {'key': 3, 'label': "غير خاضعة"},
+  ];
 
-  int currentPage = 0;
-  int rowsPerPage = 10;
-
+  Bonusesandcompensationsdata bonusesandcompensationsdata =
+      Bonusesandcompensationsdata(Get.find());
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   Statusrequest statusrequest = Statusrequest.none;
-  Categorydata categorydata = Categorydata(Get.find());
 
-  List<CategoryModel> data = [];
-  List<CategoryModel> filteredData = [];
-
-  final List<Map<String, Object>> sestemTax = [
-    {'key': 0, 'label': "tax_flat_system"},
-    {'key': 1, 'label': "tax_simplified_system"},
-    {'key': 2, 'label': "tax_real_system"},
-  ];
+  List<BonusModel> data = [];
+  List<BonusModel> filteredData = [];
+  int currentPage = 0;
+  int rowsPerPage = 10;
 
   // عرض البيانات
   Future<void> viewdata() async {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    final actData = {"type_cat": 1, "tax_id": selectedsestemTax ?? ""};
-
-    var response = await categorydata.viewdata(actData);
+    var response = await bonusesandcompensationsdata.viewdata();
     print("Response: $response");
 
     statusrequest = handlingData(response);
@@ -52,7 +52,7 @@ class JoiningcategoriescontrollerImp extends GetxController {
       if (response["status"] == 1) {
         data.clear();
         List listdata = response['data'];
-        data.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+        data.addAll(listdata.map((e) => BonusModel.fromJson(e)));
         filteredData = List.from(data);
 
         print("data == $data");
@@ -67,31 +67,30 @@ class JoiningcategoriescontrollerImp extends GetxController {
 
   // إضافة قانون
   Future<void> adddata() async {
-    if (selectedsestemTax == null) {
-      showSnackbar("خطأ".tr, "يرجى اختيار النظام الضريبي".tr, Colors.red);
-
+    if (!formState.currentState!.validate()) return;
+    if (selectcats == null) {
+      showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
       return;
     }
-    if (!formState.currentState!.validate()) return;
     statusrequest = Statusrequest.loadeng;
     update();
 
     Map<String, dynamic> requestData = {
-      "tax_id": selectedsestemTax,
-      "type_cat": 1,
-      "name": titleAr.text,
-      "name_fr": titleFr.text,
+      "name_ar": namear.text,
+      "name_fr": namefr.text,
+      "category": selectcats,
     };
 
-    var response = await categorydata.adddata(requestData);
+    var response = await bonusesandcompensationsdata.adddata(requestData);
     print("Add Response: $response");
 
     statusrequest = handlingData(response);
 
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
-      titleAr.clear();
-      titleFr.clear();
-      selectedsestemTax = null;
+      namear.clear();
+      namefr.clear();
+      selectcats = null;
+      print("===========================");
       viewdata();
       Get.back();
     } else {
@@ -105,23 +104,25 @@ class JoiningcategoriescontrollerImp extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      if (editselectcats == null) {
+        showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
+        return;
+      }
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {
         "id": id,
-        "tax_id": editselectedsestemTax,
-        "type_cat": 1,
-        "name": edittitleAr.text,
-        "name_fr": edittitleFr.text,
+        'name_ar': editnamear.text,
+        'name_fr': editnamefr.text,
+        "category": editselectcats,
       };
-      var response = await categorydata.editdata(data);
+      var response = await bonusesandcompensationsdata.editdata(data);
       print("=====================================$response");
       statusrequest = handlingData(response);
       if (Statusrequest.success == statusrequest) {
         if (response["status"] == 1) {
-          edittitleAr.clear();
-          edittitleFr.clear();
-          editselectedsestemTax = null;
+          editnamear.clear();
+          editnamefr.clear();
           Get.back();
           viewdata();
         } else {
@@ -138,7 +139,7 @@ class JoiningcategoriescontrollerImp extends GetxController {
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};
-      var response = await categorydata.editdata(data);
+      var response = await bonusesandcompensationsdata.editdata(data);
       print("=====================================$response");
       statusrequest = handlingData(response);
       if (Statusrequest.success == statusrequest) {
@@ -159,7 +160,9 @@ class JoiningcategoriescontrollerImp extends GetxController {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    var response = await categorydata.deletdata({"id": id.toString()});
+    var response = await bonusesandcompensationsdata.deletdata({
+      "id": id.toString(),
+    });
     statusrequest = handlingData(response);
 
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
@@ -173,23 +176,23 @@ class JoiningcategoriescontrollerImp extends GetxController {
     }
   }
 
-  void setEditData(CategoryModel item) {
-    edittitleAr.text = item.name;
-    edittitleFr.text = item.nameFr;
-    editselectedsestemTax = item.taxId;
-    update();
+  void setEditData(BonusModel law) {
+    editnamear.text = law.nameAr;
+    editnamefr.text = law.nameFr;
+    editselectcats = law.category;
+    print("===============${editnamear.text}");
   }
 
-  void setIndexData(CategoryModel law) {
+  void setIndexData(Natureoftheactivitymodel law) {
     index.text = law.index.toString();
   }
 
   @override
   void onInit() {
-    titleFr = TextEditingController();
-    titleAr = TextEditingController();
-    edittitleAr = TextEditingController();
-    edittitleFr = TextEditingController();
+    namear = TextEditingController();
+    namefr = TextEditingController();
+    editnamear = TextEditingController();
+    editnamefr = TextEditingController();
     index = TextEditingController();
     viewdata();
 
@@ -197,7 +200,7 @@ class JoiningcategoriescontrollerImp extends GetxController {
     super.onInit();
   }
 
-  List<CategoryModel> get pagedData =>
+  List<BonusModel> get pagedData =>
       filteredData.skip(currentPage * rowsPerPage).take(rowsPerPage).toList();
 
   int get totalPages => (filteredData.length / rowsPerPage).ceil();
@@ -205,7 +208,10 @@ class JoiningcategoriescontrollerImp extends GetxController {
   void filterData(String query) {
     currentPage = 0;
     filteredData = data
-        .where((item) => item.name.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (item) =>
+              item.localizedName.toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
     update();
   }

@@ -86,7 +86,7 @@ class _CategoryappdealogState extends State<Categoryappdealog> {
                         (f) => DropdownMenuItem<int>(
                           value: f['key'] as int,
                           child: Text(
-                            f['label'].toString(),
+                            f['label'].toString().tr,
                             style: const TextStyle(fontSize: 14),
                           ),
                         ),

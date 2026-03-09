@@ -35,24 +35,50 @@ class EditinstitutionscontrollerImp extends GetxController {
   List<LawModel> laws = [];
 
   // القوائم الثابتة
-  final List<Map<String, Object>> calculators = [
-    {'key': 0, 'label': 'Hassba1'},
-    {'key': 1, 'label': 'Hassba2'},
-    {'key': 2, 'label': 'Hassba3'},
+  final List<Map<String, Object>> calcelators = [
+    {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
+    {'key': 1, 'label': "حاسبة G12", 'route': 'calactivityType'},
+    {'key': 2, 'label': "حاسبة G12BES", 'route': 'Typeacteviteg12bes'},
+    {'key': 3, 'label': "كشف التلخيص السنوي", 'route': 'Lossorprofit'},
+    {'key': 4, 'label': "الطابع الجبائي", 'route': 'Taxstamp'},
+    {'key': 5, 'label': "budget_deposit", 'route': 'Inputdata'},
+    {'key': 6, 'label': "gifts", 'route': 'Costsguidance'},
+    {
+      'key': 7,
+      'label': "advertising_sponsorship",
+      'route': 'Advertisingandsponsorship',
+    },
+
+    {'key': 8, 'label': "البحث والتطوير", 'route': 'Researchanddevelopment'},
+    {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueisttype'},
+    {'key': 10, 'label': "المداخيل العقارية", 'route': 'Realestateincometype'},
+    {
+      'key': 11,
+      'label': "التنازل عن العقارات",
+      'route': 'Surrenderofthepropertytype',
+    },
+
+    {
+      'key': 12,
+      'label': "التنازل عن الإستثمار",
+      'route': 'Waiverofinvestmentvalue',
+    },
+    {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
+    {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
   ];
 
   final List<Map<String, Object>> institutions = [
-    {'key': 1, 'label': "micro".tr},
-    {'key': 2, 'label': "small".tr},
-    {'key': 3, 'label': "medium".tr},
-    {'key': 4, 'label': "large".tr},
-    {'key': 5, 'label': "very_large".tr},
+    {'key': 1, 'label': "micro"},
+    {'key': 2, 'label': "small"},
+    {'key': 3, 'label': "medium"},
+    {'key': 4, 'label': "large"},
+    {'key': 5, 'label': "very_large"},
   ];
 
   final List<Map<String, Object>> regulated = [
-    {'key': 6, 'label': "filter_innovative".tr},
-    {'key': 7, 'label': "filter_startup".tr},
-    {'key': 8, 'label': "filter_incubator".tr},
+    {'key': 6, 'label': "filter_innovative"},
+    {'key': 7, 'label': "filter_startup"},
+    {'key': 8, 'label': "filter_incubator"},
   ];
 
   void fillDataFromModel(InstitutionModel model) {
@@ -68,7 +94,7 @@ class EditinstitutionscontrollerImp extends GetxController {
 
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive
-        ? calculators.firstWhere((c) => c['label'] == model.calcul)['key']
+        ? calcelators.firstWhere((c) => c['label'] == model.calcul)['key']
               as int
         : null;
 
@@ -98,7 +124,7 @@ class EditinstitutionscontrollerImp extends GetxController {
         ? laws.firstWhere((element) => element.id == selectedLaw)
         : null;
     final calculator = isCalculatorActive
-        ? calculators.firstWhere((c) => c['key'] == selectedCalculator)
+        ? calcelators.firstWhere((c) => c['key'] == selectedCalculator)
         : null;
 
     final requestData = {
@@ -108,7 +134,7 @@ class EditinstitutionscontrollerImp extends GetxController {
       "title_fr": titleFr.text,
       "body_fr": infoFr.text,
       "law_id": law?.id,
-      "calcul": calculator?['label'],
+      "calcul": calculator?['route'],
       "index_link": numPerIndex.text,
     };
 

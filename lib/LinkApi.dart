@@ -19,6 +19,15 @@ class Applink {
   static const String nataireActivitysedit = "$server/NataireActivitys/Edit";
   static const String nataireActivitysdelet = "$server/NataireActivitys/Delete";
 
+  static const String bonusesAndCompensationsShwo =
+      "$server/bonusesandcompensations/Show";
+  static const String bonusesAndCompensationsadd =
+      "$server/bonusesandcompensations/add";
+  static const String bonusesAndCompensationsedit =
+      "$server/bonusesandcompensations/Edit";
+  static const String bonusesAndCompensationsdelet =
+      "$server/bonusesandcompensations/Delete";
+
   static const String activitysShwo = "$server/Activitys/Show";
   static const String activitysadd = "$server/Activitys/add";
   static const String activitysedit = "$server/Activitys/Edit";
@@ -33,11 +42,15 @@ class Applink {
   static const String appointmentsadd = "$server/Appointments/add";
   static const String appointmentsedit = "$server/Appointments/Edit";
   static const String appointmentsdelet = "$server/Appointments/Delete";
+  static const String appointmentsNotification =
+      "$server/Appointments/SendNotification";
 
   static const String notificationShwo = "$server/Notification/Show";
   static const String notificationadd = "$server/Notification/add";
   static const String notificationedit = "$server/Notification/Edit";
   static const String notificationdelet = "$server/Notification/Delete";
+  static const String notificationSend = "$server/Notification/send";
+  static const String satas = "$server/stats";
 
   static const String postShow = "$server/Post/Show";
   static const String postadd = "$server/Post/add";
@@ -59,6 +72,4 @@ class Applink {
   static const String signIn = "$server/Register";
   static const String logout = "$server/logout";
   static const String resetPassword = "$server/admin/ResetPassword";
-
-
 }

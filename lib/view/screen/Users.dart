@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/controller/UsersController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -96,126 +98,150 @@ class _UsersState extends State<Users> {
                 Expanded(
                   child: Handlingview(
                     statusrequest: controller.statusrequest,
-                    widget: Scrollbar(
-                      controller: horizontalController,
-                      thumbVisibility: true,
-                      trackVisibility: true,
-                      child: SingleChildScrollView(
+                    widget: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(
+                        scrollbars: true,
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                        },
+                      ),
+                      child: Scrollbar(
                         controller: horizontalController,
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: MediaQuery.of(context).size.width,
-                          ),
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              headingRowHeight: 50,
-                              dataRowHeight: 50,
-                              headingRowColor: MaterialStateProperty.all(
-                                const Color(0xFFF8F9FA),
-                              ),
-                              border: TableBorder(
-                                horizontalInside: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1,
+                        thumbVisibility: true,
+                        trackVisibility: true,
+                        child: SingleChildScrollView(
+                          controller: horizontalController,
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width,
+                            ),
+                            child: SingleChildScrollView(
+                              child: DataTable(
+                                headingRowHeight: 50,
+                                dataRowHeight: 50,
+                                headingRowColor: MaterialStateProperty.all(
+                                  const Color(0xFFF8F9FA),
                                 ),
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1,
+                                border: TableBorder(
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
                                 ),
-                              ),
-                              columns: buildColumns(),
-                              rows: controller.pagedData.asMap().entries.map((
-                                entry,
-                              ) {
-                                int index = entry.key;
-                                UserModel item = entry.value;
+                                columns: buildColumns(),
+                                rows: controller.pagedData.asMap().entries.map((
+                                  entry,
+                                ) {
+                                  int index = entry.key;
+                                  UserModel item = entry.value;
 
-                                int realIndex =
-                                    controller.currentPage *
-                                        controller.rowsPerPage +
-                                    index +
-                                    1;
+                                  int realIndex =
+                                      controller.currentPage *
+                                          controller.rowsPerPage +
+                                      index +
+                                      1;
 
-                                return DataRow(
-                                  cells: [
-                                    DataCell(Text((realIndex + 1).toString())),
-                                    DataCell(Text(item.username)),
-
-                                    DataCell(Text(item.numperPhone)),
-                                    DataCell(Text(item.wilaya)),
-
-                                    DataCell(Text(item.email)),
-                                    DataCell(Text(item.createdAt.toString())),
-
-                                    DataCell(
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              await showCustomConfirmationDialog(
-                                                context,
-                                                title: "تنبيه",
-                                                message:
-                                                    "هل أنت متأكد من الحذف؟",
-                                                onConfirmAction: () {},
-                                              );
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.delete,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.blue,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.edit,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-
-                                          const SizedBox(width: 10),
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.amber.shade700,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.swap_vert,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text((realIndex + 1).toString()),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
+                                      DataCell(Text(item.username)),
+
+                                      DataCell(Text(item.numperPhone)),
+                                      DataCell(Text(item.wilaya)),
+
+                                      DataCell(Text(item.email)),
+                                      DataCell(
+                                        Text(
+                                          item.createdAt.toString().substring(
+                                            0,
+                                            10,
+                                          ),
+                                        ),
+                                      ),
+
+                                      // DataCell(
+                                      //   Row(
+                                      //     children: [
+                                      //       InkWell(
+                                      //         onTap: () async {
+                                      //           await showCustomConfirmationDialog(
+                                      //             context,
+                                      //             title: "تنبيه",
+                                      //             message:
+                                      //                 "هل أنت متأكد من الحذف؟",
+                                      //             onConfirmAction: () {},
+                                      //           );
+                                      //         },
+                                      //         child: Container(
+                                      //           padding: const EdgeInsets.all(
+                                      //             6,
+                                      //           ),
+                                      //           decoration: BoxDecoration(
+                                      //             color: Colors.red,
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(6),
+                                      //           ),
+                                      //           child: const Icon(
+                                      //             Icons.delete,
+                                      //             color: Colors.white,
+                                      //             size: 18,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //       const SizedBox(width: 10),
+                                      //       InkWell(
+                                      //         onTap: () {},
+                                      //         child: Container(
+                                      //           padding: const EdgeInsets.all(
+                                      //             6,
+                                      //           ),
+                                      //           decoration: BoxDecoration(
+                                      //             color: Colors.blue,
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(6),
+                                      //           ),
+                                      //           child: const Icon(
+                                      //             Icons.edit,
+                                      //             color: Colors.white,
+                                      //             size: 18,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+
+                                      //       const SizedBox(width: 10),
+                                      //       InkWell(
+                                      //         onTap: () {},
+                                      //         child: Container(
+                                      //           padding: const EdgeInsets.all(
+                                      //             6,
+                                      //           ),
+                                      //           decoration: BoxDecoration(
+                                      //             color: Colors.amber.shade700,
+                                      //             borderRadius:
+                                      //                 BorderRadius.circular(6),
+                                      //           ),
+                                      //           child: const Icon(
+                                      //             Icons.swap_vert,
+                                      //             color: Colors.white,
+                                      //             size: 18,
+                                      //           ),
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      // ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         ),
@@ -248,7 +274,7 @@ class _UsersState extends State<Users> {
       DataColumn(label: Text('الولاية'.tr)),
       DataColumn(label: Text('بريد الإلكتروني'.tr)),
       DataColumn(label: Text('created_at'.tr)),
-      DataColumn(label: Text('actions'.tr)),
+      // DataColumn(label: Text('actions'.tr)),
     ];
   }
 }

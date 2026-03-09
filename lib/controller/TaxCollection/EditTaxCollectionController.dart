@@ -34,9 +34,35 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
   int? type;
 
   final List<Map<String, Object>> calcelators = [
-    {'key': 0, 'label': 'Hassba1'},
-    {'key': 1, 'label': 'Hassba2'},
-    {'key': 2, 'label': 'Hassba3'},
+    {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
+    {'key': 1, 'label': "حاسبة G12", 'route': 'calactivityType'},
+    {'key': 2, 'label': "حاسبة G12BES", 'route': 'Typeacteviteg12bes'},
+    {'key': 3, 'label': "كشف التلخيص السنوي", 'route': 'Lossorprofit'},
+    {'key': 4, 'label': "الطابع الجبائي", 'route': 'Taxstamp'},
+    {'key': 5, 'label': "budget_deposit", 'route': 'Inputdata'},
+    {'key': 6, 'label': "gifts", 'route': 'Costsguidance'},
+    {
+      'key': 7,
+      'label': "advertising_sponsorship",
+      'route': 'Advertisingandsponsorship',
+    },
+
+    {'key': 8, 'label': "البحث والتطوير", 'route': 'Researchanddevelopment'},
+    {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueisttype'},
+    {'key': 10, 'label': "المداخيل العقارية", 'route': 'Realestateincometype'},
+    {
+      'key': 11,
+      'label': "التنازل عن العقارات",
+      'route': 'Surrenderofthepropertytype',
+    },
+
+    {
+      'key': 12,
+      'label': "التنازل عن الإستثمار",
+      'route': 'Waiverofinvestmentvalue',
+    },
+    {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
+    {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
   ];
 
   Lawdata lawdata = Lawdata(Get.find());
@@ -51,7 +77,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
   List<CategoryModel> category = [];
 
   Future<void> editdata() async {
-     if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
     if (selectedCategory == null) {
       showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
       return;
@@ -90,7 +116,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
       "law_id": law?.id,
-      "calcul": calculator?['label'],
+      "calcul": calculator?['route'],
       "index_link": numperindex.text,
     };
 

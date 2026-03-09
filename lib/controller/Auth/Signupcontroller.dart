@@ -66,14 +66,14 @@ class Signupcontroller extends GetxController {
           "username",
           response["data"]["user"]["username"],
         );
-        myServices.sharedPreferences!.setInt(
-          "user_notify_status",
-          response["data"]["user"]["notification_status"],
-        );
+        // myServices.sharedPreferences!.setInt(
+        //   "user_notify_status",
+        //   response["data"]["user"]["notification_status"],
+        // );
 
         myServices.sharedPreferences!.setString(
           "token",
-          response["data"]["user"]["token"],
+          response["data"]["token"],
         );
 
         Get.offNamed(Approutes.sidbar);

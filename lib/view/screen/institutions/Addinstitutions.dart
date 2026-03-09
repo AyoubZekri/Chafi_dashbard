@@ -127,7 +127,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                   (f) => DropdownMenuItem<int>(
                                     value: f['key'] as int,
                                     child: Text(
-                                      f['label'].toString(),
+                                      f['label'].toString().tr,
                                       style: const TextStyle(fontSize: 14),
                                     ),
                                   ),
@@ -163,7 +163,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                               (f) => DropdownMenuItem<int>(
                                 value: f['key'] as int,
                                 child: Text(
-                                  f['label'].toString(),
+                                  f['label'].toString().tr,
                                   style: const TextStyle(fontSize: 14),
                                 ),
                               ),

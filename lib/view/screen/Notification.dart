@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/data/model/NotificationModel.dart';
 import 'package:flutter/cupertino.dart';
@@ -115,146 +117,203 @@ class _NotificationState extends State<NotificationBar> {
                 Expanded(
                   child: Handlingview(
                     statusrequest: controller.statusrequest,
-                    widget: Scrollbar(
-                      controller: horizontalController,
-                      thumbVisibility: true,
-                      trackVisibility: true,
-                      child: SingleChildScrollView(
+                    widget: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(
+                        scrollbars: true,
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                        },
+                      ),
+                      child: Scrollbar(
                         controller: horizontalController,
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: MediaQuery.of(context).size.width,
-                          ),
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              headingRowHeight: 50,
-                              dataRowHeight: 60,
-                              headingRowColor: MaterialStateProperty.all(
-                                const Color(0xFFF8F9FA),
-                              ),
-                              border: TableBorder(
-                                horizontalInside: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1,
+                        thumbVisibility: true,
+                        trackVisibility: true,
+                        child: SingleChildScrollView(
+                          controller: horizontalController,
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width,
+                            ),
+                            child: SingleChildScrollView(
+                              child: DataTable(
+                                headingRowHeight: 50,
+                                dataRowHeight: 60,
+                                headingRowColor: MaterialStateProperty.all(
+                                  const Color(0xFFF8F9FA),
                                 ),
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1,
+                                border: TableBorder(
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
                                 ),
+                                columns: buildColumns(),
+                                rows: controller.pagedData.asMap().entries.map((
+                                  entry,
+                                ) {
+                                  int index = entry.key;
+                                  NotificationModel item = entry.value;
+
+                                  int realIndex =
+                                      controller.currentPage *
+                                          controller.rowsPerPage +
+                                      index +
+                                      1;
+
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text((realIndex + 1).toString()),
+                                      ),
+                                      DataCell(Text(item.title)),
+                                      DataCell(Text(item.localizedcontent)),
+                                      DataCell(
+                                        Text(
+                                          controller.sestemTax
+                                              .firstWhere(
+                                                (e) => e['key'] == item.taxId,
+                                                orElse: () => {'label': '-'},
+                                              )['label']
+                                              .toString()
+                                              .tr,
+                                        ),
+                                      ),
+
+                                      DataCell(
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                await showCustomConfirmationDialog(
+                                                  context,
+                                                  title: "تنبيه".tr,
+                                                  message:
+                                                      "هل أنت متأكد من الحذف؟"
+                                                          .tr,
+                                                  onConfirmAction: () {
+                                                    controller.deletdata(
+                                                      item.id,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.setEditData(item);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      Notificationdealog(
+                                                        mode:
+                                                            NotificationdealogMode
+                                                                .edit,
+                                                        controller: controller,
+                                                        id: item.id,
+                                                      ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blue,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.amber.shade700,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.swap_vert,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () async {
+                                                await showCustomConfirmationDialog(
+                                                  context,
+                                                  title: "تنبيه".tr,
+                                                  message:
+                                                      "هل تريد إرسال إشعار لي المستخدمين"
+                                                          .tr,
+                                                  onConfirmAction: () {
+                                                    controller.nptificationsend(
+                                                      item.id,
+                                                      item.localizedcontent,
+                                                      item.localizedtitle,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(
+                                                    0xFF22C55E,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.send,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
                               ),
-                              columns: buildColumns(),
-                              rows: controller.pagedData.asMap().entries.map((
-                                entry,
-                              ) {
-                                int index = entry.key;
-                                NotificationModel item = entry.value;
-
-                                int realIndex =
-                                    controller.currentPage *
-                                        controller.rowsPerPage +
-                                    index +
-                                    1;
-
-                                return DataRow(
-                                  cells: [
-                                    DataCell(Text((realIndex + 1).toString())),
-                                    DataCell(Text(item.title)),
-                                    DataCell(Text(item.localizedcontent)),
-                                    DataCell(
-                                      Text(
-                                        controller.sestemTax
-                                            .firstWhere(
-                                              (e) => e['key'] == item.taxId,
-                                              orElse: () => {'label': '-'},
-                                            )['label']
-                                            .toString(),
-                                      ),
-                                    ),
-
-                                    DataCell(
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              await showCustomConfirmationDialog(
-                                                context,
-                                                title: "تنبيه".tr,
-                                                message:
-                                                    "هل أنت متأكد من الحذف؟".tr,
-                                                onConfirmAction: () {
-                                                  controller.deletdata(item.id);
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.delete,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          InkWell(
-                                            onTap: () {
-                                              controller.setEditData(item);
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    Notificationdealog(
-                                                      mode:
-                                                          NotificationdealogMode
-                                                              .edit,
-                                                      controller: controller,
-                                                      id: item.id,
-                                                    ),
-                                              );
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.blue,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.edit,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-
-                                          const SizedBox(width: 10),
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.amber.shade700,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.swap_vert,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
                             ),
                           ),
                         ),
@@ -289,7 +348,6 @@ class _NotificationState extends State<NotificationBar> {
       DataColumn(label: Text('actions'.tr)),
     ];
   }
-
 }
 
 // Pagination Footer

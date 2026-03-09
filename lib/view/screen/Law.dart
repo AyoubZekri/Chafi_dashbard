@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +24,8 @@ class Law extends StatefulWidget {
 }
 
 class _LawState extends State<Law> {
+  final ScrollController horizontalController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     Get.create(() => Lawcontroller());
@@ -115,143 +119,171 @@ class _LawState extends State<Law> {
                 Expanded(
                   child: Handlingview(
                     statusrequest: controller.statusrequest,
-                    widget: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: MediaQuery.of(context).size.width - 300,
-                        ),
+                    widget: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(
+                        scrollbars: true,
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                        },
+                      ),
+                      child: Scrollbar(
+                        controller: horizontalController,
+                        thumbVisibility: true,
+                        trackVisibility: true,
                         child: SingleChildScrollView(
-                          child: DataTable(
-                            headingRowHeight: 50,
-                            dataRowHeight: 50,
-                            headingRowColor: MaterialStateProperty.all(
-                              const Color(0xFFF8F9FA),
+                          controller: horizontalController,
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width - 300,
                             ),
-                            border: TableBorder(
-                              horizontalInside: BorderSide(
-                                color: Colors.grey.shade200,
-                                width: 1,
-                              ),
-                              bottom: BorderSide(
-                                color: Colors.grey.shade200,
-                                width: 1,
-                              ),
-                            ),
-                            columns: buildColumns(),
-                            rows: controller.pagedData.asMap().entries.map((
-                              entry,
-                            ) {
-                              int index = entry.key;
-                              LawModel item = entry.value;
-
-                              int realIndex =
-                                  controller.currentPage *
-                                      controller.rowsPerPage +
-                                  index +
-                                  1;
-
-                              return DataRow(
-                                cells: [
-                                  DataCell(Text((realIndex + 1).toString())),
-                                  DataCell(Text(item.name)),
-                                  DataCell(
-                                    Row(
-                                      children: [
-                                        InkWell(
-                                          onTap: () async {
-                                            await showCustomConfirmationDialog(
-                                              context,
-                                              title: "تنبيه".tr,
-                                              message: "هل أنت متأكد من الحذف؟".tr,
-                                              onConfirmAction: () {
-                                                controller.deletLaw(item.id);
-                                              },
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: const Icon(
-                                              Icons.delete,
-                                              color: Colors.white,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        InkWell(
-                                          onTap: () {
-                                            controller.setEditData(item);
-
-                                            controller.setEditData(item);
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => LawDialog(
-                                                mode: LawDialogMode.edit,
-                                                controller: controller,
-                                                lawId: item.id,
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: const Icon(
-                                              Icons.edit,
-                                              color: Colors.white,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ),
-
-                                        const SizedBox(width: 10),
-                                        InkWell(
-                                          onTap: () {
-                                            controller.setIndexData(item);
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => LawIndexDialog(
-                                                controller: controller,
-                                                law: item,
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.amber.shade700,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            child: const Icon(
-                                              Icons.swap_vert,
-                                              color: Colors.white,
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                            child: SingleChildScrollView(
+                              child: DataTable(
+                                headingRowHeight: 50,
+                                dataRowHeight: 50,
+                                headingRowColor: MaterialStateProperty.all(
+                                  const Color(0xFFF8F9FA),
+                                ),
+                                border: TableBorder(
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
                                   ),
-                                ],
-                              );
-                            }).toList(),
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                ),
+                                columns: buildColumns(),
+                                rows: controller.pagedData.asMap().entries.map((
+                                  entry,
+                                ) {
+                                  int index = entry.key;
+                                  LawModel item = entry.value;
+
+                                  int realIndex =
+                                      controller.currentPage *
+                                          controller.rowsPerPage +
+                                      index +
+                                      1;
+
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text((realIndex + 1).toString()),
+                                      ),
+                                      DataCell(Text(item.name)),
+                                      DataCell(
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                await showCustomConfirmationDialog(
+                                                  context,
+                                                  title: "تنبيه".tr,
+                                                  message:
+                                                      "هل أنت متأكد من الحذف؟"
+                                                          .tr,
+                                                  onConfirmAction: () {
+                                                    controller.deletLaw(
+                                                      item.id,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.setEditData(item);
+
+                                                controller.setEditData(item);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) => LawDialog(
+                                                    mode: LawDialogMode.edit,
+                                                    controller: controller,
+                                                    lawId: item.id,
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blue,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.setIndexData(item);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      LawIndexDialog(
+                                                        controller: controller,
+                                                        law: item,
+                                                      ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.amber.shade700,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.swap_vert,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-           
+
                 TablePaginationFooter(
                   currentPage: controller.currentPage,
                   rowsPerPage: controller.rowsPerPage,

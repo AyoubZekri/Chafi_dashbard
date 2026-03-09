@@ -74,7 +74,7 @@ class SidebarWidget extends StatelessWidget {
 
                               Expanded(
                                 child: Text(
-                                  screen['name'],
+                                  screen['name'].toString().tr,
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: isSelected
@@ -163,7 +163,7 @@ class SidebarWidget extends StatelessWidget {
                               ),
                               const SizedBox(width: 12),
                               Text(
-                                sub['name'],
+                                sub['name'].toString().tr,
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: isSubSelected

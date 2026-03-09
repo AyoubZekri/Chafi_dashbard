@@ -43,14 +43,14 @@ class Activitiescontroller extends GetxController {
   List<ActivityModel> data = [];
   List<ActivityModel> filteredData = [];
   final List<Map<String, Object>> sestemTax = [
-    {'key': 0, 'label': "tax_flat_system".tr},
-    {'key': 1, 'label': "tax_simplified_system".tr},
-    {'key': 2, 'label': "tax_real_system".tr},
+    {'key': 0, 'label': "tax_flat_system"},
+    {'key': 1, 'label': "tax_simplified_system"},
+    {'key': 2, 'label': "tax_real_system"},
   ];
 
   final List<Map<String, Object>> statusTaxList = [
-    {'key': 1, 'label': "مستحسن".tr},
-    {'key': 2, 'label': "إجباري".tr},
+    {'key': 1, 'label': "مستحسن"},
+    {'key': 2, 'label': "إجباري"},
   ];
 
   int currentPage = 0;

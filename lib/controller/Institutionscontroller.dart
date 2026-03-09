@@ -20,12 +20,12 @@ class InstitutionscontrollerImp extends Institutionscontroller {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   final List<Map<String, Object>> filters = [
-    {'key': 0, 'label': ' all'.tr},
-    {'key': 1, 'label': 'micro'.tr},
-    {'key': 2, 'label': 'small'.tr},
-    {'key': 3, 'label': 'medium'.tr},
-    {'key': 4, 'label': 'large'.tr},
-    {'key': 5, 'label': 'very_large'.tr},
+    {'key': 0, 'label': ' all'},
+    {'key': 1, 'label': 'micro'},
+    {'key': 2, 'label': 'small'},
+    {'key': 3, 'label': 'medium'},
+    {'key': 4, 'label': 'large'},
+    {'key': 5, 'label': 'very_large'},
   ];
 
   InstitutionData institutionData = InstitutionData(Get.find());

@@ -1,37 +1,39 @@
 import 'dart:ui';
 
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
-import 'package:chafi_dashboard/data/model/DifferantModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/ExternallinksController.dart';
+import '../../controller/BonusesAndCompensationsController.dart';
 import '../../core/class/handlingview.dart';
 import '../../core/functions/Dealog.dart';
+import '../../data/model/BonusModel.dart';
+import '../../data/model/NatureoftheactivityModel.dart';
+import '../Widget/Bonusesandcompensations/CstuembonusesandcompensationsDealog.dart';
 import '../Widget/Button/ActionButton.dart';
-import '../Widget/Externallink/CustemActivitysDealog.dart';
 import '../Widget/TablePaginationFooter.dart';
 import '../Widget/TextFild/CustemDropDownField.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
-class Externallinks extends StatefulWidget {
-  const Externallinks({super.key});
+class BonusesAndCompensations extends StatefulWidget {
+  const BonusesAndCompensations({super.key});
 
   @override
-  State<Externallinks> createState() => _ExternallinksState();
+  State<BonusesAndCompensations> createState() =>
+      _BonusesAndCompensationsState();
 }
 
-class _ExternallinksState extends State<Externallinks> {
+class _BonusesAndCompensationsState extends State<BonusesAndCompensations> {
   final ScrollController horizontalController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    Get.create(() => ExternallinkscontrollerImp());
+    Get.create(() => Bonusesandcompensationscontroller());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: GetBuilder<ExternallinkscontrollerImp>(
+      body: GetBuilder<Bonusesandcompensationscontroller>(
         builder: (controller) {
           return Container(
             padding: const EdgeInsets.all(24.0),
@@ -60,10 +62,11 @@ class _ExternallinksState extends State<Externallinks> {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => Externallinkdealog(
-                          mode: ExternallinkdealogMode.add,
-                          controller: controller,
-                        ),
+                        builder: (context) =>
+                            Cstuembonusesandcompensationsdealog(
+                              mode: BonusesandcompensationsDialogMode.add,
+                              controller: controller,
+                            ),
                       );
                     },
                   ),
@@ -161,7 +164,7 @@ class _ExternallinksState extends State<Externallinks> {
                                   entry,
                                 ) {
                                   int index = entry.key;
-                                  DifferentsModel item = entry.value;
+                                  BonusModel item = entry.value;
 
                                   int realIndex =
                                       controller.currentPage *
@@ -175,13 +178,15 @@ class _ExternallinksState extends State<Externallinks> {
                                         Text((realIndex + 1).toString()),
                                       ),
                                       DataCell(Text(item.localizedName)),
-                                      DataCell(Text(item.indexLink)),
                                       DataCell(
                                         Text(
-                                          item.createdAt.toString().substring(
-                                            0,
-                                            10,
-                                          ),
+                                          controller.cat
+                                              .firstWhere(
+                                                (e) =>
+                                                    e['key'] == item.category,
+                                                orElse: () => {'label': '-'},
+                                              )['label']
+                                              .toString().tr,
                                         ),
                                       ),
                                       DataCell(
@@ -191,10 +196,9 @@ class _ExternallinksState extends State<Externallinks> {
                                               onTap: () async {
                                                 await showCustomConfirmationDialog(
                                                   context,
-                                                  title: "تنبيه".tr,
+                                                  title: "تنبيه",
                                                   message:
-                                                      "هل أنت متأكد من الحذف؟"
-                                                          .tr,
+                                                      "هل أنت متأكد من الحذف؟",
                                                   onConfirmAction: () {
                                                     controller.deletdata(
                                                       item.id,
@@ -225,9 +229,9 @@ class _ExternallinksState extends State<Externallinks> {
                                                 showDialog(
                                                   context: context,
                                                   builder: (context) =>
-                                                      Externallinkdealog(
+                                                      Cstuembonusesandcompensationsdealog(
                                                         mode:
-                                                            ExternallinkdealogMode
+                                                            BonusesandcompensationsDialogMode
                                                                 .edit,
                                                         controller: controller,
                                                         id: item.id,
@@ -250,36 +254,6 @@ class _ExternallinksState extends State<Externallinks> {
                                                 ),
                                               ),
                                             ),
-
-                                            const SizedBox(width: 10),
-                                            InkWell(
-                                              onTap: () {
-                                                controller.setIndexData(item);
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (_) =>
-                                                      ExternallinkdealogIndexDialog(
-                                                        controller: controller,
-                                                        appointmentsmodel: item,
-                                                      ),
-                                                );
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.all(
-                                                  6,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.amber.shade700,
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.swap_vert,
-                                                  color: Colors.white,
-                                                  size: 18,
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -294,6 +268,7 @@ class _ExternallinksState extends State<Externallinks> {
                     ),
                   ),
                 ),
+
                 TablePaginationFooter(
                   currentPage: controller.currentPage,
                   rowsPerPage: controller.rowsPerPage,
@@ -314,12 +289,9 @@ class _ExternallinksState extends State<Externallinks> {
   List<DataColumn> buildColumns() {
     return [
       DataColumn(label: Text("#")),
-      DataColumn(label: Text('إسم الموقع'.tr)),
-      DataColumn(label: Text('الرابط'.tr)),
-      DataColumn(label: Text('تاريخ الإنشاء'.tr)),
+      DataColumn(label: Text('name'.tr)),
+      DataColumn(label: Text('الفئة'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];
   }
 }
-
-// Pagination Footer

@@ -158,10 +158,12 @@ class Natureoftheactivitycontroller extends GetxController {
   void setEditData(Natureoftheactivitymodel law) {
     editnamear.text = law.name;
     editnamefr.text = law.nameFr;
+    update();
   }
 
   void setIndexData(Natureoftheactivitymodel law) {
     index.text = law.index.toString();
+    update();
   }
 
   @override
@@ -185,7 +187,10 @@ class Natureoftheactivitycontroller extends GetxController {
   void filterData(String query) {
     currentPage = 0;
     filteredData = data
-        .where((item) => item.name.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (item) =>
+              item.localizedName.toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
     update();
   }

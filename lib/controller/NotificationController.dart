@@ -33,15 +33,17 @@ class Notificationcontroller extends GetxController {
   int rowsPerPage = 10;
 
   final List<Map<String, Object>> sestemTax = [
-    {'key': 0, 'label': "tax_flat_system".tr},
-    {'key': 1, 'label': "tax_simplified_system".tr},
-    {'key': 2, 'label': "tax_real_system".tr},
+    {'key': 0, 'label': "tax_flat_system"},
+    {'key': 1, 'label': "tax_simplified_system"},
+    {'key': 2, 'label': "tax_real_system"},
   ];
 
   final List<Map<String, Object>> typenotification = [
-    {'key': 0, 'label': "تنبيه".tr},
-    {'key': 1, 'label': "تحديث".tr},
-    {'key': 2, 'label': "مهم".tr},
+    {'key': 0, 'label': "تنبيه"},
+    {'key': 1, 'label': "تحديث"},
+    {'key': 2, 'label': "موعد"},
+    {'key': 2, 'label': "إعلان"},
+    {'key': 2, 'label': "جديد"},
   ];
 
   Myservices myServices = Get.find();
@@ -181,6 +183,20 @@ class Notificationcontroller extends GetxController {
       showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
     } else {
       showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
+    }
+  }
+
+  Future<void> nptificationsend(int id, String body,String title) async {
+    var response = await notificationdata.Notification({
+      "id": id.toString(),
+      "title": title,
+      "body": body,
+    });
+    statusrequest = handlingData(response);
+    if (statusrequest == Statusrequest.success && response["status"] == 1) {
+      showSnackbar("نجاح".tr, "تم الإرسال بنجاح".tr, Colors.green);
+    } else {
+      showSnackbar("خطأ".tr, "فشل الإرسال".tr, Colors.red);
     }
   }
 

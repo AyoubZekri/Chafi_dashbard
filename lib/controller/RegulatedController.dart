@@ -18,10 +18,10 @@ class RegulatedcontrollerImp extends Regulatedcontroller {
   int selectedFilter = 0;
 
   final List<Map<String, Object>> filters = [
-    {'key': 0, 'label': "all".tr},
-    {'key': 6, 'label': "filter_innovative".tr},
-    {'key': 7, 'label': "filter_startup".tr},
-    {'key': 8, 'label': "filter_incubator".tr},
+    {'key': 0, 'label': "all"},
+    {'key': 6, 'label': "filter_innovative"},
+    {'key': 7, 'label': "filter_startup"},
+    {'key': 8, 'label': "filter_incubator"},
   ];
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
