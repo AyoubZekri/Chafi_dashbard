@@ -32,7 +32,7 @@ class Custempostexclusive extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
                 imageUrl,
-                fit: BoxFit.contain,
+                fit: BoxFit.fill,
                 errorBuilder: (_, __, ___) => Container(
                   color: Colors.grey.shade200,
                   child: const Icon(Icons.image, size: 40, color: Colors.grey),

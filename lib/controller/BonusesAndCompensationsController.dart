@@ -54,14 +54,15 @@ class Bonusesandcompensationscontroller extends GetxController {
         List listdata = response['data'];
         data.addAll(listdata.map((e) => BonusModel.fromJson(e)));
         filteredData = List.from(data);
-
         print("data == $data");
         print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
     }
-
     update();
   }
 
@@ -157,9 +158,6 @@ class Bonusesandcompensationscontroller extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await bonusesandcompensationsdata.deletdata({
       "id": id.toString(),
     });

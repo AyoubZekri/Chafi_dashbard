@@ -217,7 +217,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
     numperindex.text = model.indexLink;
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive
-        ? calcelators.firstWhere((c) => c['label'] == model.calcul)['key']
+        ? calcelators.firstWhere((c) => c['route'] == model.calcul)['key']
               as int
         : null;
 
@@ -228,10 +228,26 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
     update();
   }
 
+  cleardata() {
+    titlear.clear();
+    titlefr.clear();
+    infoar.clear();
+    infofr.clear();
+    numperindex.clear();
+    id = null;
+    isLawActive = false;
+    isCalculatorActive = false;
+    selectedCalculator = null;
+    selectedLaw = null;
+    selectedCategory = null;
+    update();
+  }
+
   @override
   void onInit() {
+    cleardata();
+    print("=============");
     viewdata();
-    viewdataCategory();
     super.onInit();
   }
 }

@@ -18,7 +18,7 @@ class Edittaxcollection extends StatefulWidget {
 class _EdittaxcollectionState extends State<Edittaxcollection> {
   @override
   Widget build(BuildContext context) {
-    Get.create(() => EditTaxCollectionControllerImp());
+    // Get.create(() => EditTaxCollectionControllerImp());
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       body: GetBuilder<EditTaxCollectionControllerImp>(

@@ -124,13 +124,17 @@ class _JoiningcategoriesappState extends State<Joiningcategoriesapp> {
                         scrollbars: true,
                         dragDevices: {
                           PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                          PointerDeviceKind.mouse, 
                         },
                       ),
-                      child: Scrollbar(
-                        controller: horizontalController,
-                        thumbVisibility: true,
-                        trackVisibility: true,
+                      child: ScrollConfiguration(
+                        behavior: const ScrollBehavior().copyWith(
+                          scrollbars: true,
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse, 
+                          },
+                        ),
                         child: SingleChildScrollView(
                           controller: horizontalController,
                           scrollDirection: Axis.horizontal,
@@ -181,7 +185,8 @@ class _JoiningcategoriesappState extends State<Joiningcategoriesapp> {
                                                 (e) => e['key'] == item.taxId,
                                                 orElse: () => {'label': '-'},
                                               )['label']
-                                              .toString().tr,
+                                              .toString()
+                                              .tr,
                                         ),
                                       ),
                                       DataCell(

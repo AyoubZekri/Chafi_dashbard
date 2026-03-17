@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ReportPostDialogContent extends StatelessWidget {
   final String title;
   final String description;
-  final String imageUrl;
+  final String? imageUrl;
   final String createdAt;
 
   const ReportPostDialogContent({
@@ -16,20 +16,22 @@ class ReportPostDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage =
+        imageUrl != null && imageUrl!.isNotEmpty && imageUrl != "null";
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // الصورة
-        ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: Image.network(
-            imageUrl,
-            height: 300,
-            width: double.infinity,
-            fit: BoxFit.contain,
+        if (hasImage)
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Image.network(
+              imageUrl!,
+              height: 300,
+              width: double.infinity,
+              fit: BoxFit.contain,
+            ),
           ),
-        ),
 
         Padding(
           padding: const EdgeInsets.all(20),

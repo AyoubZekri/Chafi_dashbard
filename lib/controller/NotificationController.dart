@@ -42,8 +42,8 @@ class Notificationcontroller extends GetxController {
     {'key': 0, 'label': "تنبيه"},
     {'key': 1, 'label': "تحديث"},
     {'key': 2, 'label': "موعد"},
-    {'key': 2, 'label': "إعلان"},
-    {'key': 2, 'label': "جديد"},
+    {'key': 3, 'label': "إعلان"},
+    {'key': 4, 'label': "جديد"},
   ];
 
   Myservices myServices = Get.find();
@@ -72,6 +72,9 @@ class Notificationcontroller extends GetxController {
 
         print("data == $data");
         print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -113,6 +116,7 @@ class Notificationcontroller extends GetxController {
       namefr.clear();
       bodyar.clear();
       bodyfr.clear();
+      Timer.clear();
       selectedTypeNotification = null;
       selectedsestemTax = null;
       isSistem = false;
@@ -154,6 +158,7 @@ class Notificationcontroller extends GetxController {
           editnamefr.clear();
           editbodyar.clear();
           editbodyfr.clear();
+          Timer.clear();
           editselectedTypeNotification = null;
           selectedsestemTax = null;
           isSistem = false;
@@ -169,9 +174,6 @@ class Notificationcontroller extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await notificationdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
 
@@ -186,7 +188,7 @@ class Notificationcontroller extends GetxController {
     }
   }
 
-  Future<void> nptificationsend(int id, String body,String title) async {
+  Future<void> nptificationsend(int id, String body, String title) async {
     var response = await notificationdata.Notification({
       "id": id.toString(),
       "title": title,

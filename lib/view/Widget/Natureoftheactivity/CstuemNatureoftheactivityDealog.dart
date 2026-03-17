@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../TextFild/LabeledTextField.dart';
 
@@ -51,7 +52,7 @@ final NatureoftheactivityDialogMode mode;
                       : controller.namear,
                   label: "name_ar".tr,
                   hintText: 'enter_name_here'.tr,
-                  valid: (val) => validateInput(val!, 1, 6, "text"),
+                  valid: (val) => validateInput(val!, 1, 20, "text"),
                 ),
 
                 const SizedBox(height: 15),
@@ -61,7 +62,7 @@ final NatureoftheactivityDialogMode mode;
                       : controller.namefr,
                   label: "name_fr".tr,
                   hintText: 'enter_name_here'.tr,
-                  valid: (val) => validateInput(val!, 1, 6, "text"),
+                  valid: (val) => validateInput(val!, 1, 20, "text"),
                 ),
                 const SizedBox(height: 30),
                 Row(
@@ -80,7 +81,7 @@ final NatureoftheactivityDialogMode mode;
                     const SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6269F2),
+                        backgroundColor: AppColor.typography,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 12,

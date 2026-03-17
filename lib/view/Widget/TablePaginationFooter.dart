@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../core/constant/Colorapp.dart';
+
 class TablePaginationFooter extends StatelessWidget {
   final int currentPage;
   final int rowsPerPage;
@@ -45,10 +47,10 @@ class TablePaginationFooter extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
-                  vertical: 6,
+                  vertical: 1,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6269F2),
+                  color: AppColor.typography,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/CommonquestionsController.dart';
 import '../../../core/class/Statusrequest.dart';
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../TextFild/LabeledTextField.dart';
 
@@ -124,7 +125,7 @@ class Commonquestionsdealog extends StatelessWidget {
                     GetBuilder<CommonquestionscontrollerImp>(
                       builder: (_) => ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6269F2),
+                          backgroundColor: AppColor.typography,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 30,
                             vertical: 12,
@@ -226,7 +227,7 @@ class AppointmentsIndexDialog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,

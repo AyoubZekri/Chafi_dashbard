@@ -32,7 +32,7 @@ class CommonquestionscontrollerImp extends Commonquestionscontroller {
   List<DifferentsModel> filteredData = [];
 
   Future<void> adddata() async {
-     if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -65,7 +65,7 @@ class CommonquestionscontrollerImp extends Commonquestionscontroller {
   }
 
   Future<void> editdata(int id) async {
-     if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -174,13 +174,11 @@ class CommonquestionscontrollerImp extends Commonquestionscontroller {
   }
 
   Future<void> deletLaw(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await differentdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
-      data = data.where((element) => element.id != id).toList();
+      data.removeWhere((element) => element.id == id);
+      filteredData = data;
       update();
 
       showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);

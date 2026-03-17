@@ -88,18 +88,17 @@ class EditinstitutionscontrollerImp extends GetxController {
     titleFr.text = model.titleFr;
     infoFr.text = model.bodyFr;
     numPerIndex.text = model.indexLink ?? '';
-
     selectedInstitutions = model.scope;
     type = model.typeInstitution;
-
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive
-        ? calcelators.firstWhere((c) => c['label'] == model.calcul)['key']
+        ? calcelators.firstWhere((c) => c['route'] == model.calcul)['key']
               as int
         : null;
 
     isLawActive = model.lawId != null;
     selectedLaw = model.lawId;
+    print("=====================$type");
     update();
   }
 
@@ -142,8 +141,8 @@ class EditinstitutionscontrollerImp extends GetxController {
     statusRequest = handlingData(response);
 
     if (statusRequest == Statusrequest.success && response["status"] == 1) {
+      print("====================0$type");
       clearForm();
-      // العودة لصفحة Institutions
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
         type == 1 ? 0 : 1,
         () => type == 1 ? Institutions() : Regulated(),
@@ -167,7 +166,6 @@ class EditinstitutionscontrollerImp extends GetxController {
     selectedLaw = null;
     isCalculatorActive = false;
     isLawActive = false;
-    type = null;
   }
 
   Future<void> viewLaws() async {
@@ -178,6 +176,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     statusRequest = handlingData(response);
 
     if (statusRequest == Statusrequest.success && response["status"] == 1) {
+      laws.clear();
       laws = List<LawModel>.from(
         response['data'].map((e) => LawModel.fromJson(e)),
       );

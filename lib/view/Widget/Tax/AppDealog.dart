@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controller/application/PartialSystemAppController.dart';
 import '../../../controller/application/RealSytemAppController.dart';
 import '../../../controller/application/SimplifiedsystemAppController.dart';
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../../../data/model/TaxAndAppModel.dart';
 import '../TextFild/LabeledTextField.dart';
@@ -63,7 +64,7 @@ class CustemiRealappdealog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,
@@ -147,7 +148,7 @@ class CustemSimplappdealog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,
@@ -232,7 +233,7 @@ class CustemPartialappdealog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,

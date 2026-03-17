@@ -129,10 +129,14 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
                           PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                         },
                       ),
-                      child: Scrollbar(
-                      controller: horizontalController,
-                      thumbVisibility: true,
-                      trackVisibility: true,
+                      child: ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(
+                        scrollbars: true,
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                        },
+                      ),
                       child: SingleChildScrollView(
                         controller: horizontalController,
                         scrollDirection: Axis.horizontal,

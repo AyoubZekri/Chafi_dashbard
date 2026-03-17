@@ -48,6 +48,9 @@ class Natureoftheactivitycontroller extends GetxController {
 
         print("data == $data");
         print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -136,9 +139,6 @@ class Natureoftheactivitycontroller extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await natureoftheactivitydata.deletdata({
       "id": id.toString(),
     });

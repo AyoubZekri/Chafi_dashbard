@@ -71,6 +71,11 @@ class ReportscontrollerImp extends Reportscontroller {
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
 
+    if (file == null) {
+      showSnackbar("خطأ".tr, "يرجى إدخال صورة".tr, Colors.red);
+      return;
+    }
+
     statusrequest = Statusrequest.loadeng;
     Map<String, dynamic> requestData = {
       'type': '1',
@@ -122,13 +127,11 @@ class ReportscontrollerImp extends Reportscontroller {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await postdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
-      data = data.where((element) => element.id != id).toList();
+      data.removeWhere((element) => element.id == id);
+      filteredData = data;
       update();
 
       showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);

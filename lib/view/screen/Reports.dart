@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/LinkApi.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/view/Widget/Post/PostDealog.dart';
@@ -96,67 +98,78 @@ class _ReportsState extends State<Reports> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 0.65,
-                        ),
-                    itemCount: controller.filteredData.length,
-                    itemBuilder: (context, index) {
-                      return ReportPostCard(
-                        title: controller.filteredData[index].localizedTitle,
-                        description:
-                            controller.filteredData[index].localizedBody,
-                        imageUrl:
-                            "${Applink.image}${controller.filteredData[index].image}",
-                        createdAt: controller.filteredData[index].createdAt
-                            .toString()
-                            .substring(0, 10),
-                        onEdit: () {
-                          controller.setEditData(
-                            controller.filteredData[index],
-                          );
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(
+                      scrollbars: true,
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                      },
+                    ),
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                            childAspectRatio: 0.62,
+                          ),
+                      itemCount: controller.filteredData.length,
+                      itemBuilder: (context, index) {
+                        return ReportPostCard(
+                          title: controller.filteredData[index].localizedTitle,
+                          description:
+                              controller.filteredData[index].localizedBody,
+                          imageUrl:
+                              "${Applink.image}${controller.filteredData[index].image}",
+                          createdAt: controller.filteredData[index].createdAt
+                              .toString()
+                              .substring(0, 10),
+                          onEdit: () {
+                            controller.setEditData(
+                              controller.filteredData[index],
+                            );
 
-                          showDialog(
-                            context: context,
-                            builder: (context) => PostDialog(
-                              mode: PostDialogMode.edit,
-                              controller: controller,
-                              id: controller.filteredData[index].id,
-                            ),
-                          );
-                        },
-                        onDelete: () async {
-                          await showCustomConfirmationDialog(
-                            context,
-                            title: "تنبيه".tr,
-                            message: "هل أنت متأكد من الحذف؟".tr,
-                            onConfirmAction: () {
-                              controller.deletdata(
-                                controller.filteredData[index].id,
-                              );
-                            },
-                          );
-                        },
-                        onShwo: () {
-                          showReportDialog(
-                            context: context,
-                            title:
-                                controller.filteredData[index].localizedTitle,
-                            description:
-                                controller.filteredData[index].localizedBody,
-                            imageUrl:
-                                "${Applink.image}${controller.filteredData[index].image}",
-                            createdAt: controller.filteredData[index].createdAt
-                                .toString()
-                                .substring(0, 10),
-                          );
-                        },
-                      );
-                    },
+                            showDialog(
+                              context: context,
+                              builder: (context) => PostDialog(
+                                mode: PostDialogMode.edit,
+                                controller: controller,
+                                id: controller.filteredData[index].id,
+                              ),
+                            );
+                          },
+                          onDelete: () async {
+                            await showCustomConfirmationDialog(
+                              context,
+                              title: "تنبيه".tr,
+                              message: "هل أنت متأكد من الحذف؟".tr,
+                              onConfirmAction: () {
+                                controller.deletdata(
+                                  controller.filteredData[index].id,
+                                );
+                              },
+                            );
+                          },
+                          onShwo: () {
+                            showReportDialog(
+                              context: context,
+                              title:
+                                  controller.filteredData[index].localizedTitle,
+                              description:
+                                  controller.filteredData[index].localizedBody,
+                              imageUrl:
+                                  "${Applink.image}${controller.filteredData[index].image}",
+                              createdAt: controller
+                                  .filteredData[index]
+                                  .createdAt
+                                  .toString()
+                                  .substring(0, 10),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

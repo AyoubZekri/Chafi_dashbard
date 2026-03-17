@@ -40,7 +40,7 @@ class ReportPostCard extends StatelessWidget {
               imageUrl,
               height: 250,
               width: double.infinity,
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
               errorBuilder: (_, __, ___) => Container(
                 height: 250,
                 color: Colors.grey.shade200,
@@ -55,6 +55,7 @@ class ReportPostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
@@ -79,10 +80,11 @@ class ReportPostCard extends StatelessWidget {
                           child: Row(
                             children: [
                               Icon(
-                                CupertinoIcons.pencil,
+                                Icons.visibility,
                                 size: 16,
-                                color: Colors.blue,
+                                color: Colors.green,
                               ),
+
                               SizedBox(width: 6),
                               Text('Shwo'),
                             ],
@@ -134,7 +136,6 @@ class ReportPostCard extends StatelessWidget {
             ),
           ),
           Spacer(),
-          const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
             child: Text(

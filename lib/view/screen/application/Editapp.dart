@@ -18,7 +18,6 @@ class Editapp extends StatefulWidget {
 class _EditappState extends State<Editapp> {
   @override
   Widget build(BuildContext context) {
-    Get.create(() => EditappcontrollerImp());
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       body: GetBuilder<EditappcontrollerImp>(

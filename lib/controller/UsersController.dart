@@ -36,6 +36,9 @@ class Userscontroller extends GetxController {
 
         print("data == $data");
         print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }

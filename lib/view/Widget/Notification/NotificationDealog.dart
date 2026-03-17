@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../controller/NotificationController.dart';
 import '../../../core/class/Statusrequest.dart';
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../TextFild/CustemDatePickerInfoUser.dart';
 import '../TextFild/DropdownFild.dart';
@@ -194,9 +195,9 @@ class _NotificationdealogState extends State<Notificationdealog> {
                 CustemDatePickerInfoUser(
                   label: 'اختر تاريخ التنبيه'.tr,
                   hintText: 'إختر تاريخ التنبيه'.tr,
-                  myController:
+                  controller:
                       isEdit ? widget.controller.editTimer : widget.controller.Timer,
-                  context: context,
+                 
                 ),
 
                 const SizedBox(height: 30),
@@ -217,7 +218,7 @@ class _NotificationdealogState extends State<Notificationdealog> {
                     const SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6269F2),
+                        backgroundColor: AppColor.typography,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 12,

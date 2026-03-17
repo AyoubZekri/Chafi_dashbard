@@ -70,6 +70,9 @@ class Lawcontroller extends GetxController {
 
         // print("data == $data");
         // print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -166,9 +169,6 @@ class Lawcontroller extends GetxController {
   }
 
   Future<void> deletLaw(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await lawdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
 

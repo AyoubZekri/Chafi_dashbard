@@ -68,6 +68,9 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
 
         // print("data == $data");
         // print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -105,7 +108,8 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
       consequencesFr.clear();
       deadline.clear();
       noticeDate.clear();
-      selectedsestemTax == null;
+      selectedfiltersestemTax = null;
+      selectedsestemTax = null;
       viewdata();
       Get.back();
     } else {
@@ -142,7 +146,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
           editconsequencesFr.clear();
           editdeadline.clear();
           editnoticeDate.clear();
-          editselectedsestemTax == null;
+          editselectedsestemTax = null;
           Get.back();
           viewdata();
         } else {
@@ -177,9 +181,6 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await lawdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
 
@@ -195,7 +196,6 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   }
 
   Future<void> nptificationsend(int id, String body) async {
-
     var response = await lawdata.Notification({
       "id": id.toString(),
       "title": "تنبيه".tr,
@@ -214,8 +214,9 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
     edittypeFr.text = law.declarationFr;
     editconsequencesAr.text = law.dependenciesAr;
     editconsequencesFr.text = law.dependenciesFr;
-    editdeadline.text = law.noticeDate;
+    editdeadline.text = law.deadline;
     editselectedsestemTax = law.taxId;
+    editnoticeDate.text = law.noticeDate;
   }
 
   void setIndexData(Appointmentsmodel law) {

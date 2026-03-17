@@ -22,18 +22,22 @@ class SidebarWidget extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const SizedBox(height: 30),
-            const Center(
-              child: Text(
-                'Dashboard',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF4A4A4A),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(Appimageassets.logo, width: 60, height: 60),
+                const SizedBox(width: 10),
+                 Text(
+                  'Chafi'.tr,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4A4A4A),
+                  ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 30),
-
             ...List.generate(controller.screens.length, (index) {
               final screen = controller.screens[index];
               final isExpanded = controller.expandedIndex.value == index;
@@ -292,15 +296,16 @@ class TopBar extends StatelessWidget {
                         radius: 20,
                         backgroundImage: AssetImage(Appimageassets.avater),
                       ),
-                      title: const Text(
-                        "John Doe",
+                      title: Text(
+                        Get.find<NavigationBarcontrollerImp>().name ?? "",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF5D596C),
                         ),
                       ),
-                      subtitle: const Text(
-                        "Admin",
+                      subtitle: Text(
+                        Get.find<NavigationBarcontrollerImp>().emailofuser ??
+                            "",
                         style: TextStyle(fontSize: 13),
                       ),
                     ),
@@ -312,7 +317,7 @@ class TopBar extends StatelessWidget {
                 enabled: false,
                 child: _buildProfileButton(
                   icon: Icons.person_outline,
-                  title: "Reset password",
+                  title: "Reset password".tr,
                   onPressed: () {
                     Get.back();
 
@@ -327,7 +332,7 @@ class TopBar extends StatelessWidget {
                 enabled: false,
                 child: _buildProfileButton(
                   icon: Icons.power_settings_new,
-                  title: "Log Out",
+                  title: "Log Out".tr,
                   onPressed: () {
                     Get.back();
                     Get.find<NavigationBarcontrollerImp>().logout();

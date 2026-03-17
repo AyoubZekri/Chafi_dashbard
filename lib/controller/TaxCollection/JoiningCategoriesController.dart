@@ -57,6 +57,9 @@ class JoiningcategoriescontrollerImp extends GetxController {
 
         print("data == $data");
         print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -156,9 +159,6 @@ class JoiningcategoriescontrollerImp extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await categorydata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
 

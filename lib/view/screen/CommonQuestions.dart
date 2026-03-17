@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,64 +86,86 @@ class _CommonquestionsState extends State<Commonquestions> {
 
                 // Grid of Question Cards
                 Expanded(
-                  child: Handlingview(
-                    statusrequest: controller.statusrequest,
-                    widget: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 0.6,
-                          ),
-                      itemCount: controller.filteredData.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.filteredData[index];
-                        return InstitutionsCard(
-                          onEdit: () {
-                            controller.setEditData(item);
-                            showDialog(
-                              context: context,
-                              builder: (context) => Commonquestionsdealog(
-                                mode: CommonquestionsdealogMode.edit,
-                                controller: controller,
-                                id: item.id,
-                              ),
-                            );
-                          },
-                          onDelete: () async {
-                            await showCustomConfirmationDialog(
-                              context,
-                              title: "تنبيه".tr,
-                              message: "هل أنت متأكد من الحذف؟".tr,
-                              onConfirmAction: () {
-                                controller.deletLaw(item.id);
-                              },
-                            );
-                          },
-                          onEditindex: () {
-                            controller.setIndexData(item);
-                            showDialog(
-                              context: context,
-                              builder: (_) => AppointmentsIndexDialog(
-                                controller: controller,
-                                appointmentsmodel: item,
-                              ),
-                            );
-                          },
-                          title: item.localizedName,
-                          info: item.localizedBody,
-                          isActiveCalculator: item.calcul != null,
-                          isActiveLaw: item.lawId != null,
-                          creationDate: item.updatedAt.toString().substring(
-                            0,
-                            10,
-                          ),
-                        );
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(
+                      scrollbars: true,
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                       },
                     ),
-                    iconData: Icons.error,
-                    title: "حدث خطأ أثناء تحميل البيانات",
+                    child: Handlingview(
+                      statusrequest: controller.statusrequest,
+                      widget: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.76,
+                            ),
+                        itemCount: controller.filteredData.length,
+                        itemBuilder: (context, index) {
+                          final item = controller.filteredData[index];
+                          return InstitutionsCard(
+                            onView: () {
+                              showReportDialog(
+                                context: context,
+                                title: item.localizedName,
+                                description: item.localizedBody,
+                                imageUrl: "",
+                                createdAt: item.updatedAt.toString().substring(
+                                  0,
+                                  10,
+                                ),
+                              );
+                            },
+
+                            onEdit: () {
+                              controller.setEditData(item);
+                              showDialog(
+                                context: context,
+                                builder: (context) => Commonquestionsdealog(
+                                  mode: CommonquestionsdealogMode.edit,
+                                  controller: controller,
+                                  id: item.id,
+                                ),
+                              );
+                            },
+                            onDelete: () async {
+                              await showCustomConfirmationDialog(
+                                context,
+                                title: "تنبيه".tr,
+                                message: "هل أنت متأكد من الحذف؟".tr,
+                                onConfirmAction: () {
+                                  controller.deletLaw(item.id);
+                                },
+                              );
+                            },
+                            onEditindex: () {
+                              controller.setIndexData(item);
+                              showDialog(
+                                context: context,
+                                builder: (_) => AppointmentsIndexDialog(
+                                  controller: controller,
+                                  appointmentsmodel: item,
+                                ),
+                              );
+                            },
+                            title: item.localizedName,
+                            info: item.localizedBody,
+                            isActiveCalculator: item.calcul != null,
+                            isActiveLaw: item.lawId != null,
+                            creationDate: item.updatedAt.toString().substring(
+                              0,
+                              10,
+                            ),
+                          );
+                        },
+                      ),
+                      iconData: Icons.error,
+                      title: "حدث خطأ أثناء تحميل البيانات",
+                    ),
                   ),
                 ),
               ],

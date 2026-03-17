@@ -6,7 +6,6 @@ import '../core/services/Services.dart';
 import '../data/datasource/Remote/statsdata.dart';
 import '../data/model/DashboardStats.dart';
 
-
 class Dashboardhomecontroller extends GetxController {
   Statsdata statsdata = Statsdata(Get.find());
 
@@ -25,14 +24,12 @@ class Dashboardhomecontroller extends GetxController {
     if (statusrequest == Statusrequest.success) {
       if (response["status"] == 1) {
         data.clear();
-        List listdata = response['data'];
-        data.addAll(listdata.map((e) => DashboardStats.fromJson(e)));
-        data = List.from(data);
+        var item = DashboardStats.fromJson(response['data']);
+        data.add(item);
       } else {
         statusrequest = Statusrequest.failure;
       }
     }
-
     update();
   }
 

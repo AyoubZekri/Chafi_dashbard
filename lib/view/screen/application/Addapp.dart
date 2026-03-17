@@ -17,7 +17,6 @@ class Addapp extends StatefulWidget {
 class _AddappState extends State<Addapp> {
   @override
   Widget build(BuildContext context) {
-    Get.find<AddappcontrollerImp>();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       body: GetBuilder<AddappcontrollerImp>(

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/LawController.dart';
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../../../data/model/LawModel.dart';
 import '../TextFild/CustomFilePickerField.dart';
@@ -98,7 +99,7 @@ class LawDialog extends StatelessWidget {
                     const SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6269F2),
+                        backgroundColor: AppColor.typography,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 12,
@@ -185,7 +186,7 @@ class LawIndexDialog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,

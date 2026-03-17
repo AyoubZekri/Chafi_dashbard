@@ -1,9 +1,9 @@
-import 'package:chafi_dashboard/controller/NatureoftheactivityController.dart';
 import 'package:chafi_dashboard/data/model/NatureoftheactivityModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/BonusesAndCompensationsController.dart';
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../TextFild/LabeledTextField.dart';
 
@@ -62,7 +62,7 @@ class Custemeditbonusesandcompensations extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,

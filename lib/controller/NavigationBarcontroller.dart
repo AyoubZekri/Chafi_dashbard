@@ -50,6 +50,9 @@ class NavigationBarcontrollerImp extends GetxController {
   Authdata authdata = Authdata(Get.find());
   Myservices myServices = Get.find();
 
+  String? get name => myServices.sharedPreferences!.getString("username");
+  String? get emailofuser => myServices.sharedPreferences!.getString("email");
+
   final List<Map<String, dynamic>> screens = [
     {
       'name': 'nav_home',
@@ -84,7 +87,7 @@ class NavigationBarcontrollerImp extends GetxController {
 
     {
       'name': 'العلوات والتعويضات',
-      'icon': Icons.work_outline,
+      'icon': Icons.account_balance_wallet,
       'route': Approutes.activities,
       'page': () => BonusesAndCompensations(),
       'subPages': [],
@@ -251,6 +254,7 @@ class NavigationBarcontrollerImp extends GetxController {
     currentPage.value = index;
     currentSubIndex.value = null;
     currentSubPage.value = null;
+    update();
   }
 
   void toggleExpand(int index) {

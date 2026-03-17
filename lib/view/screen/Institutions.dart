@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/controller/NavigationBarcontroller.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/view/screen/institutions/EditInstitutions.dart';
@@ -51,45 +53,67 @@ class _InstitutionsState extends State<Institutions> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header Section: Title and Add Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Institutions/',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Institutions',
-                          style: TextStyle(color: Colors.grey, fontSize: 20),
-                        ),
-                      ],
-                    ),
-                    ActionButton(
-                      label: "add_new".tr,
-                      icon: CupertinoIcons.add,
-                      backgroundColor: AppColor.typography,
-                      onPressed: () {
-                        // Get.create(() => AddinstitutionscontrollerImp());
-                        final controller = Get.put(
-                          AddinstitutionscontrollerImp(),
-                          permanent: true,
-                        );
-                        controller.type = 1;
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     const Row(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: [
+                //         Text(
+                //           'Institutions/',
+                //           style: TextStyle(
+                //             fontSize: 24,
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //         Text(
+                //           'Institutions',
+                //           style: TextStyle(color: Colors.grey, fontSize: 20),
+                //         ),
+                //       ],
+                //     ),
+                //     ActionButton(
+                //       label: "add_new".tr,
+                //       icon: CupertinoIcons.add,
+                //       backgroundColor: AppColor.typography,
+                //       onPressed: () {
+                //         // Get.create(() => AddinstitutionscontrollerImp());
+                //         final controller = Get.put(
+                //           AddinstitutionscontrollerImp(),
+                //           permanent: true,
+                //         );
+                //         controller.type = 1;
 
-                        Get.find<NavigationBarcontrollerImp>().changeSubPage(
-                          99,
-                          () => const Addinstitutions(),
-                        );
-                      },
-                    ),
-                  ],
+                //         Get.find<NavigationBarcontrollerImp>().changeSubPage(
+                //           99,
+                //           () => const Addinstitutions(),
+                //         );
+                //       },
+                //     ),
+                //   ],
+                // ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: ActionButton(
+                    label: "add_new".tr,
+                    icon: CupertinoIcons.add,
+                    backgroundColor: AppColor.typography,
+                    onPressed: () {
+                      // Get.create(() => AddinstitutionscontrollerImp());
+                      final controller = Get.put(
+                        AddinstitutionscontrollerImp(),
+                        permanent: true,
+                      );
+                      controller.type = 1;
+
+                      Get.find<NavigationBarcontrollerImp>().changeSubPage(
+                        99,
+                        () => const Addinstitutions(),
+                      );
+                    },
+                  ),
                 ),
+
                 const SizedBox(height: 20),
 
                 Row(
@@ -138,71 +162,93 @@ class _InstitutionsState extends State<Institutions> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: Handlingview(
-                    statusrequest: controller.statusrequest,
-                    widget: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 0.6,
-                          ),
-                      itemCount: controller.filteredData.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.filteredData[index];
-                        return InstitutionsCard(
-                          onEdit: () {
-                            final controller = Get.put(
-                              EditinstitutionscontrollerImp(),
-                              permanent: true,
-                            );
-                            controller.fillDataFromModel(item);
-                            Get.find<NavigationBarcontrollerImp>()
-                                .changeSubPage(99, () => Editinstitutions());
-                          },
-                          onDelete: () async {
-                            await showCustomConfirmationDialog(
-                              context,
-                              title: "تنبيه".tr,
-                              message: "هل أنت متأكد من الحذف؟".tr,
-                              onConfirmAction: () {
-                                Get.find<InstitutionscontrollerImp>().deletLaw(
-                                  item.id,
-                                );
-                              },
-                            );
-                          },
-                          onEditindex: () {
-                            controller.setIndexData(item);
-                            showDialog(
-                              context: context,
-                              builder: (_) => Custeminstitutiondealog(
-                                controller: controller,
-                                law: item,
-                              ),
-                            );
-                          },
-                          title: controller.currentLang == "ar"
-                              ? item.title
-                              : item.titleFr,
-                          info: controller.currentLang == "ar"
-                              ? item.body
-                              : item.bodyFr,
-                          isActiveCalculator: item.calcul != null,
-                          isActiveLaw: item.lawId != null,
-                          creationDate: item.updatedAt.toString().substring(
-                            0,
-                            10,
-                          ),
-                        );
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(
+                      scrollbars: true,
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                       },
                     ),
-                    iconData: Icons.error,
-                    title: "حدث خطأ أثناء تحميل البيانات".tr,
+                    child: Handlingview(
+                      statusrequest: controller.statusrequest,
+                      widget: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.76,
+                            ),
+                        itemCount: controller.filteredData.length,
+                        itemBuilder: (context, index) {
+                          final item = controller.filteredData[index];
+                          return InstitutionsCard(
+                            onView: () {
+                              showReportDialog(
+                                context: context,
+                                title: controller.currentLang == "ar"
+                                    ? item.title
+                                    : item.titleFr,
+                                description: controller.currentLang == "ar"
+                                    ? item.body
+                                    : item.bodyFr,
+                                imageUrl: "",
+                                createdAt: item.updatedAt.toString().substring(
+                                  0,
+                                  10,
+                                ),
+                              );
+                            },
+                         
+                            onEdit: () {
+                              final controller = Get.put(
+                                EditinstitutionscontrollerImp(),
+                              );
+                              controller.fillDataFromModel(item);
+                              Get.find<NavigationBarcontrollerImp>()
+                                  .changeSubPage(99, () => Editinstitutions());
+                            },
+                            onDelete: () async {
+                              await showCustomConfirmationDialog(
+                                context,
+                                title: "تنبيه".tr,
+                                message: "هل أنت متأكد من الحذف؟".tr,
+                                onConfirmAction: () {
+                                  controller.deletLaw(item.id);
+                                },
+                              );
+                            },
+                            onEditindex: () {
+                              controller.setIndexData(item);
+                              showDialog(
+                                context: context,
+                                builder: (_) => Custeminstitutiondealog(
+                                  controller: controller,
+                                  law: item,
+                                ),
+                              );
+                            },
+                            title: controller.currentLang == "ar"
+                                ? item.title
+                                : item.titleFr,
+                            info: controller.currentLang == "ar"
+                                ? item.body
+                                : item.bodyFr,
+                            isActiveCalculator: item.calcul != null,
+                            isActiveLaw: item.lawId != null,
+                            creationDate: item.updatedAt.toString().substring(
+                              0,
+                              10,
+                            ),
+                          );
+                        },
+                      ),
+                      iconData: Icons.error,
+                      title: "حدث خطأ أثناء تحميل البيانات".tr,
+                    ),
                   ),
                 ),
-             
               ],
             ),
           );

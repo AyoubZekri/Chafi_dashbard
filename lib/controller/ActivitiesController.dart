@@ -61,7 +61,7 @@ class Activitiescontroller extends GetxController {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    final actData = {"nataire_activitys_id": 3};
+    final actData = {};
 
     var response = await activitydata.viewdata(actData);
     print("Response: $response");
@@ -74,9 +74,11 @@ class Activitiescontroller extends GetxController {
         List listdata = response['data'];
         data.addAll(listdata.map((e) => ActivityModel.fromJson(e)));
         filteredData = List.from(data);
-
         print("data == $data");
         print("filteredData == $filteredData");
+        if (data.isEmpty) {
+          statusrequest = Statusrequest.failure;
+        }
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -157,6 +159,7 @@ class Activitiescontroller extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {
@@ -183,8 +186,6 @@ class Activitiescontroller extends GetxController {
           selectedsestemTax = null;
           selecttypeTheActivity = null;
           statusTax = null;
-
-          Get.back();
           viewdata();
         } else {
           statusrequest = Statusrequest.failure;
@@ -218,9 +219,6 @@ class Activitiescontroller extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await activitydata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
 
@@ -238,10 +236,9 @@ class Activitiescontroller extends GetxController {
   void setEditData(ActivityModel item) {
     editnamear.text = item.name;
     editnamefr.text = item.nameFr;
-    editbodyar.text = item.name;
-    editbodyfr.text = item.nameFr;
-    codeActeve.text = item.nameFr;
-    editcodeActeve.text = item.nameFr;
+    editbodyar.text = item.body;
+    editbodyfr.text = item.bodyFr;
+    editcodeActeve.text = item.codeActivity.toString();
     selectedsestemTax = item.taxId;
     selecttypeTheActivity = item.nataireActivitysId;
     statusTax = item.statusTax;

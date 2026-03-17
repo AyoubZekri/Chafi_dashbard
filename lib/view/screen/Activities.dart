@@ -120,7 +120,7 @@ class _ActivitiesState extends State<Activities> {
                 Expanded(
                   child: Handlingview(
                     statusrequest: controller.statusrequest,
-                    widget:  ScrollConfiguration(
+                    widget: ScrollConfiguration(
                       behavior: const ScrollBehavior().copyWith(
                         scrollbars: true,
                         dragDevices: {
@@ -128,10 +128,14 @@ class _ActivitiesState extends State<Activities> {
                           PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                         },
                       ),
-                      child: Scrollbar(
-                        controller: horizontalController,
-                        thumbVisibility: true,
-                        trackVisibility: true,
+                      child: ScrollConfiguration(
+                        behavior: const ScrollBehavior().copyWith(
+                          scrollbars: true,
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                          },
+                        ),
                         child: SingleChildScrollView(
                           controller: horizontalController,
                           scrollDirection: Axis.horizontal,
@@ -162,16 +166,18 @@ class _ActivitiesState extends State<Activities> {
                                 ) {
                                   int index = entry.key;
                                   ActivityModel item = entry.value;
-                      
+
                                   int realIndex =
                                       controller.currentPage *
                                           controller.rowsPerPage +
                                       index +
                                       1;
-                      
+
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text((realIndex + 1).toString())),
+                                      DataCell(
+                                        Text((realIndex + 1).toString()),
+                                      ),
                                       DataCell(Text(item.localizedName)),
                                       DataCell(Text(item.nataireName)),
                                       DataCell(
@@ -181,20 +187,23 @@ class _ActivitiesState extends State<Activities> {
                                                 (e) => e['key'] == item.taxId,
                                                 orElse: () => {'label': '-'},
                                               )['label']
-                                              .toString().tr,
+                                              .toString()
+                                              .tr,
                                         ),
                                       ),
                                       DataCell(
                                         Text(
                                           controller.statusTaxList
                                               .firstWhere(
-                                                (e) => e['key'] == item.statusTax,
+                                                (e) =>
+                                                    e['key'] == item.statusTax,
                                                 orElse: () => {'label': '-'},
                                               )['label']
-                                              .toString().tr,
+                                              .toString()
+                                              .tr,
                                         ),
                                       ),
-                      
+
                                       DataCell(
                                         Text(
                                           item.createdAt.toString().substring(
@@ -212,14 +221,19 @@ class _ActivitiesState extends State<Activities> {
                                                   context,
                                                   title: "تنبيه".tr,
                                                   message:
-                                                      "هل أنت متأكد من الحذف؟".tr,
+                                                      "هل أنت متأكد من الحذف؟"
+                                                          .tr,
                                                   onConfirmAction: () {
-                                                    controller.deletdata(item.id);
+                                                    controller.deletdata(
+                                                      item.id,
+                                                    );
                                                   },
                                                 );
                                               },
                                               child: Container(
-                                                padding: const EdgeInsets.all(6),
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
                                                 decoration: BoxDecoration(
                                                   color: Colors.red,
                                                   borderRadius:
@@ -248,7 +262,9 @@ class _ActivitiesState extends State<Activities> {
                                                 );
                                               },
                                               child: Container(
-                                                padding: const EdgeInsets.all(6),
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
                                                 decoration: BoxDecoration(
                                                   color: Colors.blue,
                                                   borderRadius:
@@ -261,7 +277,7 @@ class _ActivitiesState extends State<Activities> {
                                                 ),
                                               ),
                                             ),
-                      
+
                                             const SizedBox(width: 10),
                                             InkWell(
                                               onTap: () {
@@ -276,7 +292,9 @@ class _ActivitiesState extends State<Activities> {
                                                 );
                                               },
                                               child: Container(
-                                                padding: const EdgeInsets.all(6),
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
                                                 decoration: BoxDecoration(
                                                   color: Colors.amber.shade700,
                                                   borderRadius:

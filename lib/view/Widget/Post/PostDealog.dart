@@ -121,7 +121,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlear1,
                         label: 'title_ar'.tr,
                         hintText: 'title_hint'.tr,
-                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                        valid: (val) => validateInput(val!, 2, 100, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -132,7 +132,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlefr1,
                         label: 'title_fr'.tr,
                         hintText: 'title_hint'.tr,
-                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                        valid: (val) => validateInput(val!, 2, 100, "text"),
                       ),
                     ),
                   ],
@@ -149,7 +149,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlear2,
                         label: 'title_ar2'.tr,
                         hintText: 'title_hint'.tr,
-                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                        valid: (val) => validateInput(val!, 0, 100, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -160,7 +160,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.titlefr2,
                         label: 'title_fr2'.tr,
                         hintText: 'title_hint'.tr,
-                        valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                        valid: (val) => validateInput(val!, 0, 100, "text"),
                       ),
                     ),
                   ],
@@ -179,7 +179,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.infoar,
                         label: 'الحتوى بالغة العربية'.tr,
                         hintText: 'أدخل المحتوى هنا'.tr,
-                        valid: (val) =>validateInput(val!, 2, 1000, "text"),
+                        valid: (val) => validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -191,7 +191,7 @@ class _PostDialogState extends State<PostDialog> {
                             : controller.infofr,
                         label: 'الحتوى بالغة الفرنسية'.tr,
                         hintText: 'أدخل المحتوى هنا'.tr,
-                        valid: (val) =>validateInput(val!, 2, 1000, "text"),
+                        valid: (val) => validateInput(val!, 2, 1000, "text"),
                       ),
                     ),
                   ],
@@ -216,7 +216,7 @@ class _PostDialogState extends State<PostDialog> {
                     const SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6269F2),
+                        backgroundColor: AppColor.typography,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 12,
@@ -326,12 +326,12 @@ class _PostImgDialogState extends State<PostImgDialog> {
                           borderRadius: BorderRadius.circular(10),
                           child: controller.file != null
                               // صورة جديدة
-                              ? Image.file(controller.file!, fit: BoxFit.cover)
+                              ? Image.file(controller.file!, fit: BoxFit.fill)
                               // صورة قديمة
                               : controller.editfile != null && isEdit
                               ? Image.network(
                                   "${Applink.image}${controller.editfile!}",
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                   errorBuilder: (_, __, ___) =>
                                       const Icon(Icons.broken_image, size: 60),
                                 )
@@ -373,7 +373,7 @@ class _PostImgDialogState extends State<PostImgDialog> {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 30,
                         vertical: 12,

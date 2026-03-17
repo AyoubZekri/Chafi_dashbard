@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../core/class/Statusrequest.dart';
+import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
 import '../../../data/model/AppointmentsModel.dart';
 import '../TextFild/CustemDatePickerInfoUser.dart';
@@ -112,10 +113,9 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                 CustemDatePickerInfoUser(
                   label: 'deadline'.tr,
                   hintText: 'deadline_hint'.tr,
-                  myController: isEdit
+                  controller: isEdit
                       ? widget.controller.editdeadline
                       : widget.controller.deadline,
-                  context: context,
                 ),
                 const SizedBox(height: 15),
 
@@ -150,8 +150,9 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                 CustemDatePickerInfoUser(
                   label: 'notice_date'.tr,
                   hintText: 'notice_date_hint'.tr,
-                  myController: widget.controller.noticeDate,
-                  context: context,
+                  controller: isEdit
+                      ? widget.controller.editnoticeDate
+                      : widget.controller.noticeDate,
                 ),
 
                 const SizedBox(height: 30),
@@ -173,7 +174,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                     const SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6269F2),
+                        backgroundColor: AppColor.typography,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 12,
@@ -274,7 +275,7 @@ class AppointmentsIndexDialog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,

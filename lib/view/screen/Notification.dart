@@ -125,11 +125,15 @@ class _NotificationState extends State<NotificationBar> {
                           PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                         },
                       ),
-                      child: Scrollbar(
-                        controller: horizontalController,
-                        thumbVisibility: true,
-                        trackVisibility: true,
-                        child: SingleChildScrollView(
+                      child:ScrollConfiguration(
+                      behavior: const ScrollBehavior().copyWith(
+                        scrollbars: true,
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                        },
+                      ),
+                      child: SingleChildScrollView(
                           controller: horizontalController,
                           scrollDirection: Axis.horizontal,
                           child: ConstrainedBox(

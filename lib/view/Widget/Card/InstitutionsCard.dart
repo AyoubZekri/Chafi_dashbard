@@ -1,3 +1,4 @@
+import 'package:chafi_dashboard/view/Widget/Card/CustemShwoDealog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ class InstitutionsCard extends StatelessWidget {
   final bool buttomcare;
   final String creationDate;
   final VoidCallback? onEdit;
+  final VoidCallback? onView;
   final VoidCallback? onEditindex;
   final VoidCallback? onDelete;
 
@@ -24,6 +26,7 @@ class InstitutionsCard extends StatelessWidget {
     this.onEditindex,
     this.onDelete,
     this.buttomcare = true,
+    this.onView,
   });
 
   @override
@@ -49,7 +52,9 @@ class InstitutionsCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 onSelected: (value) {
-                  if (value == 'edit') {
+                  if (value == 'view') {
+                    if (onView != null) onView!();
+                  } else if (value == 'edit') {
                     if (onEdit != null) onEdit!();
                   } else if (value == 'delete') {
                     if (onDelete != null) onDelete!();
@@ -58,6 +63,19 @@ class InstitutionsCard extends StatelessWidget {
                   }
                 },
                 itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 'view',
+                    child: Row(
+                      children: const [
+                        Icon(Icons.visibility, size: 16, color: Colors.green),
+                        SizedBox(width: 6),
+                        Text(
+                          'View',
+                          style: TextStyle(color: Colors.green, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
                   PopupMenuItem(
                     value: 'edit',
                     child: Row(
@@ -124,15 +142,17 @@ class InstitutionsCard extends StatelessWidget {
           // محتوى الكارد
           Text(
             info,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 13, color: Colors.black87),
           ),
           if (buttomcare == true) ...[
-            const Spacer(),
+            Spacer(),
             const Divider(height: 30),
             _dataRow('calculator'.tr, isActiveCalculator),
             const SizedBox(height: 8),
             _dataRow('law'.tr, isActiveLaw),
-            const Divider(height: 20),
+            const Divider(height: 10),
             Text(
               '${"created_at".tr} : $creationDate',
               style: TextStyle(color: Colors.grey.shade400, fontSize: 11),
@@ -166,4 +186,33 @@ class InstitutionsCard extends StatelessWidget {
       ],
     );
   }
+}
+
+void showReportDialog({
+  required BuildContext context,
+  required String title,
+  required String description,
+  required String imageUrl,
+  required String createdAt,
+}) {
+  showDialog(
+    context: context,
+    builder: (_) {
+      return Dialog(
+        insetPadding: const EdgeInsets.all(20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: ReportPostDialogContent(
+              title: title,
+              description: description,
+              imageUrl: imageUrl,
+              createdAt: createdAt,
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

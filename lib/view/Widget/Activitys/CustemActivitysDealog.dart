@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/controller/ActivitiesController.dart';
+import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/data/model/ActivitysModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -212,7 +213,7 @@ class _CustemactivitysdealogState extends State<Custemactivitysdealog> {
                     const SizedBox(width: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6269F2),
+                        backgroundColor: AppColor.typography,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 12,
@@ -313,7 +314,7 @@ class ActivityIndexDialog extends StatelessWidget {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6269F2),
+                      backgroundColor: AppColor.typography,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 12,

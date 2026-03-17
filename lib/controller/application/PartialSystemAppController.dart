@@ -59,7 +59,7 @@ class PartialsystemappcontrollerImp extends GetxController {
         List listdata = response['data'];
         data.addAll(listdata.map((e) => Taxandappmodel.fromJson(e)));
         filteredData = List.from(data);
-        if (filteredData.isEmpty) {
+        if (data.isEmpty) {
           statusrequest = Statusrequest.failure;
         }
         print("==========================$filteredData");
@@ -132,13 +132,11 @@ class PartialsystemappcontrollerImp extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-    statusrequest = Statusrequest.loadeng;
-    update();
-
     var response = await taxandappdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
-      data = data.where((element) => element.id != id).toList();
+      data.removeWhere((element) => element.id == id);
+      filteredData = data;
       update();
 
       showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);

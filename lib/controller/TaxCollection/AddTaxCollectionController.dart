@@ -48,11 +48,7 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
 
     {'key': 8, 'label': "البحث والتطوير", 'route': 'Researchanddevelopment'},
     {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueisttype'},
-    {
-      'key': 10,
-      'label': "المداخيل العقارية",
-      'route': 'Realestateincometype',
-    },
+    {'key': 10, 'label': "المداخيل العقارية", 'route': 'Realestateincometype'},
     {
       'key': 11,
       'label': "التنازل عن العقارات",
@@ -67,8 +63,6 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
     {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
   ];
-
-
 
   final List<Map<String, Object>> law = [
     {'key': 0, 'label': 'law1'},
@@ -194,6 +188,7 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
   }
 
   Future<void> viewdataCategory() async {
+    print("========0$type");
     update();
 
     final actData = {"type_cat": 1, "tax_id": type};
@@ -222,7 +217,6 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
   @override
   void onInit() {
     viewdata();
-    viewdataCategory();
     super.onInit();
   }
 }

@@ -10,7 +10,7 @@ class ActivityModel {
   final String bodyFr;
   final int taxId;
   final int statusTax;
-  final int codeActivity;
+  final int? codeActivity;
   final String natairenamefr;
   final String natairename;
 
@@ -45,7 +45,7 @@ class ActivityModel {
       bodyFr: json['body_fr'] ?? '',
       taxId: json['tax_id'],
       statusTax: json['status_tax'],
-      codeActivity: json['code_activity'],
+      codeActivity: json['code_activity'] ?? "",
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       natairenamefr: json['nataire_name_fr'],
@@ -63,7 +63,7 @@ class ActivityModel {
     return lang == 'ar' ? body : bodyFr;
   }
 
-    String get  nataireName {
+  String get nataireName {
     final lang = Get.locale?.languageCode ?? 'ar';
     return lang == 'ar' ? natairename : natairenamefr;
   }

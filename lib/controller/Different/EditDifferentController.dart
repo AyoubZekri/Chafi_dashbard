@@ -131,7 +131,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
-      Get.find<NavigationBarcontrollerImp>().changePage(7);
+      Get.find<NavigationBarcontrollerImp>().changePage(8);
     } else {
       statusrequest = Statusrequest.failure;
     }
@@ -175,7 +175,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
 
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive
-        ? calcelators.firstWhere((c) => c['label'] == model.calcul)['key']
+        ? calcelators.firstWhere((c) => c['route'] == model.calcul)['key']
               as int
         : null;
 

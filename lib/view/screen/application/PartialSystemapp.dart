@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/controller/NavigationBarcontroller.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/view/screen/application/Addapp.dart';
@@ -51,26 +53,26 @@ class _PartialsystemappState extends State<Partialsystemapp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header Section: Title and Add Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ActionButton(
-                      label: "add_new".tr,
-                      icon: CupertinoIcons.add,
-                      backgroundColor: AppColor.typography,
-                      onPressed: () {
-                        // Get.create(() => AddinstitutionscontrollerImp());
-                        final controller = Get.put(AddappcontrollerImp());
-                        controller.type = 0;
-                        Get.find<NavigationBarcontrollerImp>().changeSubPage(
-                          99,
-                          () => const Addapp(),
-                        );
-                      },
-                    ),
-                  ],
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: ActionButton(
+                    label: "add_new".tr,
+                    icon: CupertinoIcons.add,
+                    backgroundColor: AppColor.typography,
+                    onPressed: () {
+                      // Get.create(() => AddinstitutionscontrollerImp());
+                      final controller = Get.put(AddappcontrollerImp());
+                      controller.type = 0;
+                      controller.viewdataCategory();
+
+                      Get.find<NavigationBarcontrollerImp>().changeSubPage(
+                        99,
+                        () => const Addapp(),
+                      );
+                    },
+                  ),
                 ),
+
                 const SizedBox(height: 20),
 
                 Row(
@@ -119,68 +121,95 @@ class _PartialsystemappState extends State<Partialsystemapp> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: Handlingview(
-                    statusrequest: controller.statusrequest,
-                    widget: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 0.6,
-                          ),
-                      itemCount: controller.filteredData.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.filteredData[index];
-                        return InstitutionsCard(
-                          onEdit: () {
-                            final controller = Get.put(
-                              EditappcontrollerImp(),
-                              permanent: true,
-                            );
-                            controller.fillDataFromModel(item);
-                            controller.type = 0;
-
-                            Get.find<NavigationBarcontrollerImp>()
-                                .changeSubPage(99, () => Editapp());
-                          },
-                          onDelete: () async {
-                            await showCustomConfirmationDialog(
-                              context,
-                              title: "تنبيه".tr,
-                              message: "هل أنت متأكد من الحذف؟".tr,
-                              onConfirmAction: () {
-                                controller.deletdata(item.id);
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(
+                      scrollbars: true,
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                      },
+                    ),
+                    child: Center(
+                      child: Handlingview(
+                        statusrequest: controller.statusrequest,
+                        widget: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20,
+                                childAspectRatio: 0.76,
+                              ),
+                          itemCount: controller.filteredData.length,
+                          itemBuilder: (context, index) {
+                            final item = controller.filteredData[index];
+                            return InstitutionsCard(
+                              onView: () {
+                                showReportDialog(
+                                  context: context,
+                                  title: controller.currentLang == "ar"
+                                      ? item.title
+                                      : item.titleFr,
+                                  description: controller.currentLang == "ar"
+                                      ? item.body
+                                      : item.bodyFr,
+                                  imageUrl: "",
+                                  createdAt: item.updatedAt
+                                      .toString()
+                                      .substring(0, 10),
+                                );
                               },
-                            );
-                          },
-                          onEditindex: () {
-                            controller.setIndexData(item);
-                            showDialog(
-                              context: context,
-                              builder: (_) => CustemPartialappdealog(
-                                controller: controller,
-                                appandappmodel: item,
+
+                              onEdit: () {
+                                Get.delete<EditappcontrollerImp>();
+                                final controller = Get.put(
+                                  EditappcontrollerImp(),
+                                );
+                                controller.type = 0;
+                                controller.viewdataCategory();
+                                controller.fillDataFromModel(item);
+                                Get.find<NavigationBarcontrollerImp>()
+                                    .changeSubPage(99, () => Editapp());
+                              },
+                              onDelete: () async {
+                                await showCustomConfirmationDialog(
+                                  context,
+                                  title: "تنبيه".tr,
+                                  message: "هل أنت متأكد من الحذف؟".tr,
+                                  onConfirmAction: () {
+                                    controller.deletdata(item.id);
+                                  },
+                                );
+                              },
+                              onEditindex: () {
+                                controller.setIndexData(item);
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => CustemPartialappdealog(
+                                    controller: controller,
+                                    appandappmodel: item,
+                                  ),
+                                );
+                              },
+                              title: controller.currentLang == "ar"
+                                  ? item.title
+                                  : item.titleFr,
+                              info: controller.currentLang == "ar"
+                                  ? item.body
+                                  : item.bodyFr,
+                              isActiveCalculator: item.calcul != null,
+                              isActiveLaw: item.lawId != null,
+                              creationDate: item.updatedAt.toString().substring(
+                                0,
+                                10,
                               ),
                             );
                           },
-                          title: controller.currentLang == "ar"
-                              ? item.title
-                              : item.titleFr,
-                          info: controller.currentLang == "ar"
-                              ? item.body
-                              : item.bodyFr,
-                          isActiveCalculator: item.calcul != null,
-                          isActiveLaw: item.lawId != null,
-                          creationDate: item.updatedAt.toString().substring(
-                            0,
-                            10,
-                          ),
-                        );
-                      },
+                        ),
+                        iconData: Icons.error,
+                        title: "حدث خطأ أثناء تحميل البيانات",
+                      ),
                     ),
-                    iconData: Icons.error,
-                    title: "حدث خطأ أثناء تحميل البيانات",
                   ),
                 ),
               ],

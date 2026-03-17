@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/LinkApi.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:flutter/cupertino.dart';
@@ -96,45 +98,56 @@ class _ExclusiveState extends State<Exclusive> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: Handlingview(
-                    statusrequest: controller.statusrequest,
-                    widget: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 1.7,
-                          ),
-                      itemCount: controller.data.length,
-                      itemBuilder: (context, index) {
-                        return Custempostexclusive(
-                          imageUrl:
-                              "${Applink.image}${controller.data[index].image}",
-                          onEdit: () {
-                            controller.setEditData(controller.data[index]);
-
-                            showDialog(
-                              context: context,
-                              builder: (context) => PostImgDialog(
-                                mode: PostDialogMode.edit,
-                                controller: controller,
-                                id: controller.data[index].id,
-                              ),
-                            );
-                          },
-                          onDelete: () async {
-                            await showCustomConfirmationDialog(
-                              context,
-                              title: "تنبيه".tr,
-                              message: "هل أنت متأكد من الحذف؟".tr,
-                              onConfirmAction: () {
-                                controller.deletdata(controller.data[index].id);
-                              },
-                            );
-                          },
-                        );
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(
+                      scrollbars: true,
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                       },
+                    ),
+                    child: Handlingview(
+                      statusrequest: controller.statusrequest,
+                      widget: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 1.7,
+                            ),
+                        itemCount: controller.data.length,
+                        itemBuilder: (context, index) {
+                          return Custempostexclusive(
+                            imageUrl:
+                                "${Applink.image}${controller.data[index].image}",
+                            onEdit: () {
+                              controller.setEditData(controller.data[index]);
+
+                              showDialog(
+                                context: context,
+                                builder: (context) => PostImgDialog(
+                                  mode: PostDialogMode.edit,
+                                  controller: controller,
+                                  id: controller.data[index].id,
+                                ),
+                              );
+                            },
+                            onDelete: () async {
+                              await showCustomConfirmationDialog(
+                                context,
+                                title: "تنبيه".tr,
+                                message: "هل أنت متأكد من الحذف؟".tr,
+                                onConfirmAction: () {
+                                  controller.deletdata(
+                                    controller.data[index].id,
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

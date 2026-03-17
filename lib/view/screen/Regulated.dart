@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:chafi_dashboard/controller/NavigationBarcontroller.dart';
 import 'package:chafi_dashboard/controller/RegulatedController.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
@@ -98,7 +100,7 @@ class _RegulatedState extends State<Regulated> {
                       child: SearchField(
                         Mycontroller: controller.searchController,
                         onChanged: (value) {
-                          controller.search(value); 
+                          controller.search(value);
                         },
                         hint: "search".tr,
                       ),
@@ -135,71 +137,94 @@ class _RegulatedState extends State<Regulated> {
 
                 // Grid of Agent Cards
                 Expanded(
-                  child: Handlingview(
-                    statusrequest: controller.statusrequest,
-                    widget: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20,
-                            childAspectRatio: 0.6,
-                          ),
-                      itemCount: controller.filteredData.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.filteredData[index];
-                        return InstitutionsCard(
-                          onEdit: () {
-                            final controller = Get.put(
-                              EditinstitutionscontrollerImp(),
-                              permanent: true,
-                            );
-                            controller.fillDataFromModel(item);
-                            Get.find<NavigationBarcontrollerImp>()
-                                .changeSubPage(99, () => Editinstitutions());
-                          },
-                          onDelete: () async {
-                            await showCustomConfirmationDialog(
-                              context,
-                              title: "تنبيه".tr,
-                              message: "هل أنت متأكد من الحذف؟".tr,
-                              onConfirmAction: () {
-                                Get.find<InstitutionscontrollerImp>().deletLaw(
-                                  item.id,
-                                );
-                              },
-                            );
-                          },
-                          onEditindex: () {
-                            controller.setIndexData(item);
-                            showDialog(
-                              context: context,
-                              builder: (_) => CustemRegulateddealog(
-                                controller: controller,
-                                law: item,
-                              ),
-                            );
-                          },
-                          title: controller.currentLang == "ar"
-                              ? item.title
-                              : item.titleFr,
-                          info: controller.currentLang == "ar"
-                              ? item.body
-                              : item.bodyFr,
-                          isActiveCalculator: item.calcul != null,
-                          isActiveLaw: item.lawId != null,
-                          creationDate: item.updatedAt.toString().substring(
-                            0,
-                            10,
-                          ),
-                        );
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior().copyWith(
+                      scrollbars: true,
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
                       },
                     ),
-                    iconData: Icons.error,
-                    title: "حدث خطأ أثناء تحميل البيانات",
+                    child: Handlingview(
+                      statusrequest: controller.statusrequest,
+                      widget: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.76,
+                            ),
+                        itemCount: controller.filteredData.length,
+                        itemBuilder: (context, index) {
+                          final item = controller.filteredData[index];
+                          return InstitutionsCard(
+                            onView: () {
+                              showReportDialog(
+                                context: context,
+                                title: controller.currentLang == "ar"
+                                    ? item.title
+                                    : item.titleFr,
+                                description: controller.currentLang == "ar"
+                                    ? item.body
+                                    : item.bodyFr,
+                                imageUrl: "",
+                                createdAt: item.updatedAt.toString().substring(
+                                  0,
+                                  10,
+                                ),
+                              );
+                            },
+
+                            onEdit: () {
+                              final controller = Get.put(
+                                EditinstitutionscontrollerImp(),
+                                permanent: true,
+                              );
+                              controller.fillDataFromModel(item);
+                              Get.find<NavigationBarcontrollerImp>()
+                                  .changeSubPage(99, () => Editinstitutions());
+                            },
+                            onDelete: () async {
+                              await showCustomConfirmationDialog(
+                                context,
+                                title: "تنبيه".tr,
+                                message: "هل أنت متأكد من الحذف؟".tr,
+                                onConfirmAction: () {
+                                  controller.deletLaw(item.id);
+                                },
+                              );
+                            },
+                            onEditindex: () {
+                              controller.setIndexData(item);
+                              showDialog(
+                                context: context,
+                                builder: (_) => CustemRegulateddealog(
+                                  controller: controller,
+                                  law: item,
+                                ),
+                              );
+                            },
+                            title: controller.currentLang == "ar"
+                                ? item.title
+                                : item.titleFr,
+                            info: controller.currentLang == "ar"
+                                ? item.body
+                                : item.bodyFr,
+                            isActiveCalculator: item.calcul != null,
+                            isActiveLaw: item.lawId != null,
+                            creationDate: item.updatedAt.toString().substring(
+                              0,
+                              10,
+                            ),
+                          );
+                        },
+                      ),
+                      iconData: Icons.error,
+                      title: "حدث خطأ أثناء تحميل البيانات",
+                    ),
                   ),
                 ),
-
               ],
             ),
           );
