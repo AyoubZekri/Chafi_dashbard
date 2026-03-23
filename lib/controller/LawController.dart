@@ -83,6 +83,7 @@ class Lawcontroller extends GetxController {
 
   // إضافة قانون
   Future<void> adddata() async {
+    Get.back();
     if (!formState.currentState!.validate()) return;
 
     if (file == null) {
@@ -108,7 +109,7 @@ class Lawcontroller extends GetxController {
       nameAr.clear();
       nameFr.clear();
       fileController.clear();
-      Get.back();
+      viewdata();
     } else {
       statusrequest = Statusrequest.failure;
     }

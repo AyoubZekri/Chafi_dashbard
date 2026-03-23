@@ -46,6 +46,7 @@ class Custemtextfildauth extends StatelessWidget {
             hintText: hintText,
             hintStyle: TextStyle(color: Colors.grey),
             filled: true,
+            errorStyle: TextStyle(fontSize: 12),
             fillColor: const Color.fromARGB(255, 255, 255, 255),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

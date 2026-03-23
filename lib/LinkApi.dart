@@ -1,6 +1,6 @@
 class Applink {
-  static const String server = "http://127.0.0.1:8000/api";
-  static const String image = "http://127.0.0.1:8000/Storage/";
+  static const String server = "https://chafi.net/api";
+  static const String image = "https://chafi.net/chafi/public/storage/";
 
   // =============================Auth============================== //
 

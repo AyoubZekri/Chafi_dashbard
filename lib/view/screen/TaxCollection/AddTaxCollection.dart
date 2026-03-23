@@ -53,7 +53,7 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                       ),
                     ),
                     const SizedBox(height: 40),
-              
+
                     // العنوان
                     Row(
                       children: [
@@ -62,7 +62,7 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                             myController: controller.titlear,
                             label: "title_ar".tr,
                             hintText: "أدخل العنوان هنا...".tr,
-                            valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                            valid: (val) => validateInput(val!, 2, 100, "text"),
                           ),
                         ),
                         SizedBox(width: 24),
@@ -71,13 +71,13 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                             myController: controller.titlefr,
                             label: "title_fr".tr,
                             hintText: "أدخل العنوان هنا...".tr,
-                            valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                            valid: (val) => validateInput(val!, 2, 100, "text"),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 24),
-              
+
                     // الموضوع
                     Row(
                       children: [
@@ -87,7 +87,8 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                             label: "content_ar".tr,
                             hintText: "اكتب المحتوى هنا...".tr,
                             maxLines: 5,
-                            valid: (val) =>validateInput(val!, 2, 1000, "text") ,
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                         SizedBox(width: 20),
@@ -97,7 +98,8 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                             label: "content_fr".tr,
                             hintText: "اكتب المحتوى هنا...".tr,
                             maxLines: 5,
-                            valid: (val) =>validateInput(val!, 2, 1000, "text") ,
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                       ],
@@ -125,9 +127,9 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                           });
                         },
                       ),
-              
+
                     const SizedBox(height: 64),
-              
+
                     // Toggle الحاسبة
                     ToggleRow(
                       label: "activate_calculator".tr,
@@ -138,7 +140,7 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                         });
                       },
                     ),
-              
+
                     if (controller.isCalculatorActive)
                       Dropdownfild(
                         label: "choose_calculator".tr,
@@ -161,9 +163,9 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                           });
                         },
                       ),
-              
+
                     const SizedBox(height: 32),
-              
+
                     ToggleRow(
                       label: "activate_law".tr,
                       value: controller.isLawActive,
@@ -173,7 +175,7 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                         });
                       },
                     ),
-              
+
                     if (controller.isLawActive)
                       Row(
                         children: [
@@ -182,12 +184,12 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                             child: Dropdownfild(
                               label: "law_label".tr,
                               hintText: "law_hint".tr,
-                              items: controller.law
+                              items: controller.data
                                   .map(
                                     (f) => DropdownMenuItem<int>(
-                                      value: f['key'] as int,
+                                      value: f.id,
                                       child: Text(
-                                        f['label'].toString().tr,
+                                        f.localizedName.toString(),
                                         style: const TextStyle(fontSize: 14),
                                       ),
                                     ),
@@ -208,14 +210,15 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                               myController: controller.numperindex,
                               label: "page_number".tr,
                               hintText: "أدخل رقم الصفحة...".tr,
-                              valid: (val) => validateInput(val!, 1, 100, "number"),
+                              valid: (val) =>
+                                  validateInput(val!, 1, 10, "number"),
                             ),
                           ),
                         ],
                       ),
-              
+
                     const SizedBox(height: 48),
-              
+
                     SizedBox(
                       width: double.infinity,
                       height: 56,

@@ -64,12 +64,6 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
   ];
 
-  final List<Map<String, Object>> law = [
-    {'key': 0, 'label': 'law1'},
-    {'key': 1, 'label': 'law2'},
-    {'key': 2, 'label': 'law3'},
-  ];
-
   Lawdata lawdata = Lawdata(Get.find());
   Categorydata categorydata = Categorydata(Get.find());
   Taxandappdata taxandappdata = Taxandappdata(Get.find());

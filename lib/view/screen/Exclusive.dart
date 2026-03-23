@@ -47,38 +47,24 @@ class _ExclusiveState extends State<Exclusive> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header Section: Title and Add Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Institutions',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: ActionButton(
+                    label: 'add_new'.tr,
+                    icon: CupertinoIcons.add,
+                    backgroundColor: AppColor.typography,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => PostImgDialog(
+                          mode: PostDialogMode.add,
+                          controller: controller,
                         ),
-                      ],
-                    ),
-                    ActionButton(
-                      label: 'add_new'.tr,
-                      icon: CupertinoIcons.add,
-                      backgroundColor: AppColor.typography,
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => PostImgDialog(
-                            mode: PostDialogMode.add,
-                            controller: controller,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
+
                 const SizedBox(height: 20),
 
                 Row(

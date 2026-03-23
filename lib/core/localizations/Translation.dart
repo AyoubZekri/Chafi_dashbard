@@ -64,7 +64,9 @@ class MyTranslation extends Translations {
       "add_different_article": "إضافة مقال جديد في قسم مختلف",
       "edit_different_article": "تعديل المقال في قسم مختلف",
       "title_ar": "العنوان باللغة العربية",
+      "title_ar2": "2 العنوان باللغة العربية",
       "title_fr": "العنوان باللغة الفرنسية",
+      "title_fr2": "2 العنوان باللغة الفرنسية",
       "content_ar": "الموضوع باللغة العربية",
       "content_fr": "الموضوع باللغة الفرنسية",
       "calculator_toggle": "تنشيط الحاسبة",
@@ -286,6 +288,7 @@ class MyTranslation extends Translations {
       "October": "أكتوبر",
       "November": "نوفمبر",
       "December": "ديسمبر",
+      "يرجى إدخال صورة": "يرجى إدخال صورة",
     },
 
     ///////////////////////////////////////
@@ -365,6 +368,8 @@ class MyTranslation extends Translations {
           "Ajouter un nouvel article dans la section Différent",
       "title_ar": "Titre en arabe",
       "title_fr": "Titre en français",
+      "title_ar2": "2 Titre en arabe",
+      "title_fr2": "2 Titre en français",
       "content_ar": "Contenu en arabe",
       "content_fr": "Contenu en français",
       "calculator_toggle": "Activer la calculatrice",
@@ -587,6 +592,7 @@ class MyTranslation extends Translations {
       "October": "October",
       "November": "November",
       "December": "December",
+      "يرجى إدخال صورة": "Veuillez insérer une image",
     },
   };
 }

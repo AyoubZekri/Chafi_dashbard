@@ -102,12 +102,13 @@ class _CommonquestionsState extends State<Commonquestions> {
                               crossAxisCount: 3,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
-                              childAspectRatio: 0.76,
+                              childAspectRatio: 1.25,
                             ),
                         itemCount: controller.filteredData.length,
                         itemBuilder: (context, index) {
                           final item = controller.filteredData[index];
                           return InstitutionsCard(
+                            buttomcare: false,
                             onView: () {
                               showReportDialog(
                                 context: context,
