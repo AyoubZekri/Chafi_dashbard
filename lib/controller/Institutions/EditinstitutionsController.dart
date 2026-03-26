@@ -72,7 +72,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     {'key': 2, 'label': "small"},
     {'key': 3, 'label': "medium"},
     {'key': 4, 'label': "large"},
-    {'key': 5, 'label': "very_large"},
+    // {'key': 5, 'label': "very_large"},
   ];
 
   final List<Map<String, Object>> regulated = [

@@ -41,7 +41,7 @@ class AddinstitutionscontrollerImp extends GetxController {
     {'key': 2, 'label': "small"},
     {'key': 3, 'label': "medium"},
     {'key': 4, 'label': "large"},
-    {'key': 5, 'label': "very_large"},
+    // {'key': 5, 'label': "very_large"},
   ];
 
   final List<Map<String, Object>> regulated = [
@@ -91,7 +91,6 @@ class AddinstitutionscontrollerImp extends GetxController {
 
     if (isLawActive == true && selectedLaw == null) {
       showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
-
       return;
     }
 

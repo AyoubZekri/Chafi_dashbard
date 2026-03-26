@@ -159,7 +159,7 @@ class _UsersState extends State<Users> {
                                       DataCell(Text(item.username)),
 
                                       DataCell(Text(item.numperPhone)),
-                                      DataCell(Text(item.wilaya)),
+                                      DataCell(Text(item.wilaya.tr)),
 
                                       DataCell(Text(item.email)),
                                       DataCell(

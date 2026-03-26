@@ -303,6 +303,7 @@ class NavigationBarcontrollerImp extends GetxController {
   }
 
   logout() async {
+
     Statusrequest statusrequest = Statusrequest.loadeng;
     update();
     var response = await authdata.logout();

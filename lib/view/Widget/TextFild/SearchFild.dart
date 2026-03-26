@@ -3,10 +3,20 @@ import 'package:flutter/material.dart';
 
 class SearchField extends StatelessWidget {
   final String hint;
+  final double vertical;
+  final bool isDense;
+
   final ValueChanged<String>? onChanged;
   final TextEditingController? Mycontroller;
 
-  const SearchField({super.key, this.hint = 'search', this.onChanged, this.Mycontroller});
+  const SearchField({
+    super.key,
+    this.hint = 'search',
+    this.onChanged,
+    this.Mycontroller,
+    this.vertical = 12,
+    this.isDense = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +26,12 @@ class SearchField extends StatelessWidget {
       style: const TextStyle(fontSize: 16, color: Colors.black87),
       decoration: InputDecoration(
         hintText: hint,
+        isDense: isDense,
         prefixIcon: const Icon(CupertinoIcons.search, size: 20),
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 12,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: vertical,
           horizontal: 16,
         ),
         border: OutlineInputBorder(

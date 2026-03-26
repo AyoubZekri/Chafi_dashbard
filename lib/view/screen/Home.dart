@@ -2,10 +2,14 @@ import 'dart:ui';
 
 import 'package:chafi_dashboard/controller/DashboardHomeController.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
-import 'package:chafi_dashboard/view/screen/application/Addapp.dart';
+import 'package:chafi_dashboard/data/model/DashboardStats.dart';
+import 'package:chafi_dashboard/view/Widget/TextFild/SearchFild.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:get/get.dart'; // ستحتاج لإضافتها في pubspec.yaml
+import 'package:get/get.dart';
+
+import '../../core/class/handlingview.dart';
+import '../Widget/TablePaginationFooter.dart'; // ستحتاج لإضافتها في pubspec.yaml
 
 class DashboardHome extends StatelessWidget {
   const DashboardHome({super.key});
@@ -93,28 +97,29 @@ class DashboardHome extends StatelessWidget {
                       ),
 
                       SizedBox(width: 20),
-                      Expanded(
-                        child: _buildPieChartSection(
-                          realCount: controller.data.isNotEmpty
-                              ? controller.data[0].tax3Hakiki
-                              : 0,
-                          jzafiCount: controller.data.isNotEmpty
-                              ? controller.data[0].tax1Jazafi
-                              : 0,
-                          simpleCount: controller.data.isNotEmpty
-                              ? controller.data[0].tax2Mobassat
-                              : 0,
-                          realPercent: controller.data.isNotEmpty
-                              ? controller.data[0].tax3
-                              : 0,
-                          jzafiPercent: controller.data.isNotEmpty
-                              ? controller.data[0].tax1
-                              : 0,
-                          simplePercent: controller.data.isNotEmpty
-                              ? controller.data[0].tax2
-                              : 0,
-                        ),
-                      ),
+                      Expanded(child: _buildStateStatisticsTable(controller)),
+                      // Expanded(
+                      //   child: _buildPieChartSection(
+                      //     realCount: controller.data.isNotEmpty
+                      //         ? controller.data[0].tax3Hakiki
+                      //         : 0,
+                      //     jzafiCount: controller.data.isNotEmpty
+                      //         ? controller.data[0].tax1Jazafi
+                      //         : 0,
+                      //     simpleCount: controller.data.isNotEmpty
+                      //         ? controller.data[0].tax2Mobassat
+                      //         : 0,
+                      //     realPercent: controller.data.isNotEmpty
+                      //         ? controller.data[0].tax3
+                      //         : 0,
+                      //     jzafiPercent: controller.data.isNotEmpty
+                      //         ? controller.data[0].tax1
+                      //         : 0,
+                      //     simplePercent: controller.data.isNotEmpty
+                      //         ? controller.data[0].tax2
+                      //         : 0,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],
@@ -305,157 +310,184 @@ class DashboardHome extends StatelessWidget {
     );
   }
 
-  Widget _buildPieChartSection({
-    required double realPercent,
-    required int realCount,
-    required double jzafiPercent,
-    required int jzafiCount,
-    required double simplePercent,
-    required int simpleCount,
-  }) {
+  Widget _buildStateStatisticsTable(Dashboardhomecontroller controller) {
+    final horizontalController = ScrollController();
     return Container(
       height: 400,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.withOpacity(0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "logs_analysis_by_system".tr,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF2D3748),
+          // Table Header Section
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 5,
+              bottom: 10,
+              left: 5,
+              right: 5,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "إحصائيات الدخول".tr,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF191C1E),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "عدد الخول حسب كل ولاية".tr,
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 170,
+                  child: SearchField(
+                    onChanged: controller.filterData,
+                    hint: "search".tr,
+                    vertical: 2,
+                    isDense: true,
+                  ),
+                ),
+              ],
             ),
           ),
 
-          const SizedBox(height: 20),
-
           Expanded(
-            child: Row(
-              children: [
-                /// Chart
-                Expanded(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      PieChart(
-                        PieChartData(
-                          sectionsSpace: 3,
-                          centerSpaceRadius: 65,
-                          sections: [
-                            PieChartSectionData(
-                              value: realPercent,
-                              title: "${realPercent.toInt()}%",
-                              radius: 80,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF6269F2), Color(0xFF8B91FF)],
-                              ),
-                              titleStyle: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            PieChartSectionData(
-                              value: jzafiPercent,
-                              title: "${jzafiPercent.toInt()}%",
-                              radius: 80,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFFFFAD5F), Color(0xFFFF7D05)],
-                              ),
-                              titleStyle: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            PieChartSectionData(
-                              value: simplePercent,
-                              title: "${simplePercent.toInt()}%",
-                              radius: 80,
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFFAC54F1), Color(0xFFD483FF)],
-                              ),
-                              titleStyle: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      /// center title
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "total".tr,
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 14,
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior().copyWith(
+                scrollbars: true,
+                dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+              ),
+              child: SingleChildScrollView(
+                controller: horizontalController,
+                scrollDirection: Axis.horizontal,
+                child: DataTable(
+                  headingRowHeight: 40,
+                  dataRowHeight: 40,
+                  headingRowColor: MaterialStateProperty.all(
+                    const Color(0xFFF8F9FA),
+                  ),
+                  border: TableBorder(
+                    horizontalInside: BorderSide(
+                      color: Colors.grey.shade200,
+                      width: 1,
+                    ),
+                    bottom: BorderSide(color: Colors.grey.shade200, width: 1),
+                  ),
+                  columns: [
+                    DataColumn(label: Text('الولاية'.tr)),
+                    DataColumn(label: Text('مستخدمون'.tr)),
+                    DataColumn(label: Text('ضيوف'.tr)),
+                    DataColumn(label: Text('إجمالي المستخدمون'.tr)),
+                    DataColumn(label: Text('إجمالي الضيوف'.tr)),
+                    DataColumn(label: Text("نسبة دخول".tr)),
+                  ],
+                  rows: controller.pagedData.asMap().entries.expand((entry) {
+                    StateStats stateItem = entry.value; // ← هنا عرفنا stateItem
+                    return [
+                      DataRow(
+                        cells: [
+                          DataCell(
+                            Text(
+                              stateItem.state,
+                              style: TextStyle(fontSize: 12),
                             ),
                           ),
-                          Text(
-                            "${realCount + jzafiCount + simpleCount}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22,
+                          DataCell(
+                            Text(
+                              stateItem.dailyUser.toString(),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              stateItem.dailyG.toString(),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              stateItem.totalUser.toString(),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          DataCell(
+                            Text(
+                              stateItem.totalG.toString(),
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          DataCell(
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    height: 8,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: FractionallySizedBox(
+                                      alignment: Alignment.centerLeft,
+                                      widthFactor: stateItem.dailyPercent / 100,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '${stateItem.dailyPercent.toStringAsFixed(0)}%',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ];
+                  }).toList(),
                 ),
-
-                const SizedBox(width: 20),
-
-                /// Legend
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _legendItem(
-                      color1: const Color(0xFF6269F2),
-                      color2: const Color(0xFF8B91FF),
-                      title: "system_real".tr,
-                      percent: realPercent,
-                      count: realCount,
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    _legendItem(
-                      color1: const Color(0xFFFFAD5F),
-                      color2: const Color(0xFFFF7D05),
-                      title: "system_partial".tr,
-                      percent: jzafiPercent,
-                      count: jzafiCount,
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    _legendItem(
-                      color1: const Color(0xFFAC54F1),
-                      color2: const Color(0xFFD483FF),
-                      title: "system_simplified".tr,
-                      percent: simplePercent,
-                      count: simpleCount,
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
+          ),
+          TablePaginationFooter(
+            currentPage: controller.currentPage,
+            rowsPerPage: controller.rowsPerPage,
+            totalEntries: controller.filteredData.length,
+            totalPages: controller.totalPages,
+            currentFilteredLength: controller.filteredData.length,
+            onNext: controller.nextPage,
+            onPrevious: controller.previousPage,
           ),
         ],
       ),
@@ -674,3 +706,161 @@ class DashboardHome extends StatelessWidget {
     );
   }
 }
+
+
+  // Widget _buildPieChartSection({
+  //   required double realPercent,
+  //   required int realCount,
+  //   required double jzafiPercent,
+  //   required int jzafiCount,
+  //   required double simplePercent,
+  //   required int simpleCount,
+  // }) {
+  //   return Container(
+  //     height: 400,
+  //     padding: const EdgeInsets.all(24),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(20),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.black.withOpacity(0.05),
+  //           blurRadius: 20,
+  //           offset: const Offset(0, 10),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           "logs_analysis_by_system".tr,
+  //           style: const TextStyle(
+  //             fontSize: 18,
+  //             fontWeight: FontWeight.bold,
+  //             color: Color(0xFF2D3748),
+  //           ),
+  //         ),
+
+  //         const SizedBox(height: 20),
+
+  //         Expanded(
+  //           child: Row(
+  //             children: [
+  //               /// Chart
+  //               Expanded(
+  //                 child: Stack(
+  //                   alignment: Alignment.center,
+  //                   children: [
+  //                     PieChart(
+  //                       PieChartData(
+  //                         sectionsSpace: 3,
+  //                         centerSpaceRadius: 65,
+  //                         sections: [
+  //                           PieChartSectionData(
+  //                             value: realPercent,
+  //                             title: "${realPercent.toInt()}%",
+  //                             radius: 80,
+  //                             gradient: const LinearGradient(
+  //                               colors: [Color(0xFF6269F2), Color(0xFF8B91FF)],
+  //                             ),
+  //                             titleStyle: const TextStyle(
+  //                               color: Colors.white,
+  //                               fontWeight: FontWeight.bold,
+  //                             ),
+  //                           ),
+  //                           PieChartSectionData(
+  //                             value: jzafiPercent,
+  //                             title: "${jzafiPercent.toInt()}%",
+  //                             radius: 80,
+  //                             gradient: const LinearGradient(
+  //                               colors: [Color(0xFFFFAD5F), Color(0xFFFF7D05)],
+  //                             ),
+  //                             titleStyle: const TextStyle(
+  //                               color: Colors.white,
+  //                               fontWeight: FontWeight.bold,
+  //                             ),
+  //                           ),
+  //                           PieChartSectionData(
+  //                             value: simplePercent,
+  //                             title: "${simplePercent.toInt()}%",
+  //                             radius: 80,
+  //                             gradient: const LinearGradient(
+  //                               colors: [Color(0xFFAC54F1), Color(0xFFD483FF)],
+  //                             ),
+  //                             titleStyle: const TextStyle(
+  //                               color: Colors.white,
+  //                               fontWeight: FontWeight.bold,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+
+  //                     /// center title
+  //                     Column(
+  //                       mainAxisSize: MainAxisSize.min,
+  //                       children: [
+  //                         Text(
+  //                           "total".tr,
+  //                           style: TextStyle(
+  //                             color: Colors.grey.shade600,
+  //                             fontSize: 14,
+  //                           ),
+  //                         ),
+  //                         Text(
+  //                           "${realCount + jzafiCount + simpleCount}",
+  //                           style: const TextStyle(
+  //                             fontWeight: FontWeight.bold,
+  //                             fontSize: 22,
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+
+  //               const SizedBox(width: 20),
+
+  //               /// Legend
+  //               Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   _legendItem(
+  //                     color1: const Color(0xFF6269F2),
+  //                     color2: const Color(0xFF8B91FF),
+  //                     title: "system_real".tr,
+  //                     percent: realPercent,
+  //                     count: realCount,
+  //                   ),
+
+  //                   const SizedBox(height: 12),
+
+  //                   _legendItem(
+  //                     color1: const Color(0xFFFFAD5F),
+  //                     color2: const Color(0xFFFF7D05),
+  //                     title: "system_partial".tr,
+  //                     percent: jzafiPercent,
+  //                     count: jzafiCount,
+  //                   ),
+
+  //                   const SizedBox(height: 12),
+
+  //                   _legendItem(
+  //                     color1: const Color(0xFFAC54F1),
+  //                     color2: const Color(0xFFD483FF),
+  //                     title: "system_simplified".tr,
+  //                     percent: simplePercent,
+  //                     count: simpleCount,
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }

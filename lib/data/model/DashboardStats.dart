@@ -1,3 +1,43 @@
+class StateStats {
+  final String state;
+  final int dailyUser;
+  final int dailyG;
+  final int totalUser;
+  final int totalG;
+  final double dailyPercent;
+
+  StateStats({
+    required this.state,
+    required this.dailyUser,
+    required this.dailyG,
+    required this.totalUser,
+    required this.totalG,
+    required this.dailyPercent,
+  });
+
+  factory StateStats.fromJson(Map<String, dynamic> json) {
+    return StateStats(
+      state: json['state'] ?? '',
+      dailyUser: int.parse(json['dailyUser'].toString()),
+      dailyG: int.parse(json['dailyG'].toString()),
+      totalUser: int.parse(json['totalUser'].toString()),
+      totalG: int.parse(json['totalG'].toString()),
+      dailyPercent: (json['daily_percent'] ?? 0).toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'state': state,
+      'dailyUser': dailyUser,
+      'dailyG': dailyG,
+      'totalUser': totalUser,
+      'totalG': totalG,
+      'daily_percent': dailyPercent,
+    };
+  }
+}
+
 class DashboardStats {
   final int totalUsersEnter;
   final int totalGuestsEnter;
@@ -10,6 +50,7 @@ class DashboardStats {
   final double tax1;
   final double tax2;
   final double tax3;
+  final List<StateStats> data; // ← هنا ضفنا
 
   DashboardStats({
     required this.totalUsersEnter,
@@ -23,6 +64,7 @@ class DashboardStats {
     required this.tax1,
     required this.tax2,
     required this.tax3,
+    required this.data,
   });
 
   factory DashboardStats.fromJson(Map<String, dynamic> json) {
@@ -38,6 +80,9 @@ class DashboardStats {
       tax1: (json['tax1Percent'] ?? 0).toDouble(),
       tax2: (json['tax2Percent'] ?? 0).toDouble(),
       tax3: (json['tax3Percent'] ?? 0).toDouble(),
+      data: (json['data'] as List<dynamic>? ?? [])
+          .map((e) => StateStats.fromJson(e))
+          .toList(),
     );
   }
 
@@ -54,6 +99,7 @@ class DashboardStats {
       "tax1Percent": tax1,
       "tax2Percent": tax2,
       "tax3Percent": tax3,
+      "data": data.map((e) => e.toJson()).toList(),
     };
   }
 }
