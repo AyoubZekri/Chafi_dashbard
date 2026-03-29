@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
-import '../../core/class/handlingview.dart';
+
 import '../Widget/TablePaginationFooter.dart'; // ستحتاج لإضافتها في pubspec.yaml
 
 class DashboardHome extends StatelessWidget {
@@ -39,88 +39,130 @@ class DashboardHome extends StatelessWidget {
                   const SizedBox(height: 30),
 
                   // 2. إحصائيات سريعة (المستخدمين والدخول)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatCard(
-                          "total_users".tr,
-                          "${controller.data.isNotEmpty ? controller.data[0].user : 0}",
-                          Icons.people,
-                          Colors.blue,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: _buildStatCard2(
-                          "الدخول اليوم".tr,
-                          "${controller.data.isNotEmpty ? controller.data[0].totalUsersEntertoday : 0}",
-                          "${controller.data.isNotEmpty ? controller.data[0].totalGuestsEntertoday : 0}",
-                          Colors.blue,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: _buildStatCard2(
-                          "الدخول الإجمالي".tr,
-                          "${controller.data.isNotEmpty ? controller.data[0].totalUsersEnter : 0}",
-                          "${controller.data.isNotEmpty ? controller.data[0].totalGuestsEnter : 0}",
-                          Colors.grey,
-                        ),
-                      ),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      bool isMobile = constraints.maxWidth < 800;
+                      if (isMobile) {
+                        return Column(
+                          children: [
+                            _buildStatCard(
+                              "total_users".tr,
+                              "${controller.data.isNotEmpty ? controller.data[0].user : 0}",
+                              Icons.people,
+                              Colors.blue,
+                            ),
+                            const SizedBox(height: 20),
+                            _buildStatCard2(
+                              "الدخول اليوم".tr,
+                              "${controller.data.isNotEmpty ? controller.data[0].totalUsersEntertoday : 0}",
+                              "${controller.data.isNotEmpty ? controller.data[0].totalGuestsEntertoday : 0}",
+                              Colors.blue,
+                            ),
+                            const SizedBox(height: 20),
+                            _buildStatCard2(
+                              "الدخول الإجمالي".tr,
+                              "${controller.data.isNotEmpty ? controller.data[0].totalUsersEnter : 0}",
+                              "${controller.data.isNotEmpty ? controller.data[0].totalGuestsEnter : 0}",
+                              Colors.grey,
+                            ),
+                          ],
+                        );
+                      }
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: _buildStatCard(
+                              "total_users".tr,
+                              "${controller.data.isNotEmpty ? controller.data[0].user : 0}",
+                              Icons.people,
+                              Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: _buildStatCard2(
+                              "الدخول اليوم".tr,
+                              "${controller.data.isNotEmpty ? controller.data[0].totalUsersEntertoday : 0}",
+                              "${controller.data.isNotEmpty ? controller.data[0].totalGuestsEntertoday : 0}",
+                              Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: _buildStatCard2(
+                              "الدخول الإجمالي".tr,
+                              "${controller.data.isNotEmpty ? controller.data[0].totalUsersEnter : 0}",
+                              "${controller.data.isNotEmpty ? controller.data[0].totalGuestsEnter : 0}",
+                              Colors.grey,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildChartSection(
-                          realCount: controller.data.isNotEmpty
-                              ? controller.data[0].tax3Hakiki
-                              : 0,
-                          jzafiCount: controller.data.isNotEmpty
-                              ? controller.data[0].tax1Jazafi
-                              : 0,
-                          simpleCount: controller.data.isNotEmpty
-                              ? controller.data[0].tax2Mobassat
-                              : 0,
-                          realPercent: controller.data.isNotEmpty
-                              ? controller.data[0].tax3
-                              : 0,
-                          jzafiPercent: controller.data.isNotEmpty
-                              ? controller.data[0].tax1
-                              : 0,
-                          simplePercent: controller.data.isNotEmpty
-                              ? controller.data[0].tax2
-                              : 0,
-                        ),
-                      ),
-
-                      SizedBox(width: 20),
-                      Expanded(child: _buildStateStatisticsTable(controller)),
-                      // Expanded(
-                      //   child: _buildPieChartSection(
-                      //     realCount: controller.data.isNotEmpty
-                      //         ? controller.data[0].tax3Hakiki
-                      //         : 0,
-                      //     jzafiCount: controller.data.isNotEmpty
-                      //         ? controller.data[0].tax1Jazafi
-                      //         : 0,
-                      //     simpleCount: controller.data.isNotEmpty
-                      //         ? controller.data[0].tax2Mobassat
-                      //         : 0,
-                      //     realPercent: controller.data.isNotEmpty
-                      //         ? controller.data[0].tax3
-                      //         : 0,
-                      //     jzafiPercent: controller.data.isNotEmpty
-                      //         ? controller.data[0].tax1
-                      //         : 0,
-                      //     simplePercent: controller.data.isNotEmpty
-                      //         ? controller.data[0].tax2
-                      //         : 0,
-                      //   ),
-                      // ),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      bool isMobile = constraints.maxWidth < 800;
+                      if (isMobile) {
+                        return Column(
+                          children: [
+                            _buildChartSection(
+                              realCount: controller.data.isNotEmpty
+                                  ? controller.data[0].tax3Hakiki
+                                  : 0,
+                              jzafiCount: controller.data.isNotEmpty
+                                  ? controller.data[0].tax1Jazafi
+                                  : 0,
+                              simpleCount: controller.data.isNotEmpty
+                                  ? controller.data[0].tax2Mobassat
+                                  : 0,
+                              realPercent: controller.data.isNotEmpty
+                                  ? controller.data[0].tax3
+                                  : 0,
+                              jzafiPercent: controller.data.isNotEmpty
+                                  ? controller.data[0].tax1
+                                  : 0,
+                              simplePercent: controller.data.isNotEmpty
+                                  ? controller.data[0].tax2
+                                  : 0,
+                            ),
+                            const SizedBox(height: 20),
+                            _buildStateStatisticsTable(controller),
+                          ],
+                        );
+                      }
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _buildChartSection(
+                              realCount: controller.data.isNotEmpty
+                                  ? controller.data[0].tax3Hakiki
+                                  : 0,
+                              jzafiCount: controller.data.isNotEmpty
+                                  ? controller.data[0].tax1Jazafi
+                                  : 0,
+                              simpleCount: controller.data.isNotEmpty
+                                  ? controller.data[0].tax2Mobassat
+                                  : 0,
+                              realPercent: controller.data.isNotEmpty
+                                  ? controller.data[0].tax3
+                                  : 0,
+                              jzafiPercent: controller.data.isNotEmpty
+                                  ? controller.data[0].tax1
+                                  : 0,
+                              simplePercent: controller.data.isNotEmpty
+                                  ? controller.data[0].tax2
+                                  : 0,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(child: _buildStateStatisticsTable(controller)),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -441,20 +483,23 @@ class DashboardHome extends StatelessWidget {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Container(
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: FractionallySizedBox(
-                                      alignment: Alignment.centerLeft,
-                                      widthFactor: stateItem.dailyPercent / 100,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue,
-                                          borderRadius: BorderRadius.circular(
-                                            4,
+                                  child: SizedBox(
+                                    width: 100,
+                                    child: Container(
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: FractionallySizedBox(
+                                        alignment: Alignment.centerLeft,
+                                        widthFactor: stateItem.dailyPercent / 100,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius: BorderRadius.circular(
+                                              4,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -641,38 +686,6 @@ class DashboardHome extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _legendItem({
-    required Color color1,
-    required Color color2,
-    required String title,
-    required double percent,
-    required int count,
-  }) {
-    return Row(
-      children: [
-        Container(
-          width: 16,
-          height: 16,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [color1, color2]),
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-            Text(
-              "${percent.toInt()}%  •  $count",
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-            ),
-          ],
-        ),
-      ],
     );
   }
 

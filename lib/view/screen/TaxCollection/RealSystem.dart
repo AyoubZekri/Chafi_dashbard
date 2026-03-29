@@ -35,8 +35,8 @@ class _RealsystemState extends State<Realsystem> {
       body: GetBuilder<RealsystemcontrollerImp>(
         builder: (controller) {
           return Container(
-            padding: const EdgeInsets.all(24.0),
-            margin: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(16.0),
 
             decoration: BoxDecoration(
               color: Colors.white,
@@ -77,50 +77,60 @@ class _RealsystemState extends State<Realsystem> {
 
                 const SizedBox(height: 20),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isMobile = constraints.maxWidth < 600;
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: isMobile
+                            ? WrapAlignment.center
+                            : WrapAlignment.spaceBetween,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runSpacing: 16,
+                        spacing: 16,
+                        children: [
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth - 20 : 260,
+                            child: SearchField(
+                              Mycontroller: controller.searchController,
+                              onChanged: (value) {
+                                controller.search(value);
+                              },
+                              hint: "search".tr,
+                            ),
+                          ),
 
-                  children: [
-                    SizedBox(
-                      width: 260,
-                      child: SearchField(
-                        Mycontroller: controller.searchController,
-                        onChanged: (value) {
-                          controller.search(value);
-                        },
-                        hint: "search".tr,
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth : 280,
+                            child: CustemDropDownField(
+                              items: controller.dataCategory
+                                  .map(
+                                    (f) => DropdownMenuItem<int>(
+                                      value: f.id,
+                                      child: Text(
+                                        f.localizedName.toString().tr,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              value: controller.selectedFilter,
+                              onChanged: (value) {
+                                setState(() {
+                                  controller.selectedFilter = value!;
+                                  controller.viewdata();
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    SizedBox(
-                      width: 280,
-                      child: CustemDropDownField(
-                        items: controller.dataCategory
-                            .map(
-                              (f) => DropdownMenuItem<int>(
-                                value: f.id,
-                                child: Text(
-                                  f.localizedName.toString(),
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        value: controller.selectedFilter,
-                        onChanged: (value) {
-                          setState(() {
-                            controller.selectedFilter = value!;
-                            controller.viewdata();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-                const SizedBox(height: 24),
 
+                const SizedBox(height: 24),
                 // Grid of Agent Cards
                 Expanded(
                   child: ScrollConfiguration(
@@ -133,10 +143,18 @@ class _RealsystemState extends State<Realsystem> {
                     ),
                     child: Handlingview(
                       statusrequest: controller.statusrequest,
-                      widget: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
+                      widget: LayoutBuilder(
+                          builder: (context, constraints) {
+                            int crossAxisCount = 3;
+                            if (constraints.maxWidth < 600) {
+                              crossAxisCount = 1;
+                            } else if (constraints.maxWidth < 900) {
+                              crossAxisCount = 2;
+                            }
+                            return GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: crossAxisCount,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
                               childAspectRatio: 0.76,
@@ -209,8 +227,10 @@ class _RealsystemState extends State<Realsystem> {
                             ),
                           );
                         },
-                      ),
-                      iconData: Icons.error,
+                        );
+                      },
+                    ),
+                    iconData: Icons.error,
                       title: "حدث خطأ أثناء تحميل البيانات",
                     ),
                   ),

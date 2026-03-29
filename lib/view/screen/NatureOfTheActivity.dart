@@ -35,8 +35,8 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
       body: GetBuilder<Natureoftheactivitycontroller>(
         builder: (controller) {
           return Container(
-            padding: const EdgeInsets.all(24.0),
-            margin: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -73,55 +73,75 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
                 const SizedBox(height: 30),
 
                 // شريط البحث و Rows per page
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'show'.tr,
-                          style: const TextStyle(color: Color(0xFF5A6A85)),
-                        ),
-                        SizedBox(
-                          width: 140,
-                          child: CustemDropDownField(
-                            items: [10, 25, 50, 100].map((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(value.toString()),
-                              );
-                            }).toList(),
-                            value: controller.rowsPerPage,
-                            onChanged: (value) {
-                              setState(() {
-                                controller.rowsPerPage = value!;
-                                controller.currentPage = 0;
-                              });
-                            },
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isMobile = constraints.maxWidth < 600;
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: isMobile
+                            ? WrapAlignment.center
+                            : WrapAlignment.spaceBetween,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runSpacing: 16,
+                        spacing: 16,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'show'.tr,
+                                style: const TextStyle(
+                                  color: Color(0xFF5A6A85),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 150,
+                                child: CustemDropDownField(
+                                  items: [10, 25, 50, 100].map((int value) {
+                                    return DropdownMenuItem<int>(
+                                      value: value,
+                                      child: Text(value.toString()),
+                                    );
+                                  }).toList(),
+                                  value: controller.rowsPerPage,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      controller.rowsPerPage = value!;
+                                      controller.currentPage = 0;
+                                    });
+                                  },
+                                ),
+                              ),
+                              Text(
+                                'entries'.tr,
+                                style: const TextStyle(
+                                  color: Color(0xFF5A6A85),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Text(
-                          'entries'.tr,
-                          style: const TextStyle(color: Color(0xFF5A6A85)),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: 260,
-                      child: SearchField(
-                        onChanged: controller.filterData,
-                        hint: "search".tr,
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth : 260,
+                            child: SearchField(
+                              onChanged: controller.filterData,
+                              hint: "search".tr,
+                              vertical: 5,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
+
                 const SizedBox(height: 24),
 
                 // الجدول
                 Expanded(
                   child: Handlingview(
                     statusrequest: controller.statusrequest,
-                    widget:  ScrollConfiguration(
+                    widget: ScrollConfiguration(
                       behavior: const ScrollBehavior().copyWith(
                         scrollbars: true,
                         dragDevices: {
@@ -130,163 +150,174 @@ class _NatureoftheactivityState extends State<Natureoftheactivity> {
                         },
                       ),
                       child: ScrollConfiguration(
-                      behavior: const ScrollBehavior().copyWith(
-                        scrollbars: true,
-                        dragDevices: {
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
-                        },
-                      ),
-                      child: SingleChildScrollView(
-                        controller: horizontalController,
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: MediaQuery.of(context).size.width,
-                          ),
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              headingRowHeight: 50,
-                              dataRowHeight: 60,
-                              headingRowColor: MaterialStateProperty.all(
-                                const Color(0xFFF8F9FA),
-                              ),
-                              border: TableBorder(
-                                horizontalInside: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1,
+                        behavior: const ScrollBehavior().copyWith(
+                          scrollbars: true,
+                          dragDevices: {
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.mouse, // هنا نضيف دعم الفأرة
+                          },
+                        ),
+                        child: SingleChildScrollView(
+                          controller: horizontalController,
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width,
+                            ),
+                            child: SingleChildScrollView(
+                              child: DataTable(
+                                headingRowHeight: 50,
+                                dataRowHeight: 60,
+                                headingRowColor: MaterialStateProperty.all(
+                                  const Color(0xFFF8F9FA),
                                 ),
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1,
+                                border: TableBorder(
+                                  horizontalInside: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
+                                  bottom: BorderSide(
+                                    color: Colors.grey.shade200,
+                                    width: 1,
+                                  ),
                                 ),
-                              ),
-                              columns: buildColumns(),
-                              rows: controller.pagedData.asMap().entries.map((
-                                entry,
-                              ) {
-                                int index = entry.key;
-                                Natureoftheactivitymodel item = entry.value;
-                      
-                                int realIndex =
-                                    controller.currentPage *
-                                        controller.rowsPerPage +
-                                    index +
-                                    1;
-                      
-                                return DataRow(
-                                  cells: [
-                                    DataCell(Text((realIndex + 1).toString())),
-                                    DataCell(Text(item.localizedName)),
-                                    DataCell(
-                                      Text(
-                                        item.createdAt.toString().substring(
-                                          0,
-                                          10,
+                                columns: buildColumns(),
+                                rows: controller.pagedData.asMap().entries.map((
+                                  entry,
+                                ) {
+                                  int index = entry.key;
+                                  Natureoftheactivitymodel item = entry.value;
+
+                                  int realIndex =
+                                      controller.currentPage *
+                                          controller.rowsPerPage +
+                                      index +
+                                      1;
+
+                                  return DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text((realIndex + 1).toString()),
+                                      ),
+                                      DataCell(Text(item.localizedName)),
+                                      DataCell(
+                                        Text(
+                                          item.createdAt.toString().substring(
+                                            0,
+                                            10,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    DataCell(
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              await showCustomConfirmationDialog(
-                                                context,
-                                                title: "تنبيه",
-                                                message: "هل أنت متأكد من الحذف؟",
-                                                onConfirmAction: () {
-                                                  controller.deletdata(item.id);
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.delete,
-                                                color: Colors.white,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          InkWell(
-                                            onTap: () {
-                                              controller.setEditData(item);
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    NatureoftheactivityDialog(
-                                                      mode:
-                                                          NatureoftheactivityDialogMode
-                                                              .edit,
-                                                      controller: controller,
-                                                      id: item.id,
-                                                    ),
-                                              );
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.blue,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.edit,
-                                                color: Colors.white,
-                                                size: 18,
+                                      DataCell(
+                                        Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                await showCustomConfirmationDialog(
+                                                  context,
+                                                  title: "تنبيه",
+                                                  message:
+                                                      "هل أنت متأكد من الحذف؟",
+                                                  onConfirmAction: () {
+                                                    controller.deletdata(
+                                                      item.id,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.delete,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                      
-                                          const SizedBox(width: 10),
-                                          InkWell(
-                                            onTap: () {
-                                              controller.setIndexData(item);
-                                              showDialog(
-                                                context: context,
-                                                builder: (_) =>
-                                                    Custemeditindexnatureoftheactivity(
-                                                      controller: controller,
-                                                      law: item,
-                                                    ),
-                                              );
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.amber.shade700,
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
-                                              ),
-                                              child: const Icon(
-                                                Icons.swap_vert,
-                                                color: Colors.white,
-                                                size: 18,
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.setEditData(item);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      NatureoftheactivityDialog(
+                                                        mode:
+                                                            NatureoftheactivityDialogMode
+                                                                .edit,
+                                                        controller: controller,
+                                                        id: item.id,
+                                                      ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.blue,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.edit,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+
+                                            const SizedBox(width: 10),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.setIndexData(item);
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      Custemeditindexnatureoftheactivity(
+                                                        controller: controller,
+                                                        law: item,
+                                                      ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.amber.shade700,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.swap_vert,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              }).toList(),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                                        ),
                     ),
                   ),
                 ),
-             
+
                 TablePaginationFooter(
                   currentPage: controller.currentPage,
                   rowsPerPage: controller.rowsPerPage,

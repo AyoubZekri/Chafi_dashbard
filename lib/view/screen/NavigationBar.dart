@@ -202,39 +202,46 @@ class MainLayout extends StatelessWidget {
       NavigationBarcontrollerImp(),
     );
 
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: Row(
-        children: [
-          const SidebarWidget(),
-          Expanded(
-            child: Column(
-              children: [
-                const TopBar(),
-                Expanded(
-                  child: Obx(() {
-                    if (controller.currentSubPage.value != null) {
-                      return controller.currentSubPage.value!();
-                    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isMobile = constraints.maxWidth < 800;
+        return Scaffold(
+          backgroundColor: const Color.fromARGB(255, 243, 243, 243),
+          drawer: isMobile ? const Drawer(child: SidebarWidget()) : null,
+          body: Row(
+            children: [
+              if (!isMobile) const SidebarWidget(),
+              Expanded(
+                child: Column(
+                  children: [
+                    TopBar(isMobile: isMobile),
+                    Expanded(
+                      child: Obx(() {
+                        if (controller.currentSubPage.value != null) {
+                          return controller.currentSubPage.value!();
+                        }
 
-                    final screen =
-                        controller.screens[controller.currentPage.value];
-                    return screen['page'] != null
-                        ? screen['page']()
-                        : const SizedBox();
-                  }),
+                        final screen =
+                            controller.screens[controller.currentPage.value];
+                        return screen['page'] != null
+                            ? screen['page']()
+                            : const SizedBox();
+                      }),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
 class TopBar extends StatelessWidget {
-  const TopBar({super.key});
+  final bool isMobile;
+  const TopBar({super.key, this.isMobile = false});
   void changeLang(String code) {
     Get.updateLocale(Locale(code));
 
@@ -260,6 +267,13 @@ class TopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
+          if (isMobile)
+            IconButton(
+              icon: const Icon(Icons.menu, color: Color(0xFF034D82)),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
           const Spacer(),
 
           /// Language Menu

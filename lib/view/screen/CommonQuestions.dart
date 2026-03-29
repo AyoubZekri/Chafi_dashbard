@@ -30,8 +30,8 @@ class _CommonquestionsState extends State<Commonquestions> {
       body: GetBuilder<CommonquestionscontrollerImp>(
         builder: (controller) {
           return Container(
-            padding: const EdgeInsets.all(24.0),
-            margin: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -66,21 +66,31 @@ class _CommonquestionsState extends State<Commonquestions> {
                 ),
                 const SizedBox(height: 20),
 
-                // Search Field
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: 260,
-                      child: SearchField(
-                        Mycontroller: controller.searchController,
-                        onChanged: (value) {
-                          controller.search(value);
-                        },
-                        hint: "search".tr,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isMobile = constraints.maxWidth < 600;
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runSpacing: 16,
+                        spacing: 16,
+                        children: [
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth : 260,
+                            child: SearchField(
+                              Mycontroller: controller.searchController,
+                              onChanged: (value) {
+                                controller.search(value);
+                              },
+                              hint: "search".tr,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 24),
 
@@ -96,14 +106,22 @@ class _CommonquestionsState extends State<Commonquestions> {
                     ),
                     child: Handlingview(
                       statusrequest: controller.statusrequest,
-                      widget: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 1.25,
-                            ),
+                      widget: LayoutBuilder(
+                        builder: (context, constraints) {
+                          int crossAxisCount = 3;
+                          if (constraints.maxWidth < 600) {
+                            crossAxisCount = 1;
+                          } else if (constraints.maxWidth < 900) {
+                            crossAxisCount = 2;
+                          }
+                          return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 1.25,
+                                ),
                         itemCount: controller.filteredData.length,
                         itemBuilder: (context, index) {
                           final item = controller.filteredData[index];
@@ -163,8 +181,10 @@ class _CommonquestionsState extends State<Commonquestions> {
                             ),
                           );
                         },
-                      ),
-                      iconData: Icons.error,
+                      );
+                    },
+                  ),
+                  iconData: Icons.error,
                       title: "حدث خطأ أثناء تحميل البيانات",
                     ),
                   ),

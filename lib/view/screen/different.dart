@@ -34,8 +34,8 @@ class _DifferentState extends State<Different> {
       body: GetBuilder<DifferentcontrollerImp>(
         builder: (controller) {
           return Container(
-            padding: const EdgeInsets.all(24.0),
-            margin: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(16.0),
 
             decoration: BoxDecoration(
               color: Colors.white,
@@ -104,18 +104,28 @@ class _DifferentState extends State<Different> {
                 // ),
                 const SizedBox(height: 20),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                  children: [
-                    SizedBox(
-                      width: 260,
-                      child: SearchField(
-                        hint: 'search'.tr,
-                        onChanged: (value) {},
-                      ),
-                    ),
-                  ],
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isMobile = constraints.maxWidth < 600;
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runSpacing: 16,
+                        spacing: 16,
+                        children: [
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth : 260,
+                            child: SearchField(
+                              hint: 'search'.tr,
+                              onChanged: (value) {},
+                            ),
+                          ),
+                        ],
+                       ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 24),
 
@@ -131,16 +141,24 @@ class _DifferentState extends State<Different> {
                     ),
                     child: Handlingview(
                       statusrequest: controller.statusrequest,
-                      widget: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 0.76,
-                            ),
-                        itemCount: controller.filteredData.length,
-                        itemBuilder: (context, index) {
+                      widget: LayoutBuilder(
+                        builder: (context, constraints) {
+                          int crossAxisCount = 3;
+                          if (constraints.maxWidth < 600) {
+                            crossAxisCount = 1;
+                          } else if (constraints.maxWidth < 900) {
+                            crossAxisCount = 2;
+                          }
+                          return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 0.76,
+                                ),
+                            itemCount: controller.filteredData.length,
+                            itemBuilder: (context, index) {
                           final item = controller.filteredData[index];
                           return InstitutionsCard(
                             onView: () {
@@ -195,10 +213,12 @@ class _DifferentState extends State<Different> {
                             ),
                           );
                         },
-                      ),
-                      iconData: Icons.error,
-                      title: "حدث خطأ أثناء تحميل البيانات",
-                    ),
+                      );
+                    },
+                  ),
+                  iconData: Icons.error,
+                  title: "حدث خطأ أثناء تحميل البيانات",
+                ),
                   ),
                 ),
               ],

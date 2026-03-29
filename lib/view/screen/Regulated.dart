@@ -36,8 +36,8 @@ class _RegulatedState extends State<Regulated> {
       body: GetBuilder<RegulatedcontrollerImp>(
         builder: (controller) {
           return Container(
-            padding: const EdgeInsets.all(24.0),
-            margin: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(16.0),
+            margin: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -52,87 +52,80 @@ class _RegulatedState extends State<Regulated> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Institutions/',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Institutions',
-                          style: TextStyle(color: Colors.grey, fontSize: 20),
-                        ),
-                      ],
-                    ),
-                    ActionButton(
-                      label: 'add_new'.tr,
-                      icon: CupertinoIcons.add,
-                      backgroundColor: AppColor.typography,
-                      onPressed: () {
-                        final controller = Get.put(
-                          AddinstitutionscontrollerImp(),
-                        );
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: ActionButton(
+                    label: 'add_new'.tr,
+                    icon: CupertinoIcons.add,
+                    backgroundColor: AppColor.typography,
+                    onPressed: () {
+                      final controller = Get.put(
+                        AddinstitutionscontrollerImp(),
+                      );
 
-                        controller.type = 2;
-                        Get.find<NavigationBarcontrollerImp>().changeSubPage(
-                          99,
-                          () => const Addinstitutions(),
-                        );
-                      },
-                    ),
-                  ],
+                      controller.type = 2;
+                      Get.find<NavigationBarcontrollerImp>().changeSubPage(
+                        99,
+                        () => const Addinstitutions(),
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 20),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isMobile = constraints.maxWidth < 600;
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: isMobile
+                            ? WrapAlignment.center
+                            : WrapAlignment.spaceBetween,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        runSpacing: 16,
+                        spacing: 16,
+                        children: [
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth - 20 : 260,
+                            child: SearchField(
+                              Mycontroller: controller.searchController,
+                              onChanged: (value) {
+                                controller.search(value);
+                              },
+                              hint: "search".tr,
+                            ),
+                          ),
 
-                  children: [
-                    SizedBox(
-                      width: 260,
-                      child: SearchField(
-                        Mycontroller: controller.searchController,
-                        onChanged: (value) {
-                          controller.search(value);
-                        },
-                        hint: "search".tr,
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth : 280,
+                            child: CustemDropDownField(
+                              items: controller.filters
+                                  .map(
+                                    (f) => DropdownMenuItem<int>(
+                                      value: f['key'] as int,
+                                      child: Text(
+                                        f['label'].toString().tr,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              value: controller.selectedFilter,
+                              onChanged: (value) {
+                                setState(() {
+                                  controller.selectedFilter = value!;
+                                  controller.viewdata();
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    SizedBox(
-                      width: 280,
-                      child: CustemDropDownField(
-                        items: controller.filters
-                            .map(
-                              (f) => DropdownMenuItem<int>(
-                                value: f['key'] as int,
-                                child: Text(
-                                  f['label'].toString().tr,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        value: controller.selectedFilter,
-                        onChanged: (value) {
-                          setState(() {
-                            controller.selectedFilter = value!;
-                            controller.viewdata();
-                          });
-                        },
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
+
                 const SizedBox(height: 24),
 
                 // Grid of Agent Cards
@@ -147,76 +140,87 @@ class _RegulatedState extends State<Regulated> {
                     ),
                     child: Handlingview(
                       statusrequest: controller.statusrequest,
-                      widget: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 0.76,
-                            ),
-                        itemCount: controller.filteredData.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.filteredData[index];
-                          return InstitutionsCard(
-                            onView: () {
-                              showReportDialog(
-                                context: context,
+                      widget: LayoutBuilder(
+                        builder: (context, constraints) {
+                          int crossAxisCount = 3;
+                          if (constraints.maxWidth < 600) {
+                            crossAxisCount = 1;
+                          } else if (constraints.maxWidth < 900) {
+                            crossAxisCount = 2;
+                          }
+                          return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 0.76,
+                                ),
+                            itemCount: controller.filteredData.length,
+                            itemBuilder: (context, index) {
+                              final item = controller.filteredData[index];
+                              return InstitutionsCard(
+                                onView: () {
+                                  showReportDialog(
+                                    context: context,
+                                    title: controller.currentLang == "ar"
+                                        ? item.title
+                                        : item.titleFr,
+                                    description: controller.currentLang == "ar"
+                                        ? item.body
+                                        : item.bodyFr,
+                                    imageUrl: "",
+                                    createdAt: item.updatedAt
+                                        .toString()
+                                        .substring(0, 10),
+                                  );
+                                },
+
+                                onEdit: () {
+                                  final controller = Get.put(
+                                    EditinstitutionscontrollerImp(),
+                                    permanent: true,
+                                  );
+                                  controller.fillDataFromModel(item);
+                                  Get.find<NavigationBarcontrollerImp>()
+                                      .changeSubPage(
+                                        99,
+                                        () => Editinstitutions(),
+                                      );
+                                },
+                                onDelete: () async {
+                                  await showCustomConfirmationDialog(
+                                    context,
+                                    title: "تنبيه".tr,
+                                    message: "هل أنت متأكد من الحذف؟".tr,
+                                    onConfirmAction: () {
+                                      controller.deletLaw(item.id);
+                                    },
+                                  );
+                                },
+                                onEditindex: () {
+                                  controller.setIndexData(item);
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => CustemRegulateddealog(
+                                      controller: controller,
+                                      law: item,
+                                    ),
+                                  );
+                                },
                                 title: controller.currentLang == "ar"
                                     ? item.title
                                     : item.titleFr,
-                                description: controller.currentLang == "ar"
+                                info: controller.currentLang == "ar"
                                     ? item.body
                                     : item.bodyFr,
-                                imageUrl: "",
-                                createdAt: item.updatedAt.toString().substring(
-                                  0,
-                                  10,
-                                ),
+                                isActiveCalculator: item.calcul != null,
+                                isActiveLaw: item.lawId != null,
+                                creationDate: item.updatedAt
+                                    .toString()
+                                    .substring(0, 10),
                               );
                             },
-
-                            onEdit: () {
-                              final controller = Get.put(
-                                EditinstitutionscontrollerImp(),
-                                permanent: true,
-                              );
-                              controller.fillDataFromModel(item);
-                              Get.find<NavigationBarcontrollerImp>()
-                                  .changeSubPage(99, () => Editinstitutions());
-                            },
-                            onDelete: () async {
-                              await showCustomConfirmationDialog(
-                                context,
-                                title: "تنبيه".tr,
-                                message: "هل أنت متأكد من الحذف؟".tr,
-                                onConfirmAction: () {
-                                  controller.deletLaw(item.id);
-                                },
-                              );
-                            },
-                            onEditindex: () {
-                              controller.setIndexData(item);
-                              showDialog(
-                                context: context,
-                                builder: (_) => CustemRegulateddealog(
-                                  controller: controller,
-                                  law: item,
-                                ),
-                              );
-                            },
-                            title: controller.currentLang == "ar"
-                                ? item.title
-                                : item.titleFr,
-                            info: controller.currentLang == "ar"
-                                ? item.body
-                                : item.bodyFr,
-                            isActiveCalculator: item.calcul != null,
-                            isActiveLaw: item.lawId != null,
-                            creationDate: item.updatedAt.toString().substring(
-                              0,
-                              10,
-                            ),
                           );
                         },
                       ),
