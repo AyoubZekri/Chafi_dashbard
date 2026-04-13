@@ -10,6 +10,7 @@ import '../Widget/TextFild/CustemTextFildAuth.dart';
 class SidebarWidget extends StatelessWidget {
   const SidebarWidget({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<NavigationBarcontrollerImp>();
@@ -25,16 +26,16 @@ class SidebarWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(Appimageassets.logo, width: 60, height: 60),
-                const SizedBox(width: 10),
-                 Text(
-                  'Chafi'.tr,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF4A4A4A),
-                  ),
-                ),
+                Image.asset(Appimageassets.logo, width: 180, height: 60),
+                // const SizedBox(width: 10),
+                // Text(
+                //   'Chafi'.tr,
+                //   style: TextStyle(
+                //     fontSize: 22,
+                //     fontWeight: FontWeight.bold,
+                //     color: Color(0xFF4A4A4A),
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 30),
@@ -190,6 +191,7 @@ class SidebarWidget extends StatelessWidget {
         );
       }),
     );
+  
   }
 }
 
@@ -463,7 +465,7 @@ class resetpassword extends StatelessWidget {
                       Center(
                         child: Container(
                           height: 100,
-                          width: 100,
+                          width: 200,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(Appimageassets.logo),

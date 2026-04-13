@@ -84,14 +84,6 @@ class NavigationBarcontrollerImp extends GetxController {
       'page': () => Activities(),
       'subPages': [],
     },
-
-    {
-      'name': 'العلوات والتعويضات',
-      'icon': Icons.account_balance_wallet,
-      'route': Approutes.activities,
-      'page': () => BonusesAndCompensations(),
-      'subPages': [],
-    },
     {
       'name': 'nav_institutions',
       'icon': Icons.apartment,
@@ -210,6 +202,13 @@ class NavigationBarcontrollerImp extends GetxController {
       'page': () => Commonquestions(),
       'subPages': [],
     },
+    {
+      'name': 'العلوات والتعويضات',
+      'icon': Icons.account_balance_wallet,
+      'route': Approutes.activities,
+      'page': () => BonusesAndCompensations(),
+      'subPages': [],
+    },
 
     {
       'name': "external_links",
@@ -303,19 +302,8 @@ class NavigationBarcontrollerImp extends GetxController {
   }
 
   logout() async {
-
-    Statusrequest statusrequest = Statusrequest.loadeng;
-    update();
-    var response = await authdata.logout();
-
-    statusrequest = handlingData(response);
-    print("=============================== Controller $response ");
-    if (statusrequest == Statusrequest.success) {
-      if (response["status"] == 1) {
-        myServices.sharedPreferences!.clear();
-        Get.offNamed(Approutes.login);
-      }
-    } else {}
+    myServices.sharedPreferences!.clear();
+    Get.offNamed(Approutes.login);
     update();
   }
 

@@ -131,7 +131,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
-      Get.find<NavigationBarcontrollerImp>().changePage(8);
+      Get.find<NavigationBarcontrollerImp>().changePage(7);
     } else {
       statusrequest = Statusrequest.failure;
     }

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 
-
 import '../Widget/TablePaginationFooter.dart'; // ستحتاج لإضافتها في pubspec.yaml
 
 class DashboardHome extends StatelessWidget {
@@ -159,7 +158,9 @@ class DashboardHome extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 20),
-                          Expanded(child: _buildStateStatisticsTable(controller)),
+                          Expanded(
+                            child: _buildStateStatisticsTable(controller),
+                          ),
                         ],
                       );
                     },
@@ -380,37 +381,86 @@ class DashboardHome extends StatelessWidget {
               left: 5,
               right: 5,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "إحصائيات الدخول".tr,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF191C1E),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "عدد الخول حسب كل ولاية".tr,
-                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 170,
-                  child: SearchField(
-                    onChanged: controller.filterData,
-                    hint: "search".tr,
-                    vertical: 2,
-                    isDense: true,
-                  ),
-                ),
-              ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                bool isMobile = constraints.maxWidth < 330;
+                return isMobile
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "إحصائيات الدخول".tr,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF191C1E),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "عدد الخول حسب كل ولاية".tr,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 30),
+
+                          // هذا هو المهم
+                          Center(
+                            child: Container(
+                              width: 170,
+                              child: SearchField(
+                                onChanged: controller.filterData,
+                                hint: "search".tr,
+                                vertical: 2,
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "إحصائيات الدخول".tr,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF191C1E),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "عدد الخول حسب كل ولاية".tr,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 170,
+                            child: SearchField(
+                              onChanged: controller.filterData,
+                              hint: "search".tr,
+                              vertical: 2,
+                              isDense: true,
+                            ),
+                          ),
+                        ],
+                      );
+              },
             ),
           ),
 
@@ -493,7 +543,8 @@ class DashboardHome extends StatelessWidget {
                                       ),
                                       child: FractionallySizedBox(
                                         alignment: Alignment.centerLeft,
-                                        widthFactor: stateItem.dailyPercent / 100,
+                                        widthFactor:
+                                            stateItem.dailyPercent / 100,
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: Colors.blue,

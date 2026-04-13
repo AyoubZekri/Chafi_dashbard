@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../core/constant/Colorapp.dart';
 
-class TablePaginationFooter extends StatelessWidget {
+class TablePaginationFooter extends StatefulWidget {
   final int currentPage;
   final int rowsPerPage;
   final int totalEntries;
@@ -24,52 +24,76 @@ class TablePaginationFooter extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    int startEntry = totalEntries == 0 ? 0 : (currentPage * rowsPerPage) + 1;
-    int endEntry = (currentPage * rowsPerPage) + currentFilteredLength;
+  State<TablePaginationFooter> createState() => _TablePaginationFooterState();
+}
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "${'showing'.tr} $startEntry ${'to'.tr} $endEntry ${'of'.tr} $totalEntries ${'entries'.tr}",
-            style: const TextStyle(color: Color(0xFF5A6A85), fontSize: 13),
-          ),
-          Row(
+class _TablePaginationFooterState extends State<TablePaginationFooter> {
+  @override
+  Widget build(BuildContext context) {
+    int startEntry = widget.totalEntries == 0
+        ? 0
+        : (widget.currentPage * widget.rowsPerPage) + 1;
+    int endEntry =
+        (widget.currentPage * widget.rowsPerPage) +
+        widget.currentFilteredLength;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isMobile = constraints.maxWidth < 330;
+        return Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Row(
+            mainAxisAlignment: isMobile
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.spaceBetween,
             children: [
-              _pageButton(
-                label: 'previous'.tr,
-                onPressed: currentPage > 0 ? onPrevious : null,
-              ),
-              const SizedBox(width: 5),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 1,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColor.typography,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  "${currentPage + 1}",
+              if (!isMobile)
+                Text(
+                  "${'showing'.tr} $startEntry ${'to'.tr} $endEntry ${'of'.tr} ${widget.totalEntries} ${'entries'.tr}",
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF5A6A85),
+                    fontSize: 13,
                   ),
                 ),
-              ),
-              const SizedBox(width: 5),
-              _pageButton(
-                label: 'next'.tr,
-                onPressed: (currentPage + 1) < totalPages ? onNext : null,
+              Row(
+                children: [
+                  _pageButton(
+                    label: 'previous'.tr,
+                    onPressed: widget.currentPage > 0
+                        ? widget.onPrevious
+                        : null,
+                  ),
+                  const SizedBox(width: 5),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColor.typography,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      "${widget.currentPage + 1}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  _pageButton(
+                    label: 'next'.tr,
+                    onPressed: (widget.currentPage + 1) < widget.totalPages
+                        ? widget.onNext
+                        : null,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
