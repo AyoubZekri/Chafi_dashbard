@@ -9,6 +9,7 @@ import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
+import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';
 import '../../data/model/TaxAndAppModel.dart';
 import '../../view/screen/application/PartialSystemapp.dart';
@@ -76,16 +77,53 @@ class EditappcontrollerImp extends Editappcontroller {
   List<LawModel> datalaw = [];
   List<CategoryModel> category = [];
 
+  List<Map<String, dynamic>> lawsList = [];
+
+  void addLaw() {
+    lawsList.add({
+      "law_id": null,
+      "name_ar": "",
+      "name_fr": "",
+      "index_link": null,
+    });
+    update();
+  }
+
+  void updateLawId(int index, int? value) {
+    lawsList[index]['law_id'] = value;
+    update();
+  }
+
+  void removeLaw(int index) {
+    lawsList.removeAt(index);
+    update();
+  }
+
+  void updateLawIndex(int index, String value) {
+    lawsList[index]['index_link'] = int.tryParse(value);
+    update();
+  }
+
+  void updateLawNameAr(int index, String value) {
+    lawsList[index]['name_ar'] = value;
+    update();
+  }
+
+  void updateLawNameFr(int index, String value) {
+    lawsList[index]['name_fr'] = value;
+    update();
+  }
+
   Future<void> editdata() async {
     if (!formState.currentState!.validate()) return;
+    print("Selected laws: $lawsList");
     if (selectedCategory == null) {
       showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
-
       return;
     }
 
-    if (isLawActive == true && selectedLaw == null) {
-      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+    if (isLawActive == true && lawsList.isEmpty) {
+      showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
       return;
     }
 
@@ -97,12 +135,7 @@ class EditappcontrollerImp extends Editappcontroller {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    LawModel? law;
     Map<String, Object>? calculator;
-
-    if (isLawActive == true) {
-      law = datalaw.firstWhere((element) => element.id == selectedLaw);
-    }
 
     if (isCalculatorActive == true) {
       calculator = calcelators.firstWhere(
@@ -117,28 +150,21 @@ class EditappcontrollerImp extends Editappcontroller {
       "body": infoar.text,
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
-      "law_id": law?.id,
+      // "law_id": law?.id,
+      "laws": lawsList,
+
       "calcul": calculator?['route'],
-      "index_link": numperindex.text,
+      // "index_link": numperindex.text,
     };
 
     print("=================$requestData");
 
-    var response = await taxandappdata.adddata(requestData);
-    print("Add Response: $response");
+    var response = await taxandappdata.editdata(requestData);
+    print("Edit Response: $response");
 
     statusrequest = handlingData(response);
 
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
-      titlear.clear();
-      titlefr.clear();
-      infoar.clear();
-      infofr.clear();
-      isLawActive = false;
-      isCalculatorActive = false;
-      selectedCalculator = null;
-      selectedLaw = null;
-      selectedCategory = null;
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
         type == 0
             ? 1
@@ -173,9 +199,6 @@ class EditappcontrollerImp extends Editappcontroller {
         List listdata = response['data'];
         datalaw.addAll(listdata.map((e) => LawModel.fromJson(e)));
         datalaw = List.from(datalaw);
-
-        // print("data == $data");
-        // print("filteredData == $filteredData");
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -185,10 +208,6 @@ class EditappcontrollerImp extends Editappcontroller {
   }
 
   Future<void> viewdataCategory() async {
-    print("================");
-    print(type);
-    print("================");
-
     update();
     final actData = {"type_cat": 2, "tax_id": type};
 
@@ -203,8 +222,6 @@ class EditappcontrollerImp extends Editappcontroller {
         List listdata = response['data'];
         category.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
         category = List.from(category);
-
-        print("category == $category");
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -219,15 +236,33 @@ class EditappcontrollerImp extends Editappcontroller {
     infoar.text = model.body;
     titlefr.text = model.titleFr;
     infofr.text = model.bodyFr;
-    numperindex.text = model.indexLink;
-    isCalculatorActive = model.calcul != null;
-    selectedCalculator = isCalculatorActive
-        ? calcelators.firstWhere((c) => c['route'] == model.calcul)['key']
-              as int
-        : null;
 
-    isLawActive = model.lawId != null;
-    selectedLaw = model.lawId;
+    isCalculatorActive = model.calcul != null;
+    if (isCalculatorActive) {
+      try {
+        selectedCalculator =
+            calcelators.firstWhere((c) => c['route'] == model.calcul)['key']
+                as int;
+      } catch (e) {
+        selectedCalculator = null;
+      }
+    } else {
+      selectedCalculator = null;
+    }
+
+    isLawActive = model.laws != null && model.laws!.isNotEmpty;
+    lawsList.clear();
+    if (model.laws != null) {
+      for (var law in model.laws!) {
+        lawsList.add({
+          "law_id": law['law_id'],
+          "name_ar": law['name_ar'] ?? "",
+          "name_fr": law['name_fr'] ?? "",
+          "index_link": law['index_link'],
+        });
+      }
+    }
+
     selectedCategory = model.catId;
 
     update();
@@ -236,6 +271,7 @@ class EditappcontrollerImp extends Editappcontroller {
   @override
   void onInit() {
     viewdata();
+    viewdataCategory();
     super.onInit();
   }
 }

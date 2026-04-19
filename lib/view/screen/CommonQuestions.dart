@@ -122,69 +122,69 @@ class _CommonquestionsState extends State<Commonquestions> {
                                   mainAxisSpacing: 20,
                                   childAspectRatio: 1.25,
                                 ),
-                        itemCount: controller.filteredData.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.filteredData[index];
-                          return InstitutionsCard(
-                            buttomcare: false,
-                            onView: () {
-                              showReportDialog(
-                                context: context,
-                                title: item.localizedName,
-                                description: item.localizedBody,
-                                imageUrl: "",
-                                createdAt: item.updatedAt.toString().substring(
-                                  0,
-                                  10,
-                                ),
-                              );
-                            },
-
-                            onEdit: () {
-                              controller.setEditData(item);
-                              showDialog(
-                                context: context,
-                                builder: (context) => Commonquestionsdealog(
-                                  mode: CommonquestionsdealogMode.edit,
-                                  controller: controller,
-                                  id: item.id,
-                                ),
-                              );
-                            },
-                            onDelete: () async {
-                              await showCustomConfirmationDialog(
-                                context,
-                                title: "تنبيه".tr,
-                                message: "هل أنت متأكد من الحذف؟".tr,
-                                onConfirmAction: () {
-                                  controller.deletLaw(item.id);
+                            itemCount: controller.filteredData.length,
+                            itemBuilder: (context, index) {
+                              final item = controller.filteredData[index];
+                              return InstitutionsCard(
+                                buttomcare: false,
+                                onView: () {
+                                  showReportDialog(
+                                    context: context,
+                                    title: item.localizedName,
+                                    description: item.localizedBody,
+                                    imageUrl: "",
+                                    createdAt: item.updatedAt
+                                        .toString()
+                                        .substring(0, 10),
+                                    calcul: item.calcul,
+                                    laws: item.laws,
+                                  );
                                 },
+
+                                onEdit: () {
+                                  controller.setEditData(item);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => Commonquestionsdealog(
+                                      mode: CommonquestionsdealogMode.edit,
+                                      controller: controller,
+                                      id: item.id,
+                                    ),
+                                  );
+                                },
+                                onDelete: () async {
+                                  await showCustomConfirmationDialog(
+                                    context,
+                                    title: "تنبيه".tr,
+                                    message: "هل أنت متأكد من الحذف؟".tr,
+                                    onConfirmAction: () {
+                                      controller.deletLaw(item.id);
+                                    },
+                                  );
+                                },
+                                onEditindex: () {
+                                  controller.setIndexData(item);
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AppointmentsIndexDialog(
+                                      controller: controller,
+                                      appointmentsmodel: item,
+                                    ),
+                                  );
+                                },
+                                title: item.localizedName,
+                                info: item.localizedBody,
+                                isActiveCalculator: item.calcul != null,
+                                isActiveLaw: item.lawId != null,
+                                creationDate: item.updatedAt
+                                    .toString()
+                                    .substring(0, 10),
                               );
                             },
-                            onEditindex: () {
-                              controller.setIndexData(item);
-                              showDialog(
-                                context: context,
-                                builder: (_) => AppointmentsIndexDialog(
-                                  controller: controller,
-                                  appointmentsmodel: item,
-                                ),
-                              );
-                            },
-                            title: item.localizedName,
-                            info: item.localizedBody,
-                            isActiveCalculator: item.calcul != null,
-                            isActiveLaw: item.lawId != null,
-                            creationDate: item.updatedAt.toString().substring(
-                              0,
-                              10,
-                            ),
                           );
                         },
-                      );
-                    },
-                  ),
-                  iconData: Icons.error,
+                      ),
+                      iconData: Icons.error,
                       title: "حدث خطأ أثناء تحميل البيانات",
                     ),
                   ),

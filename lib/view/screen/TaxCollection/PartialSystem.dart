@@ -144,91 +144,94 @@ class _PartialsystemState extends State<Partialsystem> {
                     child: Handlingview(
                       statusrequest: controller.statusrequest,
                       widget: LayoutBuilder(
-                          builder: (context, constraints) {
-                            int crossAxisCount = 3;
-                            if (constraints.maxWidth < 600) {
-                              crossAxisCount = 1;
-                            } else if (constraints.maxWidth < 900) {
-                              crossAxisCount = 2;
-                            }
-                            return GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 0.76,
-                            ),
-                        itemCount: controller.filteredData.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.filteredData[index];
-                          return InstitutionsCard(
-                            onView: () {
-                              showReportDialog(
-                                context: context,
+                        builder: (context, constraints) {
+                          int crossAxisCount = 3;
+                          if (constraints.maxWidth < 600) {
+                            crossAxisCount = 1;
+                          } else if (constraints.maxWidth < 900) {
+                            crossAxisCount = 2;
+                          }
+                          return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 1.2,
+                                ),
+                            itemCount: controller.filteredData.length,
+                            itemBuilder: (context, index) {
+                              final item = controller.filteredData[index];
+                              return InstitutionsCard(
+                                onView: () {
+                                  showReportDialog(
+                                    context: context,
+                                    title: controller.currentLang == "ar"
+                                        ? item.title
+                                        : item.titleFr,
+                                    description: controller.currentLang == "ar"
+                                        ? item.body
+                                        : item.bodyFr,
+                                    imageUrl: "",
+                                    createdAt: item.updatedAt
+                                        .toString()
+                                        .substring(0, 10),
+                                    calcul: item.calcul,
+                                    laws: item.laws,
+                                  );
+                                },
+
+                                onEdit: () {
+                                  Get.delete<EditTaxCollectionControllerImp>();
+                                  final controller = Get.put(
+                                    EditTaxCollectionControllerImp(),
+                                  );
+                                  controller.type = 0;
+                                  controller.viewdataCategory();
+                                  controller.fillDataFromModel(item);
+                                  Get.find<NavigationBarcontrollerImp>()
+                                      .changeSubPage(
+                                        99,
+                                        () => Edittaxcollection(),
+                                      );
+                                },
+                                onDelete: () async {
+                                  await showCustomConfirmationDialog(
+                                    context,
+                                    title: "تنبيه".tr,
+                                    message: "هل أنت متأكد من الحذف؟".tr,
+                                    onConfirmAction: () {
+                                      controller.deletdata(item.id);
+                                    },
+                                  );
+                                },
+                                onEditindex: () {
+                                  controller.setIndexData(item);
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => CustemPartialTaxdealog(
+                                      controller: controller,
+                                      taxandappmodel: item,
+                                    ),
+                                  );
+                                },
                                 title: controller.currentLang == "ar"
                                     ? item.title
                                     : item.titleFr,
-                                description: controller.currentLang == "ar"
+                                info: controller.currentLang == "ar"
                                     ? item.body
                                     : item.bodyFr,
-                                imageUrl: "",
-                                createdAt: item.updatedAt.toString().substring(
-                                  0,
-                                  10,
-                                ),
+                                isActiveCalculator: item.calcul != null,
+                                isActiveLaw: item.lawId != null,
+                                creationDate: item.updatedAt
+                                    .toString()
+                                    .substring(0, 10),
                               );
                             },
-
-                            onEdit: () {
-                              Get.delete<EditTaxCollectionControllerImp>();
-                              final controller = Get.put(
-                                EditTaxCollectionControllerImp(),
-                              );
-                              controller.type = 0;
-                              controller.viewdataCategory();
-                              controller.fillDataFromModel(item);
-                              Get.find<NavigationBarcontrollerImp>()
-                                  .changeSubPage(99, () => Edittaxcollection());
-                            },
-                            onDelete: () async {
-                              await showCustomConfirmationDialog(
-                                context,
-                                title: "تنبيه".tr,
-                                message: "هل أنت متأكد من الحذف؟".tr,
-                                onConfirmAction: () {
-                                  controller.deletdata(item.id);
-                                },
-                              );
-                            },
-                            onEditindex: () {
-                              controller.setIndexData(item);
-                              showDialog(
-                                context: context,
-                                builder: (_) => CustemPartialTaxdealog(
-                                  controller: controller,
-                                  taxandappmodel: item,
-                                ),
-                              );
-                            },
-                            title: controller.currentLang == "ar"
-                                ? item.title
-                                : item.titleFr,
-                            info: controller.currentLang == "ar"
-                                ? item.body
-                                : item.bodyFr,
-                            isActiveCalculator: item.calcul != null,
-                            isActiveLaw: item.lawId != null,
-                            creationDate: item.updatedAt.toString().substring(
-                              0,
-                              10,
-                            ),
                           );
                         },
-                        );
-                      },
-                    ),
-                    iconData: Icons.error,
+                      ),
+                      iconData: Icons.error,
                       title: "حدث خطأ أثناء تحميل البيانات",
                     ),
                   ),

@@ -81,6 +81,43 @@ class EditinstitutionscontrollerImp extends GetxController {
     {'key': 8, 'label': "filter_incubator"},
   ];
 
+  List<Map<String, dynamic>> lawsList = [];
+
+  void addLaw() {
+    lawsList.add({
+      "law_id": null,
+      "name_ar": "",
+      "name_fr": "",
+      "index_link": null,
+    });
+    update();
+  }
+
+  void updateLawId(int index, int? value) {
+    lawsList[index]['law_id'] = value;
+    update();
+  }
+
+  void removeLaw(int index) {
+    lawsList.removeAt(index);
+    update();
+  }
+
+  void updateLawIndex(int index, String value) {
+    lawsList[index]['index_link'] = int.tryParse(value);
+    update();
+  }
+
+  void updateLawNameAr(int index, String value) {
+    lawsList[index]['name_ar'] = value;
+    update();
+  }
+
+  void updateLawNameFr(int index, String value) {
+    lawsList[index]['name_fr'] = value;
+    update();
+  }
+
   void fillDataFromModel(InstitutionModel model) {
     id = model.id;
     titleAr.text = model.title;
@@ -96,8 +133,19 @@ class EditinstitutionscontrollerImp extends GetxController {
               as int
         : null;
 
-    isLawActive = model.lawId != null;
-    selectedLaw = model.lawId;
+    isLawActive = model.laws != null && model.laws!.isNotEmpty;
+    lawsList.clear();
+    if (model.laws != null) {
+      for (var law in model.laws!) {
+        lawsList.add({
+          "law_id": law['law_id'],
+          "name_ar": law['name_ar'] ?? "",
+          "name_fr": law['name_fr'] ?? "",
+          "index_link": law['index_link'],
+        });
+      }
+    }
+
     print("=====================$type");
     update();
   }
@@ -105,8 +153,8 @@ class EditinstitutionscontrollerImp extends GetxController {
   Future<void> editData() async {
     if (!formState.currentState!.validate()) return;
 
-    if (isLawActive == true && selectedLaw == null) {
-      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+    if (isLawActive == true && lawsList.isEmpty) {
+      showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
 
       return;
     }
@@ -119,9 +167,9 @@ class EditinstitutionscontrollerImp extends GetxController {
     statusRequest = Statusrequest.loadeng;
     update();
 
-    final law = isLawActive
-        ? laws.firstWhere((element) => element.id == selectedLaw)
-        : null;
+    // final law = isLawActive
+    //     ? laws.firstWhere((element) => element.id == selectedLaw)
+    //     : null;
     final calculator = isCalculatorActive
         ? calcelators.firstWhere((c) => c['key'] == selectedCalculator)
         : null;
@@ -132,9 +180,11 @@ class EditinstitutionscontrollerImp extends GetxController {
       "body": infoAr.text,
       "title_fr": titleFr.text,
       "body_fr": infoFr.text,
-      "law_id": law?.id,
+      // "law_id": law?.id,
       "calcul": calculator?['route'],
-      "index_link": numPerIndex.text,
+      "laws": lawsList,
+
+      // "index_link": numPerIndex.text,
     };
 
     final response = await institutionData.editdata(requestData);

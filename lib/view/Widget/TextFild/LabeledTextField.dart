@@ -10,6 +10,7 @@ class CustemtextfromfildInfoUser extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? obscureText;
   final String? Function(String?) valid;
+  final void Function(String)? onChanged;
 
   const CustemtextfromfildInfoUser({
     super.key,
@@ -20,6 +21,7 @@ class CustemtextfromfildInfoUser extends StatelessWidget {
     required this.label,
     this.maxLines,
     required this.valid,
+    this.onChanged,
   });
 
   @override
@@ -34,9 +36,9 @@ class CustemtextfromfildInfoUser extends StatelessWidget {
         const SizedBox(height: 8),
 
         TextFormField(
-          obscureText: obscureText == null || obscureText == false
-              ? false
-              : true,
+          onChanged: onChanged,
+          obscureText:
+              obscureText == null || obscureText == false ? false : true,
           controller: myController,
           keyboardType: keyboardType,
           validator: valid,
@@ -58,7 +60,7 @@ class CustemtextfromfildInfoUser extends StatelessWidget {
               borderSide: BorderSide(color: AppColor.grey),
               borderRadius: BorderRadius.circular(10),
             ),
-            errorStyle: TextStyle(
+            errorStyle: const TextStyle(
               fontSize: 12, // الحجم هنا
               color: Colors.red, // اللون هنا
               fontWeight: FontWeight.bold, // optional

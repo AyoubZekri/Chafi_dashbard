@@ -155,7 +155,7 @@ class _SimplifiedsystemappState extends State<Simplifiedsystemapp> {
                                     crossAxisCount: crossAxisCount,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
-                              childAspectRatio: 0.76,
+                              childAspectRatio: 1.2,
                             ),
                         itemCount: controller.filteredData.length,
                         itemBuilder: (context, index) {
@@ -175,6 +175,8 @@ class _SimplifiedsystemappState extends State<Simplifiedsystemapp> {
                                   0,
                                   10,
                                 ),
+                                calcul: item.calcul,
+                                laws: item.laws,
                               );
                             },
 

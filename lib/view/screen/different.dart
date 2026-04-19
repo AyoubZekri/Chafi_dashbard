@@ -171,6 +171,9 @@ class _DifferentState extends State<Different> {
                                   0,
                                   10,
                                 ),
+                                                                calcul: item.calcul,
+                                laws: item.laws,
+
                               );
                             },
 

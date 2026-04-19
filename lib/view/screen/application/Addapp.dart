@@ -173,46 +173,155 @@ class _AddappState extends State<Addapp> {
                       },
                     ),
                 
-                    if (controller.isLawActive)
+                    if (controller.isLawActive) ...[
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            flex: 2,
-                            child: Dropdownfild(
-                              label: "law_label".tr,
-                              hintText: "law_hint".tr,
-                              items: controller.datalaw
-                                  .map(
-                                    (f) => DropdownMenuItem<int>(
-                                      value: f.id,
-                                      child: Text(
-                                        f.localizedName.toString(),
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              value: controller.selectedLaw,
-                              onChanged: (val) {
-                                setState(() {
-                                  controller.selectedLaw = val;
-                                });
-                              },
-                            ),
+                          Text(
+                            "law_list".tr,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(width: 24),
-                          Expanded(
-                            flex: 1,
-                            child: CustemtextfromfildInfoUser(
-                              myController: controller.numperindex,
-                              label: "page_number".tr,
-                              hintText: "أدخل رقم الصفحة...".tr,
-                              valid: (val) =>
-                                  validateInput(val!, 1, 10, "number"),
-                            ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              controller.addLaw();
+                            },
+                            icon: const Icon(Icons.add, color: Colors.white),
+                            label: Text("add_law_button".tr,
+                                style: const TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 16),
+                      ...List.generate(controller.lawsList.length, (index) {
+                        var lawItem = controller.lawsList[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey.shade50,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "${"law_item_title".tr} ${index + 1}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  IconButton(
+                                    onPressed: () =>
+                                        controller.removeLaw(index),
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Dropdownfild(
+                                      label: "select_law_label".tr,
+                                      hintText: "law_hint".tr,
+                                      items: controller.datalaw
+                                          .map(
+                                            (f) => DropdownMenuItem<int>(
+                                              value: f.id,
+                                              child: Text(
+                                                f.localizedName.toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 14),
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                      value: lawItem['law_id'],
+                                      onChanged: (val) {
+                                        controller.updateLawId(index, val as int?);
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    flex: 2,
+                                    child: CustemtextfromfildInfoUser(
+                                      label: "name_ar_input_label".tr,
+                                      hintText: "enter_name_ar_hint".tr,
+                                      myController: TextEditingController(
+                                          text: lawItem['name_ar'])
+                                        ..selection =
+                                            TextSelection.fromPosition(
+                                          TextPosition(
+                                              offset:
+                                                  lawItem['name_ar']?.length ??
+                                                      0),
+                                        ),
+                                      onChanged: (val) =>
+                                          controller.updateLawNameAr(index, val),
+                                      valid: (val) =>
+                                          validateInput(val!, 0, 200, "text"),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    flex: 2,
+                                    child: CustemtextfromfildInfoUser(
+                                      label: "name_fr_input_label".tr,
+                                      hintText: "enter_name_fr_hint".tr,
+                                      myController: TextEditingController(
+                                          text: lawItem['name_fr'])
+                                        ..selection =
+                                            TextSelection.fromPosition(
+                                          TextPosition(
+                                              offset:
+                                                  lawItem['name_fr']?.length ??
+                                                      0),
+                                        ),
+                                      onChanged: (val) =>
+                                          controller.updateLawNameFr(index, val),
+                                      valid: (val) =>
+                                          validateInput(val!, 0, 200, "text"),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    flex: 1,
+                                    child: CustemtextfromfildInfoUser(
+                                      label: "page_number".tr,
+                                      hintText: "page_number_hint".tr,
+                                      myController: TextEditingController(
+                                          text: lawItem['index_link']
+                                              ?.toString())
+                                        ..selection =
+                                            TextSelection.fromPosition(
+                                          TextPosition(
+                                              offset: lawItem['index_link']
+                                                      ?.toString()
+                                                      .length ??
+                                                  0),
+                                        ),
+                                      onChanged: (val) =>
+                                          controller.updateLawIndex(index, val),
+                                      valid: (val) =>
+                                          validateInput(val!, 0, 10, "number"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
                 
                     const SizedBox(height: 48),
                 

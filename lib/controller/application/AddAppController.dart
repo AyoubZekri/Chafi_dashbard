@@ -9,6 +9,7 @@ import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
+import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';
 import '../../view/screen/application/PartialSystemapp.dart';
 import '../../view/screen/application/RealSystemapp.dart';
@@ -75,6 +76,43 @@ class AddappcontrollerImp extends Addappcontroller {
   List<LawModel> datalaw = [];
   List<CategoryModel> category = [];
 
+  List<Map<String, dynamic>> lawsList = [];
+
+  void addLaw() {
+    lawsList.add({
+      "law_id": null,
+      "name_ar": "",
+      "name_fr": "",
+      "index_link": null,
+    });
+    update();
+  }
+
+  void updateLawId(int index, int? value) {
+    lawsList[index]['law_id'] = value;
+    update();
+  }
+
+  void removeLaw(int index) {
+    lawsList.removeAt(index);
+    update();
+  }
+
+  void updateLawIndex(int index, String value) {
+    lawsList[index]['index_link'] = int.tryParse(value);
+    update();
+  }
+
+  void updateLawNameAr(int index, String value) {
+    lawsList[index]['name_ar'] = value;
+    update();
+  }
+
+  void updateLawNameFr(int index, String value) {
+    lawsList[index]['name_fr'] = value;
+    update();
+  }
+
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
     if (selectedCategory == null) {
@@ -82,7 +120,7 @@ class AddappcontrollerImp extends Addappcontroller {
       return;
     }
 
-    if (isLawActive == true && selectedLaw == null) {
+    if (isLawActive == true && lawsList.isEmpty) {
       showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
       return;
     }
@@ -95,13 +133,7 @@ class AddappcontrollerImp extends Addappcontroller {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    LawModel? law;
     Map<String, Object>? calculator;
-
-    if (isLawActive == true) {
-      law = datalaw.firstWhere((element) => element.id == selectedLaw);
-    }
-
     if (isCalculatorActive == true) {
       calculator = calcelators.firstWhere(
         (element) => element['key'] == selectedCalculator,
@@ -114,9 +146,11 @@ class AddappcontrollerImp extends Addappcontroller {
       "body": infoar.text,
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
-      "law_id": law?.id,
+      // "law_id": law?.id,
       "calcul": calculator?['route'],
-      "index_link": numperindex.text,
+      "laws": lawsList,
+
+      // "index_link": numperindex.text,
     };
 
     print("=================$requestData");
@@ -131,11 +165,13 @@ class AddappcontrollerImp extends Addappcontroller {
       titlefr.clear();
       infoar.clear();
       infofr.clear();
+      lawsList.clear();
       isLawActive = false;
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
       selectedCategory = null;
+      lawsList.clear();
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
         type == 0
             ? 1

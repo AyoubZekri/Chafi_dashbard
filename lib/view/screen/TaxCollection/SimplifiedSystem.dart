@@ -157,7 +157,7 @@ class _SimplifiedsystemState extends State<Simplifiedsystem> {
                                     crossAxisCount: crossAxisCount,
                               crossAxisSpacing: 20,
                               mainAxisSpacing: 20,
-                              childAspectRatio: 0.76,
+                              childAspectRatio: 1.2,
                             ),
                         itemCount: controller.filteredData.length,
                         itemBuilder: (context, index) {

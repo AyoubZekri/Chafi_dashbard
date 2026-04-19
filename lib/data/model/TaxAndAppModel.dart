@@ -14,6 +14,8 @@ class Taxandappmodel {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  final List<dynamic>? laws;
+
   Taxandappmodel({
     required this.id,
     required this.index,
@@ -27,6 +29,7 @@ class Taxandappmodel {
     this.calcul,
     required this.createdAt,
     required this.updatedAt,
+    this.laws,
   });
 
   factory Taxandappmodel.fromJson(Map<String, dynamic> json) {
@@ -39,10 +42,11 @@ class Taxandappmodel {
       titleFr: json['title_fr'],
       bodyFr: json['body_fr'],
       lawId: json['law_id'],
-      indexLink: json['index_link']?? "",
+      indexLink: json['index_link'] ?? "",
       calcul: json['calcul'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      laws: json['laws'],
     );
   }
 
@@ -60,6 +64,7 @@ class Taxandappmodel {
       'calcul': calcul,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'laws': laws,
     };
   }
 
@@ -72,5 +77,4 @@ class Taxandappmodel {
     final lang = Get.locale?.languageCode ?? 'ar';
     return lang == 'ar' ? body : bodyFr;
   }
-
 }

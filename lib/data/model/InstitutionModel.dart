@@ -12,6 +12,7 @@ class InstitutionModel {
   final String? calcul;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final List<dynamic>? laws;
 
   InstitutionModel({
     required this.id,
@@ -27,6 +28,7 @@ class InstitutionModel {
     this.calcul,
     required this.createdAt,
     required this.updatedAt,
+    this.laws,
   });
 
   factory InstitutionModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class InstitutionModel {
       calcul: json['calcul'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      laws: json['laws'],
     );
   }
 
@@ -62,6 +65,7 @@ class InstitutionModel {
       'calcul': calcul,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'laws': laws,
     };
   }
 }

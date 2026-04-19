@@ -70,11 +70,49 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
 
   List<LawModel> data = [];
 
+  List<Map<String, dynamic>> lawsList = [];
+
+  void addLaw() {
+    lawsList.add({
+      "law_id": null,
+      "name_ar": "",
+      "name_fr": "",
+      "index_link": null,
+    });
+    update();
+  }
+
+  void updateLawId(int index, int? value) {
+    lawsList[index]['law_id'] = value;
+    update();
+  }
+
+  void removeLaw(int index) {
+    lawsList.removeAt(index);
+    update();
+  }
+
+  void updateLawIndex(int index, String value) {
+    lawsList[index]['index_link'] = int.tryParse(value);
+    update();
+  }
+
+  void updateLawNameAr(int index, String value) {
+    lawsList[index]['name_ar'] = value;
+    update();
+  }
+
+  void updateLawNameFr(int index, String value) {
+    lawsList[index]['name_fr'] = value;
+    update();
+  }
+
+
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
 
-    if (isLawActive == true && selectedLaw == null) {
-      showSnackbar("خطأ".tr, "يرجى اختيار القانون".tr, Colors.red);
+    if (isLawActive == true && lawsList.isEmpty) {
+      showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
 
       return;
     }
@@ -88,12 +126,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    LawModel? law;
     Map<String, Object>? calculator;
-
-    if (isLawActive == true) {
-      law = data.firstWhere((element) => element.id == selectedLaw);
-    }
 
     if (isCalculatorActive == true) {
       calculator = calcelators.firstWhere(
@@ -107,9 +140,8 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
       "body": infoar.text,
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
-      "law_id": law?.id,
+      "laws": lawsList, // Added laws array
       "calcul": calculator?['route'],
-      "index_link": numperindex.text,
     };
 
     print("=================$requestData");

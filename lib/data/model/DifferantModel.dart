@@ -15,6 +15,9 @@ class DifferentsModel {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  final List<dynamic>? laws;
+
+
   DifferentsModel({
     required this.id,
     required this.index,
@@ -28,7 +31,7 @@ class DifferentsModel {
     this.calcul,
     required this.isRead,
     required this.createdAt,
-    required this.updatedAt,
+    required this.updatedAt, this.laws,
   });
 
   factory DifferentsModel.fromJson(Map<String, dynamic> json) {
@@ -46,6 +49,8 @@ class DifferentsModel {
       isRead: json['is_read'] ?? false,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      laws: json['laws'],
+
     );
   }
   String get localizedName {

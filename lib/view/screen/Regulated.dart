@@ -154,7 +154,7 @@ class _RegulatedState extends State<Regulated> {
                                   crossAxisCount: crossAxisCount,
                                   crossAxisSpacing: 20,
                                   mainAxisSpacing: 20,
-                                  childAspectRatio: 0.76,
+                                  childAspectRatio: 1.2,
                                 ),
                             itemCount: controller.filteredData.length,
                             itemBuilder: (context, index) {
@@ -173,6 +173,8 @@ class _RegulatedState extends State<Regulated> {
                                     createdAt: item.updatedAt
                                         .toString()
                                         .substring(0, 10),
+                                    calcul: item.calcul,
+                                    laws: item.laws,
                                   );
                                 },
 

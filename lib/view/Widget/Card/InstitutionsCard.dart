@@ -146,18 +146,18 @@ class InstitutionsCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 13, color: Colors.black87),
           ),
-          if (buttomcare == true) ...[
-            Spacer(),
-            const Divider(height: 30),
-            _dataRow('calculator'.tr, isActiveCalculator),
-            const SizedBox(height: 8),
-            _dataRow('law'.tr, isActiveLaw),
-            const Divider(height: 10),
-            Text(
-              '${"created_at".tr} : $creationDate',
-              style: TextStyle(color: Colors.grey.shade400, fontSize: 11),
-            ),
-          ],
+          // if (buttomcare == true) ...[
+          //   Spacer(),
+          //   const Divider(height: 30),
+          //   _dataRow('calculator'.tr, isActiveCalculator),
+          //   const SizedBox(height: 8),
+          //   _dataRow('law'.tr, isActiveLaw),
+          //   const Divider(height: 10),
+          //   Text(
+          //     '${"created_at".tr} : $creationDate',
+          //     style: TextStyle(color: Colors.grey.shade400, fontSize: 11),
+          //   ),
+          // ],
         ],
       ),
     );
@@ -194,6 +194,8 @@ void showReportDialog({
   required String description,
   required String imageUrl,
   required String createdAt,
+  String? calcul,
+  List<dynamic>? laws,
 }) {
   showDialog(
     context: context,
@@ -209,6 +211,8 @@ void showReportDialog({
               description: description,
               imageUrl: imageUrl,
               createdAt: createdAt,
+              calcul: calcul,
+              laws: laws,
             ),
           ),
         ),

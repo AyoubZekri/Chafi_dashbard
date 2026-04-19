@@ -197,7 +197,7 @@ class _InstitutionsState extends State<Institutions> {
                                   crossAxisCount: crossAxisCount,
                                   crossAxisSpacing: 20,
                                   mainAxisSpacing: 20,
-                                  childAspectRatio: 0.76,
+                                  childAspectRatio: 1.2,
                                 ),
                             itemCount: controller.filteredData.length,
                             itemBuilder: (context, index) {
@@ -216,6 +216,8 @@ class _InstitutionsState extends State<Institutions> {
                                     createdAt: item.updatedAt
                                         .toString()
                                         .substring(0, 10),
+                                    calcul: "calcul",
+                                    laws: item.laws,
                                   );
                                 },
 
