@@ -70,6 +70,7 @@ class ReportscontrollerImp extends Reportscontroller {
 
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
 
     if (file == null) {
       showSnackbar("خطأ".tr, "يرجى إدخال صورة".tr, Colors.red);
@@ -148,6 +149,7 @@ class ReportscontrollerImp extends Reportscontroller {
 
   Future<void> editData(int id) async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
 
     statusrequest = Statusrequest.loadeng;
     Map<String, dynamic> requestData = {

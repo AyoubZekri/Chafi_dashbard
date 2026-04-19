@@ -7,6 +7,7 @@ import '../../../core/functions/valiedinput.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
+import '../../Widget/Button/AddLawButton.dart';
 
 class Editapp extends StatefulWidget {
   const Editapp({super.key});
@@ -184,15 +185,11 @@ class _EditappState extends State<Editapp> {
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          ElevatedButton.icon(
+                          CustomAddLawButton(
+                            label: "add_law_button".tr,
                             onPressed: () {
                               controller.addLaw();
                             },
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            label: Text("add_law_button".tr,
-                                style: const TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green),
                           ),
                         ],
                       ),

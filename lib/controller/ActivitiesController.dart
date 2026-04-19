@@ -118,6 +118,7 @@ class Activitiescontroller extends GetxController {
   // إضافة قانون
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
     statusrequest = Statusrequest.loadeng;
     update();
 
@@ -147,7 +148,6 @@ class Activitiescontroller extends GetxController {
       selecttypeTheActivity = null;
       statusTax = null;
       viewdata();
-      Get.back();
     } else {
       statusrequest = Statusrequest.failure;
     }
@@ -198,6 +198,7 @@ class Activitiescontroller extends GetxController {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};

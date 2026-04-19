@@ -5,6 +5,7 @@ import '../../../controller/Institutions/EditinstitutionsController.dart';
 import '../../../core/class/Statusrequest.dart';
 import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
+import '../../Widget/Button/AddLawButton.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
@@ -196,17 +197,15 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                           Text(
                             "law_list".tr,
                             style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          ElevatedButton.icon(
+                          CustomAddLawButton(
+                            label: "add_law_button".tr,
                             onPressed: () {
                               controller.addLaw();
                             },
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            label: Text("add_law_button".tr,
-                                style: const TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green),
                           ),
                         ],
                       ),
@@ -231,13 +230,16 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                   Text(
                                     "${"law_item_title".tr} ${index + 1}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   IconButton(
                                     onPressed: () =>
                                         controller.removeLaw(index),
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -255,14 +257,18 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                               child: Text(
                                                 f.localizedName.toString(),
                                                 style: const TextStyle(
-                                                    fontSize: 14),
+                                                  fontSize: 14,
+                                                ),
                                               ),
                                             ),
                                           )
                                           .toList(),
                                       value: lawItem['law_id'],
                                       onChanged: (val) {
-                                        controller.updateLawId(index, val as int?);
+                                        controller.updateLawId(
+                                          index,
+                                          val as int?,
+                                        );
                                       },
                                     ),
                                   ),
@@ -272,17 +278,21 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_ar_input_label".tr,
                                       hintText: "enter_name_ar_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_ar'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_ar']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameAr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_ar'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_ar']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameAr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -293,17 +303,21 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_fr_input_label".tr,
                                       hintText: "enter_name_fr_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_fr'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_fr']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameFr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_fr'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_fr']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameFr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -314,17 +328,21 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "page_number".tr,
                                       hintText: "page_number_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['index_link']
-                                              ?.toString())
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset: lawItem['index_link']
-                                                      ?.toString()
-                                                      .length ??
-                                                  0),
-                                        ),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['index_link']
+                                                  ?.toString(),
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['index_link']
+                                                            ?.toString()
+                                                            .length ??
+                                                        0,
+                                                  ),
+                                                ),
                                       onChanged: (val) =>
                                           controller.updateLawIndex(index, val),
                                       valid: (val) =>

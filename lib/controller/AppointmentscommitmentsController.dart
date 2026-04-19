@@ -82,6 +82,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   // إضافة قانون
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -123,6 +124,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {
@@ -160,6 +162,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};

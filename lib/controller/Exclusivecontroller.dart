@@ -53,6 +53,8 @@ class Exclusivecontroller extends GetxController {
       showSnackbar("خطأ".tr, "يرجى إدخال صورة".tr, Colors.red);
       return;
     }
+    Get.back();
+
     statusrequest = Statusrequest.loadeng;
 
     var response = await postdata.adddata({'type': '2'}, file!);

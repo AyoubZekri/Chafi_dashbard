@@ -1,25 +1,40 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
 
-import '../constant/Colorapp.dart';
+Future<File> compressTo2MB(File file) async {
+  const maxSize = 2 * 1024 * 1024;
 
-imageuploadcamera() async {
-  final XFile? file = await ImagePicker().pickImage(
-    source: ImageSource.camera,
-    imageQuality: 90,
-  );
-  if (file != null) {
-    return File(file.path);
-  } else {
-    return null;
+  img.Image? image = img.decodeImage(await file.readAsBytes());
+  if (image == null) return file;
+
+  int quality = 90;
+  List<int> encoded = img.encodeJpg(image, quality: quality);
+
+  while (encoded.length > maxSize && quality > 10) {
+    quality -= 10;
+    encoded = img.encodeJpg(image, quality: quality);
   }
+
+  final newFile = File(file.path)..writeAsBytesSync(encoded);
+
+  return newFile;
 }
 
-fileuploadGallery([isvg = true]) async {
+// imageuploadcamera() async {
+//   final XFile? file = await ImagePicker().pickImage(
+//     source: ImageSource.camera,
+//     imageQuality: 90,
+//   );
+//   if (file != null) {
+//     return File(file.path);
+//   } else {
+//     return null;
+//   }
+// }
+
+Future<File?> fileuploadGallery([bool isvg = true]) async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: isvg
@@ -27,69 +42,30 @@ fileuploadGallery([isvg = true]) async {
         : ["png", "PNG", "jpg", "JPG", "jpeg", "gif"],
   );
 
-  if (result != null) {
-    return File(result.files.single.path!);
-  } else {
-    return null;
+  if (result == null) return null;
+
+  File file = File(result.files.single.path!);
+
+  // SVG ما يتضغطش
+  if (isvg) return file;
+
+  // تحقق من الحجم
+  const maxSize = 2 * 1024 * 1024; // 2MB
+
+  if (await file.length() <= maxSize) {
+    return file; // عادي
   }
+
+  // ضغط الصورة
+  return await compressTo2MB(file);
 }
 
-Future<FilePickerResult?> fileuploadGallerys([bool isvg = true]) async {
+Future<FilePickerResult?> fileuploadGallerys([bool isvg = false]) async {
   return await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: isvg
         ? ["svg", "SVG"]
-        : ["png", "PNG", "jpg", "JPG", "jpeg", "gif","pdf",'doc', 'docx'],
+        : ["png", "PNG", "jpg", "JPG", "jpeg", "gif", "pdf", 'doc', 'docx'],
   );
 }
 
-showbottom(imageuploadcamera(), fileuploadGallery()) {
-  Get.bottomSheet(
-    backgroundColor: AppColor.white,
-    Directionality(
-      textDirection: TextDirection.rtl,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        height: 200,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: Text(
-                "choose_image".tr,
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: AppColor.grey,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const Padding(padding: EdgeInsets.only(top: 10)),
-            ListTile(
-              onTap: () {
-                imageuploadcamera();
-                Get.back();
-              },
-              leading: const Icon(Icons.camera, size: 40),
-              title: Text(
-                "from_camera".tr,
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                fileuploadGallery();
-                Get.back();
-              },
-              leading: const Icon(Icons.image, size: 40),
-              title: Text(
-                "from_gallery".tr,
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}

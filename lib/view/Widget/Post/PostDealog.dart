@@ -417,6 +417,7 @@ class _PostImgDialogState extends State<PostImgDialog> {
 
   Future<void> _pickImage() async {
     await controller.uploadimagefile();
+    if (!mounted) return;
     setState(() {}); // 🔥 تحديث الواجهة
   }
 }

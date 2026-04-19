@@ -69,6 +69,8 @@ class Bonusesandcompensationscontroller extends GetxController {
   // إضافة قانون
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
+
     if (selectcats == null) {
       showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
       return;
@@ -105,6 +107,8 @@ class Bonusesandcompensationscontroller extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       if (editselectcats == null) {
         showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
         return;
@@ -137,6 +141,8 @@ class Bonusesandcompensationscontroller extends GetxController {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};

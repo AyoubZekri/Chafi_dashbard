@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controller/TaxCollection/EditTaxCollectionController.dart';
 import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
+import '../../Widget/Button/AddLawButton.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
@@ -54,7 +55,7 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                       ),
                     ),
                     const SizedBox(height: 40),
-              
+
                     // العنوان
                     Row(
                       children: [
@@ -63,7 +64,7 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                             myController: controller.titlear,
                             label: "title_ar".tr,
                             hintText: "أدخل العنوان هنا...".tr,
-                            valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                            valid: (val) => validateInput(val!, 2, 100, "text"),
                           ),
                         ),
                         SizedBox(width: 24),
@@ -72,13 +73,13 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                             myController: controller.titlefr,
                             label: "title_fr".tr,
                             hintText: "أدخل العنوان هنا...".tr,
-                            valid: (val) =>validateInput(val!, 2, 100, "text") ,
+                            valid: (val) => validateInput(val!, 2, 100, "text"),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 24),
-              
+
                     // الموضوع
                     Row(
                       children: [
@@ -88,7 +89,8 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                             label: "content_ar".tr,
                             hintText: "اكتب المحتوى هنا...".tr,
                             maxLines: 5,
-                            valid: (val) =>validateInput(val!, 2, 1000, "text") ,
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                         SizedBox(width: 20),
@@ -98,7 +100,8 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                             label: "content_fr".tr,
                             hintText: "اكتب المحتوى هنا...".tr,
                             maxLines: 5,
-                            valid: (val) =>validateInput(val!, 2, 1000, "text") ,
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                       ],
@@ -125,9 +128,9 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                         });
                       },
                     ),
-              
+
                     const SizedBox(height: 64),
-              
+
                     // Toggle الحاسبة
                     ToggleRow(
                       label: "activate_calculator".tr,
@@ -138,7 +141,7 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                         });
                       },
                     ),
-              
+
                     if (controller.isCalculatorActive)
                       Dropdownfild(
                         label: "choose_calculator".tr,
@@ -161,9 +164,9 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                           });
                         },
                       ),
-              
+
                     const SizedBox(height: 32),
-              
+
                     ToggleRow(
                       label: "activate_law".tr,
                       value: controller.isLawActive,
@@ -173,7 +176,7 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                         });
                       },
                     ),
-              
+
                     if (controller.isLawActive) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,17 +184,15 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                           Text(
                             "law_list".tr,
                             style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          ElevatedButton.icon(
+                          CustomAddLawButton(
+                            label: "add_law_button".tr,
                             onPressed: () {
                               controller.addLaw();
                             },
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            label: Text("add_law_button".tr,
-                                style: const TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green),
                           ),
                         ],
                       ),
@@ -216,13 +217,16 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                                   Text(
                                     "${"law_item_title".tr} ${index + 1}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   IconButton(
                                     onPressed: () =>
                                         controller.removeLaw(index),
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -240,14 +244,18 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                                               child: Text(
                                                 f.localizedName.toString(),
                                                 style: const TextStyle(
-                                                    fontSize: 14),
+                                                  fontSize: 14,
+                                                ),
                                               ),
                                             ),
                                           )
                                           .toList(),
                                       value: lawItem['law_id'],
                                       onChanged: (val) {
-                                        controller.updateLawId(index, val as int?);
+                                        controller.updateLawId(
+                                          index,
+                                          val as int?,
+                                        );
                                       },
                                     ),
                                   ),
@@ -257,17 +265,21 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_ar_input_label".tr,
                                       hintText: "enter_name_ar_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_ar'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_ar']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameAr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_ar'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_ar']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameAr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -278,17 +290,21 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_fr_input_label".tr,
                                       hintText: "enter_name_fr_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_fr'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_fr']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameFr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_fr'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_fr']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameFr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -299,17 +315,21 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "page_number".tr,
                                       hintText: "page_number_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['index_link']
-                                              ?.toString())
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset: lawItem['index_link']
-                                                      ?.toString()
-                                                      .length ??
-                                                  0),
-                                        ),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['index_link']
+                                                  ?.toString(),
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['index_link']
+                                                            ?.toString()
+                                                            .length ??
+                                                        0,
+                                                  ),
+                                                ),
                                       onChanged: (val) =>
                                           controller.updateLawIndex(index, val),
                                       valid: (val) =>
@@ -323,14 +343,16 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                         );
                       }),
                     ],
-                
+
                     const SizedBox(height: 48),
-              
+
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: () {controller.editdata();},
+                        onPressed: () {
+                          controller.editdata();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF2D62ED),
                           shape: RoundedRectangleBorder(

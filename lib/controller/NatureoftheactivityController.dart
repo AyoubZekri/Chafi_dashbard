@@ -62,6 +62,8 @@ class Natureoftheactivitycontroller extends GetxController {
   // إضافة قانون
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
+
     statusrequest = Statusrequest.loadeng;
     update();
 
@@ -91,6 +93,7 @@ class Natureoftheactivitycontroller extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {
@@ -118,6 +121,8 @@ class Natureoftheactivitycontroller extends GetxController {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};

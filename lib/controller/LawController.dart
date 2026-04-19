@@ -121,6 +121,7 @@ class Lawcontroller extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {
@@ -149,6 +150,8 @@ class Lawcontroller extends GetxController {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};

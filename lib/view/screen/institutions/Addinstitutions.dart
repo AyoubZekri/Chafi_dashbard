@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../controller/Institutions/AddinstitutionsController.dart';
 import '../../../core/class/Statusrequest.dart';
 import '../../../core/functions/valiedinput.dart';
+import '../../Widget/Button/AddLawButton.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
@@ -57,7 +58,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                       ),
                     ),
                     const SizedBox(height: 40),
-              
+
                     // العنوان
                     Row(
                       children: [
@@ -85,7 +86,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                       ],
                     ),
                     const SizedBox(height: 24),
-              
+
                     // الموضوع
                     Row(
                       children: [
@@ -95,7 +96,8 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                             label: "content_ar".tr,
                             hintText: "enter_content_here".tr,
                             maxLines: 5,
-                            valid: (val) => validateInput(val!, 2, 1000, "text"),
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                         SizedBox(width: 20),
@@ -105,7 +107,8 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                             label: "content_fr".tr,
                             hintText: "enter_content_here".tr,
                             maxLines: 5,
-                            valid: (val) => validateInput(val!, 2, 1000, "text"),
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                       ],
@@ -140,9 +143,9 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                           });
                         },
                       ),
-              
+
                     const SizedBox(height: 64),
-              
+
                     // Toggle الحاسبة
                     ToggleRow(
                       label: "activate_calculator".tr,
@@ -153,7 +156,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                         });
                       },
                     ),
-              
+
                     if (controller.isCalculatorActive)
                       Dropdownfild(
                         label: "choose_calculator".tr,
@@ -176,9 +179,9 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                           });
                         },
                       ),
-              
+
                     const SizedBox(height: 32),
-              
+
                     ToggleRow(
                       label: "activate_law".tr,
                       value: controller.isLawActive,
@@ -188,7 +191,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                         });
                       },
                     ),
-              
+
                     if (controller.isLawActive) ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,17 +199,15 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                           Text(
                             "law_list".tr,
                             style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          ElevatedButton.icon(
+                          CustomAddLawButton(
+                            label: "add_law_button".tr,
                             onPressed: () {
                               controller.addLaw();
                             },
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            label: Text("add_law_button".tr,
-                                style: const TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green),
                           ),
                         ],
                       ),
@@ -231,13 +232,16 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                   Text(
                                     "${"law_item_title".tr} ${index + 1}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   IconButton(
                                     onPressed: () =>
                                         controller.removeLaw(index),
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -255,14 +259,18 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                               child: Text(
                                                 f.localizedName.toString(),
                                                 style: const TextStyle(
-                                                    fontSize: 14),
+                                                  fontSize: 14,
+                                                ),
                                               ),
                                             ),
                                           )
                                           .toList(),
                                       value: lawItem['law_id'],
                                       onChanged: (val) {
-                                        controller.updateLawId(index, val as int?);
+                                        controller.updateLawId(
+                                          index,
+                                          val as int?,
+                                        );
                                       },
                                     ),
                                   ),
@@ -272,17 +280,21 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_ar_input_label".tr,
                                       hintText: "enter_name_ar_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_ar'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_ar']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameAr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_ar'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_ar']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameAr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -293,17 +305,21 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_fr_input_label".tr,
                                       hintText: "enter_name_fr_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_fr'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_fr']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameFr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_fr'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_fr']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameFr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -314,17 +330,21 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "page_number".tr,
                                       hintText: "page_number_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['index_link']
-                                              ?.toString())
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset: lawItem['index_link']
-                                                      ?.toString()
-                                                      .length ??
-                                                  0),
-                                        ),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['index_link']
+                                                  ?.toString(),
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['index_link']
+                                                            ?.toString()
+                                                            .length ??
+                                                        0,
+                                                  ),
+                                                ),
                                       onChanged: (val) =>
                                           controller.updateLawIndex(index, val),
                                       valid: (val) =>
@@ -338,9 +358,9 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                         );
                       }),
                     ],
-                
+
                     const SizedBox(height: 48),
-              
+
                     SizedBox(
                       width: double.infinity,
                       height: 56,
@@ -354,8 +374,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child:controller.statusrequest ==
-                                Statusrequest.loadeng
+                        child: controller.statusrequest == Statusrequest.loadeng
                             ? const SizedBox(
                                 width: 15,
                                 height: 15,
@@ -365,9 +384,12 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                                 ),
                               )
                             : Text(
-                          "save".tr,
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
+                                "save".tr,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
                       ),
                     ),
                   ],

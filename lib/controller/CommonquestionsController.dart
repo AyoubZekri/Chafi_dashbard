@@ -33,6 +33,7 @@ class CommonquestionscontrollerImp extends Commonquestionscontroller {
 
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -66,6 +67,7 @@ class CommonquestionscontrollerImp extends Commonquestionscontroller {
 
   Future<void> editdata(int id) async {
     if (!formState.currentState!.validate()) return;
+    Get.back();
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -153,6 +155,8 @@ class CommonquestionscontrollerImp extends Commonquestionscontroller {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};

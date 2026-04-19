@@ -85,7 +85,7 @@ class Notificationcontroller extends GetxController {
 
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
-
+    Get.back();
     print("isSistem == $isSistem");
     print("selectedsestemTax == $selectedsestemTax");
     if (isSistem == true && selectedsestemTax == null) {
@@ -133,6 +133,8 @@ class Notificationcontroller extends GetxController {
 
   void editdata(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       if (isSistem == true && selectedsestemTax == null) {
         showSnackbar("خطأ".tr, "يرجى اختيار النظام الضريبي".tr, Colors.red);
         return;

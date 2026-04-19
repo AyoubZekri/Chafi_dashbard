@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../core/class/Statusrequest.dart';
 import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
+import '../../Widget/Button/AddLawButton.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
@@ -154,17 +155,12 @@ class _EditdifferentState extends State<Editdifferent> {
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          ElevatedButton.icon(
+                          CustomAddLawButton(
+                            label: "add_law_button".tr,
                             onPressed: () {
                               controller.addLaw();
                             },
-                            icon: const Icon(Icons.add, color: Colors.white),
-                            label: Text("add_law_button".tr,
-                                style: const TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green),
-                          ),
-                        ],
+                          ),                        ],
                       ),
                       const SizedBox(height: 16),
                       ...List.generate(controller.lawsList.length, (index) {

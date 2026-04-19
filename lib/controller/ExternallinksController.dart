@@ -31,7 +31,9 @@ class ExternallinkscontrollerImp extends GetxController {
   List<DifferentsModel> filteredData = [];
 
   Future<void> adddata() async {
-     if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
+    Get.back();
+
     statusrequest = Statusrequest.loadeng;
     update();
     Map<String, dynamic> requestData = {
@@ -61,7 +63,8 @@ class ExternallinkscontrollerImp extends GetxController {
   }
 
   Future<void> editdata(int id) async {
-     if (!formState.currentState!.validate()) return;
+    if (!formState.currentState!.validate()) return;
+    Get.back();
 
     statusrequest = Statusrequest.loadeng;
     update();
@@ -146,6 +149,8 @@ class ExternallinkscontrollerImp extends GetxController {
 
   void editindex(int id) async {
     if (formState.currentState!.validate()) {
+      Get.back();
+
       statusrequest = Statusrequest.loadeng;
       update();
       Map data = {"id": id, "index": index.text};
@@ -167,7 +172,6 @@ class ExternallinkscontrollerImp extends GetxController {
   }
 
   Future<void> deletdata(int id) async {
-
     var response = await differentdata.deletdata({"id": id.toString()});
     statusrequest = handlingData(response);
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
