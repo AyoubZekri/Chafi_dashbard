@@ -8,6 +8,7 @@ import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';
+import '../../view/screen/GeneralDefinitions.dart';
 import '../../view/screen/Institutions.dart';
 import '../../view/screen/Regulated.dart';
 import '../NavigationBarcontroller.dart';
@@ -48,6 +49,11 @@ class AddinstitutionscontrollerImp extends GetxController {
     {'key': 6, 'label': "filter_innovative"},
     {'key': 7, 'label': "filter_startup"},
     {'key': 8, 'label': "filter_incubator"},
+  ];
+
+  final List<Map<String, Object>> generaldefinitions = [
+    {'key': 9, 'label': "nav_institutions"},
+    {'key': 10, 'label': "nav_regulated"},
   ];
 
   final List<Map<String, Object>> calcelators = [
@@ -121,6 +127,10 @@ class AddinstitutionscontrollerImp extends GetxController {
 
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+    if (selectedinstitutions == null) {
+      showSnackbar("خطأ".tr, 'choose_institution_type'.tr, Colors.red);
+      return;
+    }
 
     if (isLawActive == true && lawsList.isEmpty) {
       showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
@@ -179,10 +189,19 @@ class AddinstitutionscontrollerImp extends GetxController {
       selectedCalculator = null;
       selectedinstitutions = null;
       selectedLaw = null;
+      lawsList.clear();
       // العودة لصفحة Institutions
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
-        type == 1 ? 0 : 1,
-        () => type == 1 ? Institutions() : Regulated(),
+        type == 1
+            ? 0
+            : type == 2
+            ? 1
+            : 0,
+        () => type == 1
+            ? Institutions()
+            : type == 2
+            ? Regulated()
+            : Generaldefinitions(),
       );
     } else {
       statusrequest = Statusrequest.failure;

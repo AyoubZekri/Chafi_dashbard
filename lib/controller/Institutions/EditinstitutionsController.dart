@@ -8,6 +8,7 @@ import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/InstitutionModel.dart';
 import '../../data/model/LawModel.dart';
+import '../../view/screen/GeneralDefinitions.dart' show Generaldefinitions;
 import '../../view/screen/Institutions.dart';
 import '../../view/screen/Regulated.dart';
 import '../NavigationBarcontroller.dart';
@@ -79,6 +80,11 @@ class EditinstitutionscontrollerImp extends GetxController {
     {'key': 6, 'label': "filter_innovative"},
     {'key': 7, 'label': "filter_startup"},
     {'key': 8, 'label': "filter_incubator"},
+  ];
+
+  final List<Map<String, Object>> generaldefinitions = [
+    {'key': 9, 'label': "nav_institutions"},
+    {'key': 10, 'label': "nav_regulated"},
   ];
 
   List<Map<String, dynamic>> lawsList = [];
@@ -177,6 +183,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     final requestData = {
       "id": id,
       "title": titleAr.text,
+      "scope": selectedInstitutions,
       "body": infoAr.text,
       "title_fr": titleFr.text,
       "body_fr": infoFr.text,
@@ -194,8 +201,16 @@ class EditinstitutionscontrollerImp extends GetxController {
       print("====================0$type");
       clearForm();
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
-        type == 1 ? 0 : 1,
-        () => type == 1 ? Institutions() : Regulated(),
+        type == 1
+            ? 0
+            : type == 2
+            ? 1
+            : 0,
+        () => type == 1
+            ? Institutions()
+            : type == 2
+            ? Regulated()
+            : Generaldefinitions(),
       );
     } else {
       statusRequest = Statusrequest.failure;

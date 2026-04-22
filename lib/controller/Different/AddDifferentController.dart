@@ -160,6 +160,8 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
+      lawsList.clear();
+
       Get.find<NavigationBarcontrollerImp>().changePage(7);
     } else {
       statusrequest = Statusrequest.failure;

@@ -3,6 +3,7 @@ import 'package:chafi_dashboard/data/model/InstitutionModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/GeneralDefinitionsController.dart';
 import '../../../controller/RegulatedController.dart';
 import '../../../core/constant/Colorapp.dart';
 import '../../../core/functions/valiedinput.dart';
@@ -172,3 +173,87 @@ class CustemRegulateddealog extends StatelessWidget {
     );
   }
 }
+
+
+class CustemGeneralDefinitionsdealog extends StatelessWidget {
+  final Generaldefinitionscontroller controller;
+  final InstitutionModel law;
+
+  const CustemGeneralDefinitionsdealog({
+    super.key,
+    required this.controller,
+    required this.law,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Container(
+        width: 400,
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: controller.formState,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'تعديل الترتيب'.tr,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              CustemtextfromfildInfoUser(
+                myController: controller.index,
+                label: 'classement'.tr,
+                hintText: 'classement'.tr,
+                valid: (val) => validateInput(val!, 1, 6, "number"),
+              ),
+
+              const SizedBox(height: 25),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      'cancel'.tr,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.typography,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () {
+                      controller.editindex(law.id);
+                    },
+                    child: Text(
+                      'save'.tr,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

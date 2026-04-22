@@ -116,14 +116,21 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                       Dropdownfild(
                         label: controller.type == 1
                             ? "institution_type".tr
-                            : "regulated_type".tr,
+                            : controller.type == 2
+                            ? "regulated_type".tr
+                            : "institution_type".tr,
+
                         hintText: controller.type == 1
                             ? "institution_type".tr
-                            : "regulated_type".tr,
+                            : controller.type == 2
+                            ? "regulated_type".tr
+                            : "institution_type".tr,
                         items:
                             (controller.type == 1
                                     ? controller.institutions
-                                    : controller.regulated)
+                                    : controller.type == 2
+                                    ? controller.regulated
+                                    : controller.generaldefinitions)
                                 .map(
                                   (f) => DropdownMenuItem<int>(
                                     value: f['key'] as int,

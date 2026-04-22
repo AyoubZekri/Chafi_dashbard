@@ -175,6 +175,7 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
       selectedCalculator = null;
       selectedLaw = null;
       selectedCategory = null;
+      lawsList.clear();
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
         type == 0
             ? 1

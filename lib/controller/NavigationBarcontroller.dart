@@ -17,6 +17,7 @@ import '../view/screen/AppointmentsCommitments.dart';
 import '../view/screen/CommonQuestions.dart';
 import '../view/screen/Exclusive.dart';
 import '../view/screen/ExternalLinks.dart';
+import '../view/screen/GeneralDefinitions.dart';
 import '../view/screen/Home.dart';
 import '../view/screen/Institutions.dart';
 import '../view/screen/Law.dart';
@@ -91,6 +92,12 @@ class NavigationBarcontrollerImp extends GetxController {
 
       'page': "",
       'subPages': [
+        {
+          'name': "General_definitions",
+          'route': Approutes.regulated,
+          'icon': Icons.verified_outlined,
+          'page': () => Generaldefinitions(),
+        },
         {
           'name': 'nav_institutions',
           'route': Approutes.institutions,

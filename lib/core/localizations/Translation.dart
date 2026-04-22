@@ -389,6 +389,8 @@ class MyTranslation extends Translations {
       "enter_name_fr_hint": "أدخل الاسم بالفرنسية...",
       "law_item_title": "القانون",
       "error_loading_data": "حدث خطأ أثناء تحميل البيانات",
+      'General_definitions': 'التعاريف العامة',
+      'choose_institution_type': 'يرجى اختيار نوع المؤسسة',
     },
 
     ///////////////////////////////////////
@@ -793,6 +795,8 @@ class MyTranslation extends Translations {
       "enter_name_fr_hint": "Entrez le nom en français...",
       "law_item_title": "Loi",
       "error_loading_data": "Erreur lors du chargement des données",
+                'General_definitions': 'Définitions générales',
+          'choose_institution_type': 'Veuillez choisir le type d’institution',
     },
   };
 }

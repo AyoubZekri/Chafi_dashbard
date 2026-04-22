@@ -1,7 +1,7 @@
 class InstitutionModel {
   final int id;
   final int typeInstitution;
-  final int scope;
+  final int? scope;
   final int index;
   final String title;
   final String body;
@@ -17,7 +17,7 @@ class InstitutionModel {
   InstitutionModel({
     required this.id,
     required this.typeInstitution,
-    required this.scope,
+    this.scope,
     required this.index,
     required this.title,
     required this.body,
