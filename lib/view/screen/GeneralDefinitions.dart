@@ -217,7 +217,7 @@ class _GeneraldefinitionsState extends State<Generaldefinitions> {
                                     createdAt: item.updatedAt
                                         .toString()
                                         .substring(0, 10),
-                                    calcul: "calcul",
+                                    calcul: item.calcul,
                                     laws: item.laws,
                                   );
                                 },
