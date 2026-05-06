@@ -13,7 +13,6 @@ class Taxandappmodel {
   final String? calcul;
   final DateTime createdAt;
   final DateTime updatedAt;
-
   final List<dynamic>? laws;
 
   Taxandappmodel({

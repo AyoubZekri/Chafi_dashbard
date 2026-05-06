@@ -186,7 +186,7 @@ class _RealsystemState extends State<Realsystem> {
                                 EditTaxCollectionControllerImp(),
                               );
 
-                              controller.type = 0;
+                              controller.type = 2;
                               controller.viewdataCategory();
                               controller.fillDataFromModel(item);
 

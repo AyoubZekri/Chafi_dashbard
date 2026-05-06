@@ -41,7 +41,7 @@ class JoiningcategoriescontrollerImp extends GetxController {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    final actData = {"type_cat": 1, "tax_id": selectedsestemTax ?? ""};
+    final actData = {"type_cat": 1, "tax_id": selectedsestemTax??""};
 
     var response = await categorydata.viewdata(actData);
     print("Response: $response");

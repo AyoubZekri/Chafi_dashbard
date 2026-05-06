@@ -107,6 +107,28 @@ class _EdittaxcollectionState extends State<Edittaxcollection> {
                       ],
                     ),
                     const SizedBox(height: 20),
+                    // Dropdownfild(
+                    //   label: "الفئة".tr,
+                    //   hintText: "إختر الفئة".tr,
+                    //   items: controller.category
+                    //       .map(
+                    //         (f) => DropdownMenuItem<int>(
+                    //           value: f.id,
+                    //           child: Text(
+                    //             f.localizedName.toString(),
+                    //             style: const TextStyle(fontSize: 14),
+                    //           ),
+                    //         ),
+                    //       )
+                    //       .toList(),
+                    //   value: controller.selectedCategory,
+                    //   onChanged: (val) {
+                    //     setState(() {
+                    //       controller.selectedCategory = val;
+                    //     });
+                    //   },
+                    // ),
+                    const SizedBox(height: 20),
                     Dropdownfild(
                       label: "الفئة".tr,
                       hintText: "إختر الفئة".tr,

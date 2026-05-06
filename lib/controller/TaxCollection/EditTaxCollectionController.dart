@@ -32,6 +32,8 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
   int? selectedCategory;
   int? id;
   int? type;
+  int? selecttax;
+
 
   final List<Map<String, Object>> calcelators = [
     {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
@@ -63,6 +65,12 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
     },
     {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
+  ];
+
+  final List<Map<String, Object>> sestemTax = [
+    {'key': 0, 'label': "tax_flat_system"},
+    {'key': 1, 'label': "tax_simplified_system"},
+    {'key': 2, 'label': "tax_real_system"},
   ];
 
   Lawdata lawdata = Lawdata(Get.find());
@@ -274,6 +282,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
     }
 
     selectedCategory = model.catId;
+    // selecttax = model.;
 
     update();
   }
