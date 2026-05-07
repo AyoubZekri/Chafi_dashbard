@@ -4,6 +4,7 @@ import 'package:chafi_dashboard/controller/UsersController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../Widget/Users/UserFeedbackDialog.dart';
 import '../../core/class/handlingview.dart';
 
 import '../../data/model/UsersModel.dart';
@@ -183,6 +184,58 @@ class _UsersState extends State<Users> {
 
                                       DataCell(Text(item.email)),
                                       DataCell(
+                                        Text(item.statsCount?.toString() ?? "0"),
+                                      ),
+                                      DataCell(
+                                        InkWell(
+                                          onTap: () {
+                                            Get.dialog(
+                                              UserFeedbackDialog(
+                                                feedback: item.feedback ?? [],
+                                                options: controller.options,
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue.withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Icon(Icons.remove_red_eye_outlined, size: 16, color: Colors.blue),
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  "view_feedback".tr,
+                                                  style: const TextStyle(
+                                                    color: Colors.blue,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                if ((item.feedback?.length ?? 0) > 0) ...[
+                                                  const SizedBox(width: 6),
+                                                  Container(
+                                                    padding: const EdgeInsets.all(4),
+                                                    decoration: const BoxDecoration(
+                                                      color: Colors.blue,
+                                                      shape: BoxShape.circle,
+                                                    ),
+                                                    child: Text(
+                                                      item.feedback!.length.toString(),
+                                                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
                                         Text(
                                           item.createdAt.toString().substring(
                                             0,
@@ -190,78 +243,6 @@ class _UsersState extends State<Users> {
                                           ),
                                         ),
                                       ),
-
-                                      // DataCell(
-                                      //   Row(
-                                      //     children: [
-                                      //       InkWell(
-                                      //         onTap: () async {
-                                      //           await showCustomConfirmationDialog(
-                                      //             context,
-                                      //             title: "تنبيه",
-                                      //             message:
-                                      //                 "هل أنت متأكد من الحذف؟",
-                                      //             onConfirmAction: () {},
-                                      //           );
-                                      //         },
-                                      //         child: Container(
-                                      //           padding: const EdgeInsets.all(
-                                      //             6,
-                                      //           ),
-                                      //           decoration: BoxDecoration(
-                                      //             color: Colors.red,
-                                      //             borderRadius:
-                                      //                 BorderRadius.circular(6),
-                                      //           ),
-                                      //           child: const Icon(
-                                      //             Icons.delete,
-                                      //             color: Colors.white,
-                                      //             size: 18,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       const SizedBox(width: 10),
-                                      //       InkWell(
-                                      //         onTap: () {},
-                                      //         child: Container(
-                                      //           padding: const EdgeInsets.all(
-                                      //             6,
-                                      //           ),
-                                      //           decoration: BoxDecoration(
-                                      //             color: Colors.blue,
-                                      //             borderRadius:
-                                      //                 BorderRadius.circular(6),
-                                      //           ),
-                                      //           child: const Icon(
-                                      //             Icons.edit,
-                                      //             color: Colors.white,
-                                      //             size: 18,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-
-                                      //       const SizedBox(width: 10),
-                                      //       InkWell(
-                                      //         onTap: () {},
-                                      //         child: Container(
-                                      //           padding: const EdgeInsets.all(
-                                      //             6,
-                                      //           ),
-                                      //           decoration: BoxDecoration(
-                                      //             color: Colors.amber.shade700,
-                                      //             borderRadius:
-                                      //                 BorderRadius.circular(6),
-                                      //           ),
-                                      //           child: const Icon(
-                                      //             Icons.swap_vert,
-                                      //             color: Colors.white,
-                                      //             size: 18,
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
                                     ],
                                   );
                                 }).toList(),
@@ -292,13 +273,14 @@ class _UsersState extends State<Users> {
 
   List<DataColumn> buildColumns() {
     return [
-      DataColumn(label: Text("#")),
+      const DataColumn(label: Text("#")),
       DataColumn(label: Text("الإسم".tr)),
       DataColumn(label: Text('رقم الهاتف'.tr)),
       DataColumn(label: Text('الولاية'.tr)),
       DataColumn(label: Text('بريد الإلكتروني'.tr)),
+      DataColumn(label: Text('total_access_count'.tr)),
+      DataColumn(label: Text('user_opinion'.tr)),
       DataColumn(label: Text('created_at'.tr)),
-      // DataColumn(label: Text('actions'.tr)),
     ];
   }
 }

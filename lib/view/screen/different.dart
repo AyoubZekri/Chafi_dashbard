@@ -16,6 +16,7 @@ import '../../core/functions/Dealog.dart';
 import '../Widget/Button/ActionButton.dart';
 import '../Widget/Card/InstitutionsCard.dart';
 import '../Widget/Differente/CustemDifferentedealog.dart';
+import '../Widget/TextFild/CustemDropDownField.dart';
 import '../Widget/TextFild/SearchFild.dart';
 
 class Different extends StatefulWidget {
@@ -110,20 +111,49 @@ class _DifferentState extends State<Different> {
                     return SizedBox(
                       width: double.infinity,
                       child: Wrap(
-                        alignment: WrapAlignment.center,
+                        alignment: isMobile
+                            ? WrapAlignment.center
+                            : WrapAlignment.spaceBetween,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         runSpacing: 16,
                         spacing: 16,
                         children: [
                           SizedBox(
-                            width: isMobile ? constraints.maxWidth : 260,
+                            width: isMobile ? constraints.maxWidth - 20 : 260,
                             child: SearchField(
-                              hint: 'search'.tr,
-                              onChanged: (value) {},
+                              Mycontroller: controller.searchController,
+                              onChanged: (value) {
+                                controller.search(value);
+                              },
+                              hint: "search".tr,
+                            ),
+                          ),
+
+                          SizedBox(
+                            width: isMobile ? constraints.maxWidth : 280,
+                            child: CustemDropDownField(
+                              items: controller.dataCategory
+                                  .map(
+                                    (f) => DropdownMenuItem<int>(
+                                      value: f.id,
+                                      child: Text(
+                                        f.localizedName.toString().tr,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                              value: controller.selectedFilter,
+                              onChanged: (value) {
+                                setState(() {
+                                  controller.selectedFilter = value!;
+                                  controller.viewdata();
+                                });
+                              },
                             ),
                           ),
                         ],
-                       ),
+                      ),
                     );
                   },
                 ),
@@ -159,69 +189,70 @@ class _DifferentState extends State<Different> {
                                 ),
                             itemCount: controller.filteredData.length,
                             itemBuilder: (context, index) {
-                          final item = controller.filteredData[index];
-                          return InstitutionsCard(
-                            onView: () {
-                              showReportDialog(
-                                context: context,
-                                title: item.localizedName,
-                                description: item.localizedBody,
-                                imageUrl: "",
-                                createdAt: item.updatedAt.toString().substring(
-                                  0,
-                                  10,
-                                ),
-                                                                calcul: item.calcul,
-                                laws: item.laws,
-
-                              );
-                            },
-
-                            onEdit: () {
-                              final controller = Get.put(
-                                EditdifferentcontrollerImp(),
-                                permanent: true,
-                              );
-                              controller.fillDataFromModel(item);
-                              Get.find<NavigationBarcontrollerImp>()
-                                  .changeSubPage(99, () => Editdifferent());
-                            },
-                            onDelete: () async {
-                              await showCustomConfirmationDialog(
-                                context,
-                                title: "تنبيه".tr,
-                                message: "هل أنت متأكد من الحذف؟".tr,
-                                onConfirmAction: () {
-                                  controller.deletLaw(item.id);
+                              final item = controller.filteredData[index];
+                              return InstitutionsCard(
+                                onView: () {
+                                  showReportDialog(
+                                    context: context,
+                                    title: item.localizedName,
+                                    description: item.localizedBody,
+                                    imageUrl: "",
+                                    createdAt: item.updatedAt
+                                        .toString()
+                                        .substring(0, 10),
+                                    calcul: item.calcul,
+                                    laws: item.laws,
+                                  );
                                 },
+
+                                onEdit: () {
+                                  Get.delete<EditdifferentcontrollerImp>();
+
+                                  final controller = Get.put(
+                                    EditdifferentcontrollerImp(),
+                                  );
+
+                                  controller.viewdataCategory();
+                                  controller.fillDataFromModel(item);
+
+                                  Get.find<NavigationBarcontrollerImp>()
+                                      .changeSubPage(99, () => Editdifferent());
+                                },
+                                onDelete: () async {
+                                  await showCustomConfirmationDialog(
+                                    context,
+                                    title: "تنبيه".tr,
+                                    message: "هل أنت متأكد من الحذف؟".tr,
+                                    onConfirmAction: () {
+                                      controller.deletLaw(item.id);
+                                    },
+                                  );
+                                },
+                                onEditindex: () {
+                                  controller.setIndexData(item);
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => Custemdifferentedealog(
+                                      controller: controller,
+                                      law: item,
+                                    ),
+                                  );
+                                },
+                                title: item.localizedName,
+                                info: item.localizedBody,
+                                isActiveCalculator: item.calcul != null,
+                                isActiveLaw: item.lawId != null,
+                                creationDate: item.updatedAt
+                                    .toString()
+                                    .substring(0, 10),
                               );
                             },
-                            onEditindex: () {
-                              controller.setIndexData(item);
-                              showDialog(
-                                context: context,
-                                builder: (_) => Custemdifferentedealog(
-                                  controller: controller,
-                                  law: item,
-                                ),
-                              );
-                            },
-                            title: item.localizedName,
-                            info: item.localizedBody,
-                            isActiveCalculator: item.calcul != null,
-                            isActiveLaw: item.lawId != null,
-                            creationDate: item.updatedAt.toString().substring(
-                              0,
-                              10,
-                            ),
                           );
                         },
-                      );
-                    },
-                  ),
-                  iconData: Icons.error,
-                  title: "حدث خطأ أثناء تحميل البيانات",
-                ),
+                      ),
+                      iconData: Icons.error,
+                      title: "حدث خطأ أثناء تحميل البيانات",
+                    ),
                   ),
                 ),
               ],

@@ -8,6 +8,8 @@ class UserModel {
   final String? image;
   final String? gmailId;
   final int notificationStatus;
+  final int? statsCount;
+  final List<UserFeedback>? feedback;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -21,6 +23,8 @@ class UserModel {
     this.image,
     this.gmailId,
     required this.notificationStatus,
+    this.statsCount,
+    this.feedback,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -36,6 +40,12 @@ class UserModel {
       image: json['image'],
       gmailId: json['gmail_id'],
       notificationStatus: json['notification_status'],
+      statsCount: json['stats_count'],
+      feedback: json['feedback'] != null
+          ? (json['feedback'] as List)
+              .map((e) => UserFeedback.fromJson(e))
+              .toList()
+          : null,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -43,5 +53,28 @@ class UserModel {
 
   static List<UserModel> fromList(List<dynamic> list) {
     return list.map((e) => UserModel.fromJson(e)).toList();
+  }
+}
+
+class UserFeedback {
+  final int id;
+  final int userId;
+  final int type;
+  final DateTime createdAt;
+
+  UserFeedback({
+    required this.id,
+    required this.userId,
+    required this.type,
+    required this.createdAt,
+  });
+
+  factory UserFeedback.fromJson(Map<String, dynamic> json) {
+    return UserFeedback(
+      id: json['id'],
+      userId: json['user_id'],
+      type: json['type'],
+      createdAt: DateTime.parse(json['created_at']),
+    );
   }
 }

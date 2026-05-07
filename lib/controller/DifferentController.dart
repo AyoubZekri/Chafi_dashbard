@@ -5,29 +5,41 @@ import '../core/class/Statusrequest.dart';
 import '../core/functions/Snacpar copy.dart';
 import '../core/functions/handlingdatacontroller.dart';
 import '../core/services/Services.dart';
+import '../data/datasource/Remote/Categorydata.dart';
 import '../data/datasource/Remote/Differentdata.dart';
+import '../data/model/CategoryModel.dart';
 import '../data/model/DifferantModel.dart';
 
 abstract class Differentcontroller extends GetxController {}
 
 class DifferentcontrollerImp extends Differentcontroller {
+  int selectedFilter = 0;
+
   late TextEditingController index;
   late TextEditingController searchController;
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   Differentdata differentdata = Differentdata(Get.find());
+  Categorydata categorydata = Categorydata(Get.find());
+
   Myservices myServices = Get.find();
   Statusrequest statusrequest = Statusrequest.none;
 
   List<DifferentsModel> data = [];
   List<DifferentsModel> filteredData = [];
+  List<CategoryModel> dataCategory = [
+    CategoryModel(id: 0, name: "الكل", nameFr: "Tous", index: 0, typeCat: 1),
+  ];
 
   // عرض البيانات
   Future<void> viewdata() async {
     statusrequest = Statusrequest.loadeng;
     update();
-    final dat = {"type": 3};
+    final dat = {
+      "type": 3,
+      "cat_id": selectedFilter == 0 ? "" : selectedFilter,
+    };
 
     var response = await differentdata.viewdata(dat);
     print("Response: $response");
@@ -64,6 +76,29 @@ class DifferentcontrollerImp extends Differentcontroller {
           )
           .toList();
     }
+    update();
+  }
+
+  Future<void> viewdataCategory() async {
+    update();
+
+    final actData = {"type_cat": 1, "type": 2};
+
+    var response = await categorydata.viewdata(actData);
+    print("Response: $response");
+
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        List listdata = response['data'];
+        dataCategory.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+        dataCategory = List.from(dataCategory);
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
+    }
+
     update();
   }
 
@@ -111,6 +146,7 @@ class DifferentcontrollerImp extends Differentcontroller {
   void onInit() {
     index = TextEditingController();
     searchController = TextEditingController();
+    viewdataCategory();
     viewdata();
     print("Institutions");
     super.onInit();

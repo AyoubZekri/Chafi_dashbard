@@ -8,27 +8,42 @@ class CustemDatePickerInfoUser extends StatelessWidget {
   final String label;
   final TextEditingController? controller;
 
+  final bool isDayMonthOnly;
+ 
   const CustemDatePickerInfoUser({
     super.key,
     required this.hintText,
     required this.label,
     this.controller,
+    this.isDayMonthOnly = false,
   });
 
   Future<void> _pickDate(BuildContext context) async {
     DateTime? initial;
 
     if (controller?.text.isNotEmpty == true) {
-      initial = DateFormat('yyyy-MM-dd').parse(controller!.text);
+      String format = isDayMonthOnly ? 'MM-dd' : 'yyyy-MM-dd';
+      try {
+        initial = DateFormat(format).parse(controller!.text);
+        if (isDayMonthOnly) {
+          initial = DateTime(DateTime.now().year, initial.month, initial.day);
+        }
+      } catch (e) {
+        initial = DateTime.now();
+      }
     }
 
     final DateTime? picked = await showDialog(
       context: context,
-      builder: (_) => ElegantDatePicker(initialDate: initial),
+      builder: (_) => ElegantDatePicker(
+        initialDate: initial,
+        isDayMonthOnly: isDayMonthOnly,
+      ),
     );
 
     if (picked != null) {
-      controller?.text = DateFormat('yyyy-MM-dd').format(picked);
+      String format = isDayMonthOnly ? 'MM-dd' : 'yyyy-MM-dd';
+      controller?.text = DateFormat(format).format(picked);
     }
   }
 
@@ -73,8 +88,13 @@ class CustemDatePickerInfoUser extends StatelessWidget {
 
 class ElegantDatePicker extends StatefulWidget {
   final DateTime? initialDate;
+  final bool isDayMonthOnly;
 
-  const ElegantDatePicker({super.key, this.initialDate});
+  const ElegantDatePicker({
+    super.key,
+    this.initialDate,
+    this.isDayMonthOnly = false,
+  });
 
   @override
   State<ElegantDatePicker> createState() => _ElegantDatePickerState();
@@ -337,19 +357,20 @@ class _ElegantDatePickerState extends State<ElegantDatePicker> {
                           ),
                         ),
 
-                        const SizedBox(width: 6),
-
-                        GestureDetector(
-                          onTap: pickYear,
-                          child: Text(
-                            currentMonth.year.toString(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.typography,
+                        if (!widget.isDayMonthOnly) ...[
+                          const SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: pickYear,
+                            child: Text(
+                              currentMonth.year.toString(),
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.typography,
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   ],

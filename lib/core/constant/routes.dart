@@ -18,7 +18,7 @@ class Approutes {
   static const String simplifiedSystem = "/simplified_system";
   static const String realSystem = "/real_system";
 
-  // التطبيقات
+  // الجزاءات 
   static const String joiningCategoriesApp = "/joining_categories_app";
   static const String partialSystemApp = "/partial_system_app";
   static const String simplifiedSystemApp = "/simplified_system_app";

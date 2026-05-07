@@ -108,6 +108,30 @@ class _AdddifferentState extends State<Adddifferent> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20),
+
+                    Dropdownfild(
+                      label: "الفئة".tr,
+                      hintText: "إختر الفئة".tr,
+                      items: controller.category
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f.id,
+                              child: Text(
+                                f.localizedName.toString(),
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: controller.selectedCategory,
+                      onChanged: (val) {
+                        setState(() {
+                          controller.selectedCategory = val;
+                        });
+                      },
+                    ),
+
                     const SizedBox(height: 64),
                     ToggleRow(
                       label: "calculator_toggle".tr,
@@ -166,7 +190,8 @@ class _AdddifferentState extends State<Adddifferent> {
                             onPressed: () {
                               controller.addLaw();
                             },
-                          ),                        ],
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       ...List.generate(controller.lawsList.length, (index) {

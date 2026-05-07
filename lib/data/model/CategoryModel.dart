@@ -5,7 +5,7 @@ class CategoryModel {
   final int index;
   final String name;
   final String nameFr;
-  final int taxId;
+  final int? taxId;
   final int typeCat;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -15,7 +15,7 @@ class CategoryModel {
     required this.index,
     required this.name,
     required this.nameFr,
-    required this.taxId,
+    this.taxId,
     required this.typeCat,
     this.createdAt,
     this.updatedAt,

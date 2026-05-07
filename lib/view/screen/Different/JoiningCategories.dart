@@ -1,38 +1,39 @@
 import 'dart:ui';
 
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
-import 'package:chafi_dashboard/data/model/AppointmentsModel.dart';
+import 'package:chafi_dashboard/data/model/CategoryModel.dart';
+import 'package:chafi_dashboard/view/Widget/Category/CategoryDealog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/AppointmentscommitmentsController.dart';
-import '../../core/class/handlingview.dart';
-import '../../core/functions/Dealog.dart';
-import '../Widget/Appointments/AppointmentsDealog.dart';
-import '../Widget/Button/ActionButton.dart';
-import '../Widget/TablePaginationFooter.dart';
-import '../Widget/TextFild/CustemDropDownField.dart';
-import '../Widget/TextFild/SearchFild.dart';
+import '../../../controller/Different/JoiningCategoriesControllerDiff.dart';
+import '../../../controller/TaxCollection/JoiningCategoriesController.dart';
+import '../../../core/class/handlingview.dart';
+import '../../../core/functions/Dealog.dart';
+import '../../Widget/Button/ActionButton.dart';
+import '../../Widget/Differente/CategoryDealogDiff.dart';
+import '../../Widget/TablePaginationFooter.dart';
+import '../../Widget/TextFild/CustemDropDownField.dart';
+import '../../Widget/TextFild/SearchFild.dart';
 
-class Appointmentscommitments extends StatefulWidget {
-  const Appointmentscommitments({super.key});
+class Joiningcategoriesdiff extends StatefulWidget {
+  const Joiningcategoriesdiff({super.key});
 
   @override
-  State<Appointmentscommitments> createState() =>
-      _AppointmentscommitmentsState();
+  State<Joiningcategoriesdiff> createState() => _JoiningcategoriesdiffState();
 }
 
-class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
+class _JoiningcategoriesdiffState extends State<Joiningcategoriesdiff> {
   final ScrollController horizontalController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    Get.create(() => AppointmentscommitmentscontrollerImp());
+    Get.create(() => JoiningcategoriescontrollerDiff());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 243, 243),
-      body: GetBuilder<AppointmentscommitmentscontrollerImp>(
+      body: GetBuilder<JoiningcategoriescontrollerDiff>(
         builder: (controller) {
           return Container(
             padding: const EdgeInsets.all(16.0),
@@ -51,7 +52,6 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // زر إضافة
                 Container(
                   alignment: Alignment.centerLeft,
                   child: ActionButton(
@@ -61,8 +61,8 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                     onPressed: () {
                       showDialog(
                         context: context,
-                        builder: (context) => Appointmentsdealog(
-                          mode: AppointmentsdealogMode.add,
+                        builder: (context) => CategorydealogDiff(
+                          mode: CategorydealogDiffmode.add,
                           controller: controller,
                         ),
                       );
@@ -72,7 +72,6 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
 
                 const SizedBox(height: 30),
 
-                // شريط البحث و Rows per page
                 LayoutBuilder(
                   builder: (context, constraints) {
                     bool isMobile = constraints.maxWidth < 600;
@@ -186,7 +185,7 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                   entry,
                                 ) {
                                   int index = entry.key;
-                                  Appointmentsmodel item = entry.value;
+                                  CategoryModel item = entry.value;
 
                                   int realIndex =
                                       controller.currentPage *
@@ -199,37 +198,7 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                       DataCell(
                                         Text((realIndex + 1).toString()),
                                       ),
-                                      DataCell(Text(item.declaration)),
-                                      DataCell(
-                                        Text(
-                                          controller.sestemTax
-                                              .firstWhere(
-                                                (e) => e['key'] == item.taxId,
-                                                orElse: () => {'label': '-'},
-                                              )['label']
-                                              .toString()
-                                              .tr,
-                                        ),
-                                      ),
-
-                                      DataCell(
-                                        Text(
-                                          item.deadline.toString().substring(
-                                            5,
-                                            10,
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(Text(item.dependencies)),
-                                      DataCell(
-                                        Text(
-                                          item.noticeDate.toString().substring(
-                                            5,
-                                            10,
-                                          ),
-                                        ),
-                                      ),
-
+                                      DataCell(Text(item.localizedName)),
                                       DataCell(
                                         Row(
                                           children: [
@@ -264,7 +233,6 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                                 ),
                                               ),
                                             ),
-
                                             const SizedBox(width: 10),
                                             InkWell(
                                               onTap: () {
@@ -272,9 +240,9 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                                 showDialog(
                                                   context: context,
                                                   builder: (context) =>
-                                                      Appointmentsdealog(
+                                                      CategorydealogDiff(
                                                         mode:
-                                                            AppointmentsdealogMode
+                                                            CategorydealogDiffmode
                                                                 .edit,
                                                         controller: controller,
                                                         id: item.id,
@@ -305,9 +273,9 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                                 showDialog(
                                                   context: context,
                                                   builder: (_) =>
-                                                      AppointmentsIndexDialog(
+                                                      CategoryIndexDialogDiff(
                                                         controller: controller,
-                                                        appointmentsmodel: item,
+                                                        categorymodel: item,
                                                       ),
                                                 );
                                               },
@@ -322,41 +290,6 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                                 ),
                                                 child: const Icon(
                                                   Icons.swap_vert,
-                                                  color: Colors.white,
-                                                  size: 18,
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            InkWell(
-                                              onTap: () async {
-                                                await showCustomConfirmationDialog(
-                                                  context,
-                                                  title: "تنبيه".tr,
-                                                  message:
-                                                      "هل تريد إرسال إشعار لي المستخدمين"
-                                                          .tr,
-                                                  onConfirmAction: () {
-                                                    controller.nptificationsend(
-                                                      item.id,
-                                                      item.declaration,
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.all(
-                                                  6,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: const Color(
-                                                    0xFF22C55E,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.send,
                                                   color: Colors.white,
                                                   size: 18,
                                                 ),
@@ -396,14 +329,8 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
   List<DataColumn> buildColumns() {
     return [
       DataColumn(label: Text("#")),
-      DataColumn(label: Text('declaration_type'.tr)),
-      DataColumn(label: Text('نوع النضام'.tr)),
-      DataColumn(label: Text('deadline'.tr)),
-      DataColumn(label: Text('consequences'.tr)),
-      DataColumn(label: Text('notice_date'.tr)),
+      DataColumn(label: Text('إسم الفئة'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];
   }
 }
-
-// Pagination Footer

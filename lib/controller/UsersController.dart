@@ -12,7 +12,13 @@ class Userscontroller extends GetxController {
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   Statusrequest statusrequest = Statusrequest.none;
-
+  final List<Map<String, dynamic>> options = [
+    {"id": 1, "name": "feedback_easy".tr},
+    {"id": 2, "name": "feedback_instructive".tr},
+    {"id": 3, "name": "feedback_motivating".tr},
+    {"id": 4, "name": "feedback_correcting".tr},
+    {"id": 5, "name": "feedback_reassuring".tr},
+  ];
   List<UserModel> data = [];
   List<UserModel> filteredData = [];
   int currentPage = 0;

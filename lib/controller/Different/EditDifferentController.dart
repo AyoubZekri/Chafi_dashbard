@@ -8,8 +8,11 @@ import '../../core/class/Statusrequest.dart';
 import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
+import '../../data/datasource/Remote/Categorydata.dart';
 import '../../data/datasource/Remote/LawData.dart';
+import '../../data/model/CategoryModel.dart';
 import '../../data/model/LawModel.dart';
+import '../../view/screen/different.dart';
 import '../NavigationBarcontroller.dart';
 
 abstract class Editdifferentcontroller extends GetxController {}
@@ -26,6 +29,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
   int? selectedCalculator;
   int? selectedLaw;
   int? id;
+  int? selectedCategory;
 
   final List<Map<String, Object>> calcelators = [
     {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
@@ -66,6 +70,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
   ];
   Lawdata lawdata = Lawdata(Get.find());
   Differentdata differentdata = Differentdata(Get.find());
+  Categorydata categorydata = Categorydata(Get.find());
 
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
@@ -74,6 +79,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
   List<LawModel> data = [];
 
   List<Map<String, dynamic>> lawsList = [];
+  List<CategoryModel> category = [];
 
   void addLaw() {
     lawsList.add({
@@ -113,6 +119,11 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
   Future<void> editdata() async {
     if (!formState.currentState!.validate()) return;
 
+    if (selectedCategory == null) {
+      showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
+      return;
+    }
+
     if (isLawActive == true && lawsList.isEmpty) {
       showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
       return;
@@ -129,8 +140,6 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
 
     Map<String, Object>? calculator;
 
-
-
     if (isCalculatorActive == true) {
       calculator = calcelators.firstWhere(
         (element) => element['key'] == selectedCalculator,
@@ -138,6 +147,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
     }
 
     Map<String, dynamic> requestData = {
+      "cat_id": selectedCategory,
       "id": id,
       "title": titlear.text,
       "body": infoar.text,
@@ -163,9 +173,35 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
       isCalculatorActive = false;
       selectedCalculator = null;
       selectedLaw = null;
-      Get.find<NavigationBarcontrollerImp>().changePage(7);
+      Get.find<NavigationBarcontrollerImp>().changeSubPage(
+        1,
+        () => Different(),
+      );
     } else {
       statusrequest = Statusrequest.failure;
+    }
+
+    update();
+  }
+
+  Future<void> viewdataCategory() async {
+    update();
+
+    final actData = {"type_cat": 1, "type": 2};
+
+    var response = await categorydata.viewdata(actData);
+    print("Response: $response");
+
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        List listdata = response['data'];
+        category.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+        category = List.from(category);
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
     }
 
     update();
@@ -223,6 +259,8 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
         });
       }
     }
+
+    selectedCategory = model.catId;
 
     update();
   }

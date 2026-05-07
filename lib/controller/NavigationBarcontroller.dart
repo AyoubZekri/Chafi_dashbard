@@ -15,6 +15,7 @@ import '../data/datasource/Remote/AuthData.dart';
 import '../view/screen/Activities.dart';
 import '../view/screen/AppointmentsCommitments.dart';
 import '../view/screen/CommonQuestions.dart';
+import '../view/screen/Different/JoiningCategories.dart';
 import '../view/screen/Exclusive.dart';
 import '../view/screen/ExternalLinks.dart';
 import '../view/screen/GeneralDefinitions.dart';
@@ -149,7 +150,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': 'التطبيقات',
+      'name': 'الجزاءات ',
       'icon': Icons.apps,
       'route': Approutes.joiningCategoriesApp,
 
@@ -189,8 +190,21 @@ class NavigationBarcontrollerImp extends GetxController {
       'name': "nav_different",
       'icon': Icons.extension_outlined,
       'route': Approutes.different,
-      'page': () => Different(),
-      'subPages': [],
+      'page': "",
+      'subPages': [
+        {
+          'name': 'فئات',
+          'icon': Icons.category_outlined,
+          'route': Approutes.joiningCategoriesApp,
+          'page': () => Joiningcategoriesdiff(),
+        },
+        {
+          'name': "مقالات",
+          'route': Approutes.partialSystemApp,
+          'icon': Icons.extension_outlined,
+          'page': () => Different(),
+        },
+      ],
     },
 
     {

@@ -282,7 +282,6 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
     }
 
     selectedCategory = model.catId;
-    // selecttax = model.;
 
     update();
   }

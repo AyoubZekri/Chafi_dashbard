@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/data/datasource/Remote/Differentdata.dart';
+import 'package:chafi_dashboard/view/screen/different.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,7 +7,9 @@ import '../../core/class/Statusrequest.dart';
 import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
+import '../../data/datasource/Remote/Categorydata.dart';
 import '../../data/datasource/Remote/LawData.dart';
+import '../../data/model/CategoryModel.dart';
 import '../../data/model/LawModel.dart';
 import '../NavigationBarcontroller.dart';
 
@@ -23,6 +26,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
   bool isLawActive = false;
   int? selectedCalculator;
   int? selectedLaw;
+  int? selectedCategory;
 
   final List<Map<String, Object>> calcelators = [
     {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
@@ -63,6 +67,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
   ];
   Lawdata lawdata = Lawdata(Get.find());
   Differentdata differentdata = Differentdata(Get.find());
+  Categorydata categorydata = Categorydata(Get.find());
 
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
@@ -71,6 +76,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
   List<LawModel> data = [];
 
   List<Map<String, dynamic>> lawsList = [];
+  List<CategoryModel> category = [];
 
   void addLaw() {
     lawsList.add({
@@ -107,10 +113,12 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     update();
   }
 
-
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
-
+    if (selectedCategory == null) {
+      showSnackbar("خطأ".tr, "يرجى اختيار الفئة".tr, Colors.red);
+      return;
+    }
     if (isLawActive == true && lawsList.isEmpty) {
       showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
 
@@ -135,6 +143,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     }
 
     Map<String, dynamic> requestData = {
+      "cat_id": selectedCategory,
       "type": 3,
       "title": titlear.text,
       "body": infoar.text,
@@ -162,9 +171,35 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
       selectedLaw = null;
       lawsList.clear();
 
-      Get.find<NavigationBarcontrollerImp>().changePage(7);
+      Get.find<NavigationBarcontrollerImp>().changeSubPage(
+        1,
+        () => Different(),
+      );
     } else {
       statusrequest = Statusrequest.failure;
+    }
+
+    update();
+  }
+
+  Future<void> viewdataCategory() async {
+    update();
+
+    final actData = {"type_cat": 1, "type": 2};
+
+    var response = await categorydata.viewdata(actData);
+    print("Response: $response");
+
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        List listdata = response['data'];
+        category.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+        category = List.from(category);
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
     }
 
     update();
@@ -198,6 +233,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
 
   @override
   void onInit() {
+    viewdataCategory();
     viewdata();
     super.onInit();
   }

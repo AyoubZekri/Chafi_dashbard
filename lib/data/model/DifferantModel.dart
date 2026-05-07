@@ -4,6 +4,7 @@ class DifferentsModel {
   final int id;
   final int index;
   final int type;
+  final int? catId;
   final String title;
   final String body;
   final String titleFr;
@@ -16,7 +17,6 @@ class DifferentsModel {
   final DateTime updatedAt;
 
   final List<dynamic>? laws;
-
 
   DifferentsModel({
     required this.id,
@@ -31,7 +31,8 @@ class DifferentsModel {
     this.calcul,
     required this.isRead,
     required this.createdAt,
-    required this.updatedAt, this.laws,
+    required this.updatedAt,
+    this.laws, this.catId,
   });
 
   factory DifferentsModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +44,7 @@ class DifferentsModel {
       body: json['body'] ?? '',
       titleFr: json['title_fr'] ?? '',
       bodyFr: json['body_fr'] ?? '',
+      catId: json['cat_id'],
       lawId: json['law_id'],
       indexLink: json['index_link'].toString(),
       calcul: json['calcul'],
@@ -50,7 +52,6 @@ class DifferentsModel {
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       laws: json['laws'],
-
     );
   }
   String get localizedName {

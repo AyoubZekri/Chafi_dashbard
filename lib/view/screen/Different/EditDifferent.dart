@@ -89,7 +89,8 @@ class _EditdifferentState extends State<Editdifferent> {
                             label: "content_ar".tr,
                             hintText: "content_hint".tr,
                             maxLines: 5,
-                            valid: (val) => validateInput(val!, 2, 1000, "text"),
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                         SizedBox(width: 20),
@@ -99,11 +100,36 @@ class _EditdifferentState extends State<Editdifferent> {
                             label: "content_fr".tr,
                             hintText: "content_hint".tr,
                             maxLines: 5,
-                            valid: (val) => validateInput(val!, 2, 1000, "text"),
+                            valid: (val) =>
+                                validateInput(val!, 2, 1000, "text"),
                           ),
                         ),
                       ],
                     ),
+                    const SizedBox(height: 20),
+
+                    Dropdownfild(
+                      label: "الفئة".tr,
+                      hintText: "إختر الفئة".tr,
+                      items: controller.category
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f.id,
+                              child: Text(
+                                f.localizedName.toString(),
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: controller.selectedCategory,
+                      onChanged: (val) {
+                        setState(() {
+                          controller.selectedCategory = val;
+                        });
+                      },
+                    ),
+
                     const SizedBox(height: 64),
                     ToggleRow(
                       label: "calculator_toggle".tr,
@@ -153,14 +179,17 @@ class _EditdifferentState extends State<Editdifferent> {
                           Text(
                             "law_list".tr,
                             style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           CustomAddLawButton(
                             label: "add_law_button".tr,
                             onPressed: () {
                               controller.addLaw();
                             },
-                          ),                        ],
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       ...List.generate(controller.lawsList.length, (index) {
@@ -183,13 +212,16 @@ class _EditdifferentState extends State<Editdifferent> {
                                   Text(
                                     "${"law_item_title".tr} ${index + 1}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   IconButton(
                                     onPressed: () =>
                                         controller.removeLaw(index),
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -207,14 +239,18 @@ class _EditdifferentState extends State<Editdifferent> {
                                               child: Text(
                                                 f.localizedName.toString(),
                                                 style: const TextStyle(
-                                                    fontSize: 14),
+                                                  fontSize: 14,
+                                                ),
                                               ),
                                             ),
                                           )
                                           .toList(),
                                       value: lawItem['law_id'],
                                       onChanged: (val) {
-                                        controller.updateLawId(index, val as int?);
+                                        controller.updateLawId(
+                                          index,
+                                          val as int?,
+                                        );
                                       },
                                     ),
                                   ),
@@ -224,17 +260,21 @@ class _EditdifferentState extends State<Editdifferent> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_ar_input_label".tr,
                                       hintText: "enter_name_ar_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_ar'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_ar']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameAr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_ar'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_ar']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameAr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -245,17 +285,21 @@ class _EditdifferentState extends State<Editdifferent> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "name_fr_input_label".tr,
                                       hintText: "enter_name_fr_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['name_fr'])
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset:
-                                                  lawItem['name_fr']?.length ??
-                                                      0),
-                                        ),
-                                      onChanged: (val) =>
-                                          controller.updateLawNameFr(index, val),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['name_fr'],
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['name_fr']
+                                                            ?.length ??
+                                                        0,
+                                                  ),
+                                                ),
+                                      onChanged: (val) => controller
+                                          .updateLawNameFr(index, val),
                                       valid: (val) =>
                                           validateInput(val!, 0, 200, "text"),
                                     ),
@@ -266,17 +310,21 @@ class _EditdifferentState extends State<Editdifferent> {
                                     child: CustemtextfromfildInfoUser(
                                       label: "page_number".tr,
                                       hintText: "page_number_hint".tr,
-                                      myController: TextEditingController(
-                                          text: lawItem['index_link']
-                                              ?.toString())
-                                        ..selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                              offset: lawItem['index_link']
-                                                      ?.toString()
-                                                      .length ??
-                                                  0),
-                                        ),
+                                      myController:
+                                          TextEditingController(
+                                              text: lawItem['index_link']
+                                                  ?.toString(),
+                                            )
+                                            ..selection =
+                                                TextSelection.fromPosition(
+                                                  TextPosition(
+                                                    offset:
+                                                        lawItem['index_link']
+                                                            ?.toString()
+                                                            .length ??
+                                                        0,
+                                                  ),
+                                                ),
                                       onChanged: (val) =>
                                           controller.updateLawIndex(index, val),
                                       valid: (val) =>
@@ -305,8 +353,7 @@ class _EditdifferentState extends State<Editdifferent> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child:controller.statusrequest ==
-                                Statusrequest.loadeng
+                        child: controller.statusrequest == Statusrequest.loadeng
                             ? const SizedBox(
                                 width: 15,
                                 height: 15,
@@ -316,12 +363,12 @@ class _EditdifferentState extends State<Editdifferent> {
                                 ),
                               )
                             : Text(
-                          "save".tr,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
+                                "save".tr,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
                       ),
                     ),
                   ],
