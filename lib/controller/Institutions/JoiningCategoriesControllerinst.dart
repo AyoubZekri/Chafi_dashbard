@@ -8,7 +8,7 @@ import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
 
-class JoiningcategoriescontrollerDiff extends GetxController {
+class Joiningcategoriescontrollerinstitutions extends GetxController {
   late TextEditingController titleAr;
   late TextEditingController titleFr;
   late TextEditingController index;
@@ -18,6 +18,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
 
   int currentPage = 0;
   int rowsPerPage = 10;
+
 
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
@@ -31,7 +32,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
     statusrequest = Statusrequest.loadeng;
     update();
 
-    final actData = {"type_cat": 1, "type": 2};
+    final actData = {"type_cat": 1, "type": 3};
 
     var response = await categorydata.viewdata(actData);
     print("Response: $response");
@@ -61,6 +62,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
   // إضافة قانون
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
+
     statusrequest = Statusrequest.loadeng;
     update();
 
@@ -68,7 +70,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
       "type_cat": 1,
       "name": titleAr.text,
       "name_fr": titleFr.text,
-      "type": 2,
+      "type": 3,
     };
 
     var response = await categorydata.adddata(requestData);
@@ -99,7 +101,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
         "type_cat": 1,
         "name": edittitleAr.text,
         "name_fr": edittitleFr.text,
-        "type": 2,
+        "type": 3,
       };
       var response = await categorydata.editdata(data);
       print("=====================================$response");
@@ -123,7 +125,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
     if (formState.currentState!.validate()) {
       statusrequest = Statusrequest.loadeng;
       update();
-      Map data = {"id": id, "index": index.text, "type": 2};
+      Map data = {"id": id, "index": index.text, "type": 3};
       var response = await categorydata.editdata(data);
       print("=====================================$response");
       statusrequest = handlingData(response);
@@ -144,7 +146,7 @@ class JoiningcategoriescontrollerDiff extends GetxController {
   Future<void> deletdata(int id) async {
     var response = await categorydata.deletdata({
       "id": id.toString(),
-      "type": 2,
+      "type": 3,
     });
     statusrequest = handlingData(response);
 
@@ -177,7 +179,6 @@ class JoiningcategoriescontrollerDiff extends GetxController {
     edittitleFr = TextEditingController();
     index = TextEditingController();
     viewdata();
-
     filteredData = data;
     super.onInit();
   }

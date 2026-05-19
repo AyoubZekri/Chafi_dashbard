@@ -111,43 +111,63 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                         ),
                       ],
                     ),
-                    if (controller.type != null) const SizedBox(height: 20),
-                    if (controller.type != null)
-                      Dropdownfild(
-                        label: controller.type == 1
-                            ? "institution_type".tr
-                            : controller.type == 2
-                            ? "regulated_type".tr
-                            : "institution_type".tr,
+                    const SizedBox(height: 20),
+                    Dropdownfild(
+                      label: 'الفئة'.tr,
+                      hintText: 'إختر الفئة المناسبة'.tr,
+                      items: controller.category
+                          // (controller.type == 1
+                          //         ? controller.institutions
+                          //         : controller.type == 2
+                          //         ? controller.regulated
+                          //         : controller.generaldefinitions)
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f.id,
+                              child: Text(
+                                f.localizedName.toString().tr,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: controller.selectedcat,
+                      onChanged: (val) {
+                        setState(() {
+                          controller.selectedcat = val;
+                          controller.childSelectcat = null;
+                          controller.childCategory();
+                        });
+                      },
+                    ),
 
-                        hintText: controller.type == 1
-                            ? "institution_type".tr
-                            : controller.type == 2
-                            ? "regulated_type".tr
-                            : "institution_type".tr,
-                        items:
-                            (controller.type == 1
-                                    ? controller.institutions
-                                    : controller.type == 2
-                                    ? controller.regulated
-                                    : controller.generaldefinitions)
-                                .map(
-                                  (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
-                                    child: Text(
-                                      f['label'].toString().tr,
-                                      style: const TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                        value: controller.selectedInstitutions,
-                        onChanged: (val) {
-                          setState(() {
-                            controller.selectedInstitutions = val;
-                          });
-                        },
-                      ),
+                    const SizedBox(height: 20),
+                    Dropdownfild(
+                      label: 'التصنيف'.tr,
+                      hintText: 'إختر التصنيف المناسبة'.tr,
+                      items: controller.childcategory
+                          // (controller.type == 1
+                          //         ? controller.institutions
+                          //         : controller.type == 2
+                          //         ? controller.regulated
+                          //         : controller.generaldefinitions)
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f.id,
+                              child: Text(
+                                f.localizedName.toString().tr,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: controller.childSelectcat,
+                      onChanged: (val) {
+                        setState(() {
+                          controller.childSelectcat = val;
+                        });
+                      },
+                    ),
 
                     const SizedBox(height: 64),
 

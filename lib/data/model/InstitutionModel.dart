@@ -1,7 +1,10 @@
 class InstitutionModel {
   final int id;
-  final int typeInstitution;
+  final int? typeInstitution;
   final int? scope;
+  final int? catId;
+  final int? parintscat;
+
   final int index;
   final String title;
   final String body;
@@ -16,7 +19,7 @@ class InstitutionModel {
 
   InstitutionModel({
     required this.id,
-    required this.typeInstitution,
+    this.typeInstitution,
     this.scope,
     required this.index,
     required this.title,
@@ -29,6 +32,7 @@ class InstitutionModel {
     required this.createdAt,
     required this.updatedAt,
     this.laws,
+    this.catId, this.parintscat,
   });
 
   factory InstitutionModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +40,8 @@ class InstitutionModel {
       id: json['id'],
       typeInstitution: json['type_institution'],
       scope: json['scope'],
+      catId: json['cat_id'],
+      parintscat: json['parints_cat'],
       index: json['index'],
       title: json['title'],
       body: json['body'],
@@ -55,6 +61,8 @@ class InstitutionModel {
       'id': id,
       'type_institution': typeInstitution,
       'scope': scope,
+      'cat_id': catId,
+      'parints_cat': parintscat,
       'index': index,
       'title': title,
       'body': body,

@@ -1,7 +1,6 @@
 import 'package:chafi_dashboard/view/Widget/Card/CustemShwoDealog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class InstitutionsCard extends StatelessWidget {
   final String title;
@@ -135,6 +134,8 @@ class InstitutionsCard extends StatelessWidget {
           // عنوان الكارد
           Text(
             title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 12),

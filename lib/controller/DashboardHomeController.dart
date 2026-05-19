@@ -216,6 +216,13 @@ class Dashboardhomecontroller extends GetxController {
     update();
   }
 
+  int selectedServiceType = 1;
+
+  void changeSelectedServiceType(int type) {
+    selectedServiceType = type;
+    update();
+  }
+
   @override
   void onInit() {
     if (data.isNotEmpty) {

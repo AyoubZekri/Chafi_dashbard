@@ -7,6 +7,8 @@ import '../core/class/Statusrequest.dart';
 import '../core/functions/Snacpar copy.dart';
 import '../core/functions/handlingdatacontroller.dart';
 import '../core/services/Services.dart';
+import '../data/datasource/Remote/Categorydata.dart';
+import '../data/model/CategoryModel.dart';
 import '../data/model/InstitutionModel.dart';
 
 abstract class Institutionscontroller extends GetxController {}
@@ -29,17 +31,111 @@ class InstitutionscontrollerImp extends Institutionscontroller {
   ];
 
   InstitutionData institutionData = InstitutionData(Get.find());
+  Categorydata categorydata = Categorydata(Get.find());
+
   Myservices myServices = Get.find();
   Statusrequest statusrequest = Statusrequest.none;
 
   List<InstitutionModel> data = [];
   List<InstitutionModel> filteredData = [];
+  List<CategoryModel> category = [
+    CategoryModel(
+      id: 0,
+      name: "الكل",
+      nameFr: "Tous",
+      index: 0,
+      taxId: 0,
+      typeCat: 2,
+    ),
+  ];
+  List<CategoryModel> childCategory = [
+    CategoryModel(
+      id: 0,
+      name: "الكل",
+      nameFr: "Tous",
+      index: 0,
+      taxId: 0,
+      typeCat: 2,
+    ),
+  ];
+  int? selectedCategory = 0;
+  int? selectedchildCategory = 0;
+
+  Future<void> viewdataCategory() async {
+    update();
+    final actData = {"type_cat": 1, 'type': 3};
+
+    var response = await categorydata.viewdata(actData);
+
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        category = [
+          CategoryModel(
+            id: 0,
+            name: "الكل",
+            nameFr: "Tous",
+            index: 0,
+            taxId: 0,
+            typeCat: 2,
+          ),
+        ];
+        List listdata = response['data'];
+        category.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+        category = List.from(category);
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
+    }
+
+    update();
+  }
+
+  Future<void> viewChildCategory() async {
+    update();
+    final actData = {
+      "cat_id": selectedCategory == 0 ? "" : selectedCategory,
+      'type': 4,
+    };
+
+    var response = await categorydata.viewdata(actData);
+    print("===============Response================: $response");
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        childCategory = [
+          CategoryModel(
+            id: 0,
+            name: "الكل",
+            nameFr: "Tous",
+            index: 0,
+            taxId: 0,
+            typeCat: 2,
+          ),
+        ];
+        List listdata = response['data'];
+        childCategory.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+        childCategory = List.from(childCategory);
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
+    }
+
+    update();
+  }
 
   // عرض البيانات
   Future<void> viewdata() async {
     statusrequest = Statusrequest.loadeng;
     update();
-    final dat = {"scope": selectedFilter, "type_institution": 1};
+    final dat = {
+      // "scope": selectedFilter,
+      // "type_institution": 1,
+      "cat_id": selectedchildCategory == 0 ? null : selectedchildCategory,
+      "parints_cat": selectedCategory == 0 ? null : selectedCategory,
+    };
 
     var response = await institutionData.viewdata(dat);
     print("Response: $response");
@@ -124,6 +220,7 @@ class InstitutionscontrollerImp extends Institutionscontroller {
     index = TextEditingController();
     searchController = TextEditingController();
     viewdata();
+    viewdataCategory();
     print("Institutions");
     super.onInit();
   }

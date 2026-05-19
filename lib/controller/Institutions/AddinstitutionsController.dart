@@ -1,3 +1,4 @@
+import 'package:chafi_dashboard/data/model/CategoryModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,6 +6,7 @@ import '../../core/class/Statusrequest.dart';
 import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
+import '../../data/datasource/Remote/Categorydata.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';
@@ -24,18 +26,22 @@ class AddinstitutionscontrollerImp extends GetxController {
   bool isLawActive = false;
   int? selectedCalculator;
   int? selectedinstitutions;
-
   int? selectedLaw;
   int? type;
+  int? selectedcat;
+  int? childSelectcat;
 
   Lawdata lawdata = Lawdata(Get.find());
   InstitutionData institutionData = InstitutionData(Get.find());
+  Categorydata categorydata = Categorydata(Get.find());
 
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   Statusrequest statusrequest = Statusrequest.none;
 
   List<LawModel> data = [];
+  List<CategoryModel> category = [];
+  List<CategoryModel> childcategory = [];
 
   final List<Map<String, Object>> institutions = [
     {'key': 1, 'label': "micro"},
@@ -125,10 +131,47 @@ class AddinstitutionscontrollerImp extends GetxController {
     update();
   }
 
+  Future<void> getCategory() async {
+    update();
+    var response = await categorydata.viewdata({"type": 3, "type_cat": 1});
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        category.clear();
+        List listdata = response['data'];
+        category.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
+    }
+    update();
+  }
+
+  Future<void> childCategory() async {
+    update();
+    var response = await categorydata.viewdata({
+      "type": 4,
+      "cat_id": selectedcat,
+    });
+    statusrequest = handlingData(response);
+
+    if (statusrequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        childcategory.clear();
+        List listdata = response['data'];
+        childcategory.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+      } else {
+        statusrequest = Statusrequest.failure;
+      }
+    }
+    update();
+  }
+
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
-    if (selectedinstitutions == null) {
-      showSnackbar("خطأ".tr, 'choose_institution_type'.tr, Colors.red);
+    if (childSelectcat == null) {
+      showSnackbar("خطأ".tr, 'يجب اختيار الفئة'.tr, Colors.red);
       return;
     }
 
@@ -160,12 +203,13 @@ class AddinstitutionscontrollerImp extends GetxController {
     }
 
     Map<String, dynamic> requestData = {
-      "type_institution": type,
-      "scope": selectedinstitutions,
+      // "type_institution": type,
+      // "scope": selectedinstitutions,
       "title": titlear.text,
       "body": infoar.text,
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
+      "cat_id": childSelectcat,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
       "laws": lawsList,
@@ -189,7 +233,12 @@ class AddinstitutionscontrollerImp extends GetxController {
       selectedCalculator = null;
       selectedinstitutions = null;
       selectedLaw = null;
+      selectedcat = null;
+      childSelectcat = null;
       lawsList.clear();
+      category.cast();
+      childcategory.cast();
+
       // العودة لصفحة Institutions
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
         type == 1
@@ -239,6 +288,7 @@ class AddinstitutionscontrollerImp extends GetxController {
   @override
   void onInit() {
     print("===================$type");
+    getCategory();
     viewdata();
     super.onInit();
   }

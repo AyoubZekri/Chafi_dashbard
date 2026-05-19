@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import '../../core/class/Statusrequest.dart';
 import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
+import '../../data/datasource/Remote/Categorydata.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
+import '../../data/model/CategoryModel.dart';
 import '../../data/model/InstitutionModel.dart';
 import '../../data/model/LawModel.dart';
 import '../../view/screen/GeneralDefinitions.dart' show Generaldefinitions;
@@ -28,12 +30,17 @@ class EditinstitutionscontrollerImp extends GetxController {
   int? selectedInstitutions;
   int? selectedLaw;
   int? type;
+  int? selectedcat;
+  int? childSelectcat;
 
   Lawdata lawData = Lawdata(Get.find());
   InstitutionData institutionData = InstitutionData(Get.find());
+  Categorydata categorydata = Categorydata(Get.find());
 
   Statusrequest statusRequest = Statusrequest.none;
   List<LawModel> laws = [];
+  List<CategoryModel> category = [];
+  List<CategoryModel> childcategory = [];
 
   // القوائم الثابتة
   final List<Map<String, Object>> calcelators = [
@@ -133,6 +140,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     numPerIndex.text = model.indexLink ?? '';
     selectedInstitutions = model.scope;
     type = model.typeInstitution;
+    childSelectcat = model.catId;
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive
         ? calcelators.firstWhere((c) => c['route'] == model.calcul)['key']
@@ -156,9 +164,49 @@ class EditinstitutionscontrollerImp extends GetxController {
     update();
   }
 
+  Future<void> getCategory() async {
+    update();
+    var response = await categorydata.viewdata({"type": 3, "type_cat": 1});
+    statusRequest = handlingData(response);
+
+    if (statusRequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        category.clear();
+        List listdata = response['data'];
+        category.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+      } else {
+        statusRequest = Statusrequest.failure;
+      }
+    }
+    update();
+  }
+
+  Future<void> childCategory() async {
+    update();
+    var response = await categorydata.viewdata({
+      "type": 4,
+      "cat_id": selectedcat,
+    });
+    statusRequest = handlingData(response);
+
+    if (statusRequest == Statusrequest.success) {
+      if (response["status"] == 1) {
+        childcategory.clear();
+        List listdata = response['data'];
+        childcategory.addAll(listdata.map((e) => CategoryModel.fromJson(e)));
+      } else {
+        statusRequest = Statusrequest.failure;
+      }
+    }
+    update();
+  }
+
   Future<void> editData() async {
     if (!formState.currentState!.validate()) return;
-
+    if (childSelectcat == null) {
+      showSnackbar("خطأ".tr, 'يجب اختيار الفئة'.tr, Colors.red);
+      return;
+    }
     if (isLawActive == true && lawsList.isEmpty) {
       showSnackbar("خطأ".tr, "يرجى إضافة قانون واحد على الأقل".tr, Colors.red);
 
@@ -183,10 +231,11 @@ class EditinstitutionscontrollerImp extends GetxController {
     final requestData = {
       "id": id,
       "title": titleAr.text,
-      "scope": selectedInstitutions,
+      // "scope": selectedInstitutions,
       "body": infoAr.text,
       "title_fr": titleFr.text,
       "body_fr": infoFr.text,
+      "cat_id": selectedcat,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
       "laws": lawsList,
@@ -225,12 +274,15 @@ class EditinstitutionscontrollerImp extends GetxController {
     titleFr.clear();
     infoFr.clear();
     numPerIndex.clear();
-
+    category.cast();
+    childcategory.cast();
     selectedCalculator = null;
     selectedInstitutions = null;
     selectedLaw = null;
     isCalculatorActive = false;
     isLawActive = false;
+    selectedcat = null;
+    childSelectcat = null;
   }
 
   Future<void> viewLaws() async {

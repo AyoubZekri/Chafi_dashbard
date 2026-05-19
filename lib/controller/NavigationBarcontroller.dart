@@ -32,6 +32,8 @@ import '../view/screen/Users.dart';
 import '../view/screen/application/RealSystemapp.dart';
 import '../view/screen/bonuses_and_compensations.dart';
 import '../view/screen/different.dart';
+import '../view/screen/institutions/ChildCategories.dart';
+import '../view/screen/institutions/JoiningCategories.dart';
 
 abstract class NavigationBarcontroller extends GetxController {
   // ignore: non_constant_identifier_names
@@ -94,23 +96,35 @@ class NavigationBarcontrollerImp extends GetxController {
       'page': "",
       'subPages': [
         {
-          'name': "General_definitions",
-          'route': Approutes.regulated,
-          'icon': Icons.verified_outlined,
-          'page': () => Generaldefinitions(),
+          'name': 'فئات',
+          'icon': Icons.category_outlined,
+         // 'route': Approutes.joiningCategoriesApp,
+          'page': () => Joiningcategoriesinstitutions(),
         },
+        {
+          'name': 'تصنيفات فرعية',
+          'icon': Icons.category_outlined,
+          //'route': Approutes.joiningCategoriesApp,
+          'page': () => Childcategories(),
+        },
+        // {
+        //   'name': "General_definitions",
+        //   'route': Approutes.regulated,
+        //   'icon': Icons.verified_outlined,
+        //   'page': () => Generaldefinitions(),
+        // },
         {
           'name': 'nav_institutions',
           'route': Approutes.institutions,
           'icon': Icons.business,
           'page': () => Institutions(),
         },
-        {
-          'name': "nav_regulated",
-          'route': Approutes.regulated,
-          'icon': Icons.verified_outlined,
-          'page': () => Regulated(),
-        },
+        // {
+        //   'name': "nav_regulated",
+        //   'route': Approutes.regulated,
+        //   'icon': Icons.verified_outlined,
+        //   'page': () => Regulated(),
+        // },
       ],
     },
 

@@ -546,30 +546,34 @@ class DashboardHome extends StatelessWidget {
                 ),
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
-                  _buildLineBar(
-                    dataPoints.asMap().entries.map((e) {
-                      return FlSpot(e.key.toDouble(), e.value.type1.toDouble());
-                    }).toList(),
-                    Colors.blue,
-                  ),
-                  _buildLineBar(
-                    dataPoints.asMap().entries.map((e) {
-                      return FlSpot(e.key.toDouble(), e.value.type2.toDouble());
-                    }).toList(),
-                    Colors.orange,
-                  ),
-                  _buildLineBar(
-                    dataPoints.asMap().entries.map((e) {
-                      return FlSpot(e.key.toDouble(), e.value.type3.toDouble());
-                    }).toList(),
-                    Colors.purple,
-                  ),
-                  _buildLineBar(
-                    dataPoints.asMap().entries.map((e) {
-                      return FlSpot(e.key.toDouble(), e.value.type4.toDouble());
-                    }).toList(),
-                    Colors.green,
-                  ),
+                  if (controller.selectedServiceType == 1)
+                    _buildLineBar(
+                      dataPoints.asMap().entries.map((e) {
+                        return FlSpot(e.key.toDouble(), e.value.type1.toDouble());
+                      }).toList(),
+                      Colors.blue,
+                    ),
+                  if (controller.selectedServiceType == 2)
+                    _buildLineBar(
+                      dataPoints.asMap().entries.map((e) {
+                        return FlSpot(e.key.toDouble(), e.value.type2.toDouble());
+                      }).toList(),
+                      Colors.orange,
+                    ),
+                  if (controller.selectedServiceType == 3)
+                    _buildLineBar(
+                      dataPoints.asMap().entries.map((e) {
+                        return FlSpot(e.key.toDouble(), e.value.type3.toDouble());
+                      }).toList(),
+                      Colors.purple,
+                    ),
+                  if (controller.selectedServiceType == 4)
+                    _buildLineBar(
+                      dataPoints.asMap().entries.map((e) {
+                        return FlSpot(e.key.toDouble(), e.value.type4.toDouble());
+                      }).toList(),
+                      Colors.green,
+                    ),
                 ],
               ),
             ),
@@ -580,10 +584,10 @@ class DashboardHome extends StatelessWidget {
             runSpacing: 5,
             alignment: WrapAlignment.center,
             children: [
-              _buildLegendItem("institutions".tr, Colors.blue),
-              _buildLegendItem("tax_systems".tr, Colors.orange),
-              _buildLegendItem("card".tr, Colors.purple),
-              _buildLegendItem("calculators".tr, Colors.green),
+              _buildServiceTypeBtn("institutions".tr, 1, controller),
+              _buildServiceTypeBtn("tax_systems".tr, 2, controller),
+              _buildServiceTypeBtn("card".tr, 3, controller),
+              _buildServiceTypeBtn("calculators".tr, 4, controller),
             ],
           ),
         ],
@@ -657,6 +661,61 @@ class DashboardHome extends StatelessWidget {
         const SizedBox(width: 5),
         Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       ],
+    );
+  }
+
+  Widget _buildServiceTypeBtn(
+      String label, int type, Dashboardhomecontroller controller) {
+    bool isSelected = controller.selectedServiceType == type;
+    Color color;
+    switch (type) {
+      case 1:
+        color = Colors.blue;
+        break;
+      case 2:
+        color = Colors.orange;
+        break;
+      case 3:
+        color = Colors.purple;
+        break;
+      case 4:
+        color = Colors.green;
+        break;
+      default:
+        color = Colors.blue;
+    }
+
+    return InkWell(
+      onTap: () => controller.changeSelectedServiceType(type),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? color : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: isSelected ? color : Colors.transparent),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!isSelected) ...[
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              ),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.grey.shade600,
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

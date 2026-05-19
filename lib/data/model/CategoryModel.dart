@@ -7,6 +7,7 @@ class CategoryModel {
   final String nameFr;
   final int? taxId;
   final int typeCat;
+  final int? catid;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -19,6 +20,7 @@ class CategoryModel {
     required this.typeCat,
     this.createdAt,
     this.updatedAt,
+    this.catid,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class CategoryModel {
       nameFr: json['name_fr'] ?? '',
       taxId: json['tax_id'] ?? 0,
       typeCat: json['type_cat'] ?? 0,
+      catid: json['cat_id'] ?? 0,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
           : null,
@@ -43,6 +46,7 @@ class CategoryModel {
       'id': id,
       'index': index,
       'name': name,
+      'cat_id': catid,
       'name_fr': nameFr,
       'tax_id': taxId,
       'type_cat': typeCat,

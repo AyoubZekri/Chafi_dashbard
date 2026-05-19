@@ -143,26 +143,53 @@ class _InstitutionsState extends State<Institutions> {
                           SizedBox(
                             width: isMobile ? constraints.maxWidth : 280,
                             child: CustemDropDownField(
-                              items: controller.filters
+                              items: controller.category
                                   .map(
                                     (f) => DropdownMenuItem<int>(
-                                      value: f['key'] as int,
+                                      value: f.id,
                                       child: Text(
-                                        f['label'].toString().tr,
+                                        f.localizedName.toString().tr,
                                         style: const TextStyle(fontSize: 14),
                                       ),
                                     ),
                                   )
                                   .toList(),
-                              value: controller.selectedFilter,
+                              value: controller.selectedCategory,
                               onChanged: (value) {
                                 setState(() {
-                                  controller.selectedFilter = value!;
+                                  controller.selectedCategory = value!;
+                                  controller.selectedchildCategory = 0;
+                                  controller.viewChildCategory();
+                                  controller.searchController.clear();
                                   controller.viewdata();
                                 });
                               },
                             ),
                           ),
+                          if (controller.selectedCategory != 0)
+                            SizedBox(
+                              width: isMobile ? constraints.maxWidth : 280,
+                              child: CustemDropDownField(
+                                items: controller.childCategory
+                                    .map(
+                                      (f) => DropdownMenuItem<int>(
+                                        value: f.id,
+                                        child: Text(
+                                          f.localizedName.toString().tr,
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                value: controller.selectedchildCategory,
+                                onChanged: (value) {
+                                  setState(() {
+                                    controller.selectedchildCategory = value!;
+                                    controller.viewdata();
+                                  });
+                                },
+                              ),
+                            ),
                         ],
                       ),
                     );
@@ -225,6 +252,9 @@ class _InstitutionsState extends State<Institutions> {
                                   final controller = Get.put(
                                     EditinstitutionscontrollerImp(),
                                   );
+                                  controller.getCategory();
+                                  controller.childSelectcat = item.parintscat;
+                                  controller.childCategory();
                                   controller.fillDataFromModel(item);
                                   Get.find<NavigationBarcontrollerImp>()
                                       .changeSubPage(

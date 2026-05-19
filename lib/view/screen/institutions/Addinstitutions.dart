@@ -113,39 +113,82 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                         ),
                       ],
                     ),
-                    if (controller.type != null) const SizedBox(height: 20),
-                    if (controller.type != null)
+                    const SizedBox(height: 20),
+                    // if (controller.type != null)
+                    Dropdownfild(
+                      label: 'الفئة'.tr,
+                      hintText: 'إختر الفئة المناسبة'.tr,
+                      // controller.type == 1
+                      //     ? "institution_type".tr
+                      //     : controller.type == 2
+                      //     ? "regulated_type".tr
+                      //     : "نوع المؤسسة".tr,
+                      // hintText: controller.type == 1
+                      //     ? "institution_type".tr
+                      //     : controller.type == 2
+                      //     ? "regulated_type".tr
+                      //     : "نوع المؤسسة".tr,
+                      items: controller.category
+                          // (controller.type == 1
+                          //         ? controller.institutions
+                          //         : controller.type == 2
+                          //         ? controller.regulated
+                          //         : controller.generaldefinitions)
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f.id,
+                              child: Text(
+                                f.localizedName.toString().tr,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: controller.selectedcat,
+                      onChanged: (val) {
+                        setState(() {
+                          controller.selectedcat = val;
+                          controller.childSelectcat = null;
+                          controller.childCategory();
+                        });
+                      },
+                    ),
+                    if (controller.childcategory.isNotEmpty)
+                      const SizedBox(height: 20),
+                    if (controller.childcategory.isNotEmpty)
                       Dropdownfild(
-                        label: controller.type == 1
-                            ? "institution_type".tr
-                            : controller.type == 2
-                            ? "regulated_type".tr
-                            : "نوع المؤسسة".tr,
-                        hintText: controller.type == 1
-                            ? "institution_type".tr
-                            : controller.type == 2
-                            ? "regulated_type".tr
-                            : "نوع المؤسسة".tr,
-                        items:
-                            (controller.type == 1
-                                    ? controller.institutions
-                                    : controller.type == 2
-                                    ? controller.regulated
-                                    : controller.generaldefinitions)
-                                .map(
-                                  (f) => DropdownMenuItem<int>(
-                                    value: f['key'] as int,
-                                    child: Text(
-                                      f['label'].toString().tr,
-                                      style: const TextStyle(fontSize: 14),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                        value: controller.selectedinstitutions,
+                        label: 'التصنيف'.tr,
+                        hintText: 'إختر التصنيف المناسبة'.tr,
+                        // controller.type == 1
+                        //     ? "institution_type".tr
+                        //     : controller.type == 2
+                        //     ? "regulated_type".tr
+                        //     : "نوع المؤسسة".tr,
+                        // hintText: controller.type == 1
+                        //     ? "institution_type".tr
+                        //     : controller.type == 2
+                        //     ? "regulated_type".tr
+                        //     : "نوع المؤسسة".tr,
+                        items: controller.childcategory
+                            // (controller.type == 1
+                            //         ? controller.institutions
+                            //         : controller.type == 2
+                            //         ? controller.regulated
+                            //         : controller.generaldefinitions)
+                            .map(
+                              (f) => DropdownMenuItem<int>(
+                                value: f.id,
+                                child: Text(
+                                  f.localizedName.toString().tr,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        value: controller.childSelectcat,
                         onChanged: (val) {
                           setState(() {
-                            controller.selectedinstitutions = val;
+                            controller.childSelectcat = val;
                           });
                         },
                       ),
