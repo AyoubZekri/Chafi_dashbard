@@ -235,7 +235,7 @@ class EditinstitutionscontrollerImp extends GetxController {
       "body": infoAr.text,
       "title_fr": titleFr.text,
       "body_fr": infoFr.text,
-      "cat_id": selectedcat,
+      "cat_id": childSelectcat,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
       "laws": lawsList,
@@ -250,16 +250,8 @@ class EditinstitutionscontrollerImp extends GetxController {
       print("====================0$type");
       clearForm();
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
-        type == 1
-            ? 0
-            : type == 2
-            ? 1
-            : 0,
-        () => type == 1
-            ? Institutions()
-            : type == 2
-            ? Regulated()
-            : Generaldefinitions(),
+        2,
+        () => Institutions(),
       );
     } else {
       statusRequest = Statusrequest.failure;

@@ -20,7 +20,6 @@ class Childcategoriescontrollerinst extends GetxController {
   int rowsPerPage = 10;
   int? selectedCategory;
   int showselectedCategory = 0;
-
   int? editselectedCategory;
   Myservices myServices = Get.find();
   GlobalKey<FormState> formState = GlobalKey<FormState>();
@@ -148,6 +147,7 @@ class Childcategoriescontrollerinst extends GetxController {
         if (response["status"] == 1) {
           edittitleAr.clear();
           edittitleFr.clear();
+          editselectedCategory = null;
           Get.back();
           viewdata();
         } else {

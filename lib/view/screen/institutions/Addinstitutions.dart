@@ -149,6 +149,7 @@ class _AddinstitutionsState extends State<Addinstitutions> {
                         setState(() {
                           controller.selectedcat = val;
                           controller.childSelectcat = null;
+                          controller.childcategory.clear();
                           controller.childCategory();
                         });
                       },

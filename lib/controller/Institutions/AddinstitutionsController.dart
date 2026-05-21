@@ -241,16 +241,8 @@ class AddinstitutionscontrollerImp extends GetxController {
 
       // العودة لصفحة Institutions
       Get.find<NavigationBarcontrollerImp>().changeSubPage(
-        type == 1
-            ? 0
-            : type == 2
-            ? 1
-            : 0,
-        () => type == 1
-            ? Institutions()
-            : type == 2
-            ? Regulated()
-            : Generaldefinitions(),
+        2,
+        () => Institutions(),
       );
     } else {
       statusrequest = Statusrequest.failure;

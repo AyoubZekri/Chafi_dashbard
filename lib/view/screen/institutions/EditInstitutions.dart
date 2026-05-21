@@ -136,6 +136,7 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                         setState(() {
                           controller.selectedcat = val;
                           controller.childSelectcat = null;
+                          controller.childcategory.clear();
                           controller.childCategory();
                         });
                       },

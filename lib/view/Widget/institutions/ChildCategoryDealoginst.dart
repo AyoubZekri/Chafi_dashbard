@@ -102,11 +102,14 @@ class _ChildcategorydealoginstState extends State<Childcategorydealoginst> {
                       : widget.controller.selectedCategory,
                   onChanged: (value) {
                     if (isEdit) {
-                      widget.controller.editselectedCategory = value;
+                      setState(() {
+                        widget.controller.editselectedCategory = value;
+                      });
                     } else {
-                      widget.controller.selectedCategory = value;
+                      setState(() {
+                        widget.controller.selectedCategory = value;
+                      });
                     }
-                    widget.controller.update();
                   },
                 ),
 
