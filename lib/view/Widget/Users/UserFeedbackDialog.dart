@@ -5,12 +5,12 @@ import '../../../data/model/UsersModel.dart';
 
 class UserFeedbackDialog extends StatelessWidget {
   final List<UserFeedback> feedback;
-  final List<Map<String, dynamic>> options;
+  final List<Map<String, dynamic>> questions;
 
   const UserFeedbackDialog({
     super.key,
     required this.feedback,
-    required this.options,
+    required this.questions,
   });
 
   IconData _getIcon(int type) {
@@ -118,10 +118,19 @@ class UserFeedbackDialog extends StatelessWidget {
                   itemCount: feedback.length,
                   itemBuilder: (context, index) {
                     final f = feedback[index];
-                    final option = options.firstWhere(
-                      (opt) => opt['id'] == f.type,
-                      orElse: () => {"name": "Unknown"},
-                    );
+                    String questionTitle = "غير معروف";
+                    String optionName = "غير معروف";
+
+                    for (var question in questions) {
+                      var options = question['options'] as List<dynamic>;
+                      var matches = options.where((o) => o['id'] == f.type);
+                      if (matches.isNotEmpty) {
+                        var opt = matches.first;
+                        questionTitle = question['title'];
+                        optionName = opt['name'];
+                        break;
+                      }
+                    }
                     final color = _getColor(f.type);
                     final icon = _getIcon(f.type);
 
@@ -149,7 +158,16 @@ class UserFeedbackDialog extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  option['name'],
+                                  questionTitle,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  optionName,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,

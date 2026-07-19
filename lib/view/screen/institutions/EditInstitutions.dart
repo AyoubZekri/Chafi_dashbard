@@ -131,7 +131,9 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                             ),
                           )
                           .toList(),
-                      value: controller.selectedcat,
+                      value: controller.category.any((e) => e.id == controller.selectedcat)
+                          ? controller.selectedcat
+                          : null,
                       onChanged: (val) {
                         setState(() {
                           controller.selectedcat = val;
@@ -162,7 +164,9 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                             ),
                           )
                           .toList(),
-                      value: controller.childSelectcat,
+                      value: controller.childcategory.any((e) => e.id == controller.childSelectcat)
+                          ? controller.childSelectcat
+                          : null,
                       onChanged: (val) {
                         setState(() {
                           controller.childSelectcat = val;
@@ -291,7 +295,9 @@ class _EditinstitutionsState extends State<Editinstitutions> {
                                             ),
                                           )
                                           .toList(),
-                                      value: lawItem['law_id'],
+                                      value: controller.laws.any((e) => e.id == lawItem['law_id'])
+                                          ? lawItem['law_id']
+                                          : null,
                                       onChanged: (val) {
                                         controller.updateLawId(
                                           index,

@@ -192,7 +192,7 @@ class _UsersState extends State<Users> {
                                             Get.dialog(
                                               UserFeedbackDialog(
                                                 feedback: item.feedback ?? [],
-                                                options: controller.options,
+                                                questions: controller.questions,
                                               ),
                                             );
                                           },

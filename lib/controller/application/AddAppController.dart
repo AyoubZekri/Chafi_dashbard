@@ -63,6 +63,8 @@ class AddappcontrollerImp extends Addappcontroller {
     },
     {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
+    {'key': 15, 'label': "الإقتطاع من المصدر", 'route': 'Flatratesystem'},
+
   ];
 
   Lawdata lawdata = Lawdata(Get.find());

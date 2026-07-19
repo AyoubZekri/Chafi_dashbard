@@ -252,10 +252,10 @@ class _InstitutionsState extends State<Institutions> {
                                   final controller = Get.put(
                                     EditinstitutionscontrollerImp(),
                                   );
-                                  controller.getCategory();
-                                  controller.childSelectcat = item.parintscat;
-                                  controller.childCategory();
+                                  controller.clearForm();
                                   controller.fillDataFromModel(item);
+                                  controller.getCategory();
+                                  controller.childCategory();
                                   Get.find<NavigationBarcontrollerImp>()
                                       .changeSubPage(
                                         99,

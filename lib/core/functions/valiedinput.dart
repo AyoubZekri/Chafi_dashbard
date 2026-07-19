@@ -1,12 +1,18 @@
 import 'package:get/get.dart';
 
 /// Validation function
-/// [val] : القيمة  
-/// [min] : الحد الأدنى للطول  
-/// [max] : الحد الأقصى للطول  
+/// [val] : القيمة
+/// [min] : الحد الأدنى للطول
+/// [max] : الحد الأقصى للطول
 /// [type] : نوع الحقل: 'username', 'email', 'phone', 'text', 'number'
-String? validateInput(String val, int min, int max, String type) {
-  if (val.isEmpty) {
+String? validateInput(
+  String val,
+  int min,
+  int max,
+  String type, [
+  bool empty = true,
+]) {
+  if (val.isEmpty && empty == true) {
     return "الحقل لا يمكن أن يكون فارغًا".tr;
   }
 

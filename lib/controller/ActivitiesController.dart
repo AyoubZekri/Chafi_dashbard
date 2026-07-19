@@ -46,6 +46,7 @@ class Activitiescontroller extends GetxController {
     {'key': 0, 'label': "tax_flat_system"},
     {'key': 1, 'label': "tax_simplified_system"},
     {'key': 2, 'label': "tax_real_system"},
+    {'key': 3, 'label': "مقاول ذاتي"},
   ];
 
   final List<Map<String, Object>> statusTaxList = [
@@ -278,7 +279,11 @@ class Activitiescontroller extends GetxController {
   void filterData(String query) {
     currentPage = 0;
     filteredData = data
-        .where((item) => item.name.toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (item) =>
+              item.localizedName.toLowerCase().contains(query.toLowerCase()) ||
+              item.nataireName.toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
     update();
   }

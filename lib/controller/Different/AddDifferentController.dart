@@ -58,6 +58,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     },
     {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
+    {'key': 15, 'label': "الإقتطاع من المصدر", 'route': 'Flatratesystem'},
   ];
 
   final List<Map<String, Object>> law = [

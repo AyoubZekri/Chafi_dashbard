@@ -28,6 +28,7 @@ import '../view/screen/Reports.dart';
 import '../view/screen/TaxCollection/JoiningCategories.dart';
 import '../view/screen/TaxCollection/PartialSystem.dart';
 import '../view/screen/TaxCollection/SimplifiedSystem.dart';
+import '../view/screen/TaxDictionary.dart';
 import '../view/screen/Users.dart';
 import '../view/screen/application/RealSystemapp.dart';
 import '../view/screen/bonuses_and_compensations.dart';
@@ -235,6 +236,12 @@ class NavigationBarcontrollerImp extends GetxController {
       'icon': Icons.help_outline,
       'route': Approutes.faq,
       'page': () => Commonquestions(),
+      'subPages': [],
+    },
+    {
+      'name': "قاموس جبائي",
+      'icon': Icons.assignment_outlined,
+      'page': () => TaxDictionary(),
       'subPages': [],
     },
     {

@@ -73,6 +73,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     },
     {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
+    {'key': 15, 'label': "الإقتطاع من المصدر", 'route': 'Flatratesystem'},
   ];
 
   final List<Map<String, Object>> institutions = [
@@ -140,6 +141,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     numPerIndex.text = model.indexLink ?? '';
     selectedInstitutions = model.scope;
     type = model.typeInstitution;
+    selectedcat = model.parintscat;
     childSelectcat = model.catId;
     isCalculatorActive = model.calcul != null;
     selectedCalculator = isCalculatorActive

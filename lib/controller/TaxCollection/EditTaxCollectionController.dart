@@ -34,7 +34,6 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
   int? type;
   int? selecttax;
 
-
   final List<Map<String, Object>> calcelators = [
     {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
     {'key': 1, 'label': "حاسبة G12", 'route': 'calactivityType'},
@@ -65,6 +64,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
     },
     {'key': 13, 'label': "bonuses_compensation", 'route': 'Accounttype'},
     {'key': 14, 'label': "ضريبة الفوائد", 'route': 'Taxtype'},
+    {'key': 15, 'label': "الإقتطاع من المصدر", 'route': 'Flatratesystem'},
   ];
 
   final List<Map<String, Object>> sestemTax = [
