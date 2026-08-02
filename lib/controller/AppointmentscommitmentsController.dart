@@ -13,16 +13,14 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   late TextEditingController typeAr;
   late TextEditingController typeFr;
   late TextEditingController deadline;
-  late TextEditingController consequencesAr;
-  late TextEditingController consequencesFr;
+
   late TextEditingController noticeDate;
   late TextEditingController index;
 
   late TextEditingController edittypeAr;
   late TextEditingController edittypeFr;
   late TextEditingController editdeadline;
-  late TextEditingController editconsequencesAr;
-  late TextEditingController editconsequencesFr;
+
   late TextEditingController editnoticeDate;
 
   int? selectedsestemTax;
@@ -90,9 +88,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
     Map<String, dynamic> requestData = {
       "tax_id": selectedsestemTax,
       "declaration": typeAr.text,
-      "dependencies": consequencesAr.text,
       "declaration_fr": typeFr.text,
-      "dependencies_fr": consequencesFr.text,
       "deadline": deadline.text,
       "noticeDate": noticeDate.text,
     };
@@ -105,8 +101,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
     if (statusrequest == Statusrequest.success && response["status"] == 1) {
       typeAr.clear();
       typeFr.clear();
-      consequencesAr.clear();
-      consequencesFr.clear();
+
       deadline.clear();
       noticeDate.clear();
       selectedfiltersestemTax = null;
@@ -131,9 +126,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
         "id": id,
         "tax_id": editselectedsestemTax,
         "declaration": edittypeAr.text,
-        "dependencies": editconsequencesAr.text,
         "declaration_fr": edittypeFr.text,
-        "dependencies_fr": editconsequencesFr.text,
         "deadline": editdeadline.text,
         "noticeDate": editnoticeDate.text,
       };
@@ -144,8 +137,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
         if (response["status"] == 1) {
           edittypeAr.clear();
           edittypeFr.clear();
-          editconsequencesAr.clear();
-          editconsequencesFr.clear();
+
           editdeadline.clear();
           editnoticeDate.clear();
           editselectedsestemTax = null;
@@ -215,11 +207,10 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   void setEditData(Appointmentsmodel law) {
     edittypeAr.text = law.declarationAr;
     edittypeFr.text = law.declarationFr;
-    editconsequencesAr.text = law.dependenciesAr;
-    editconsequencesFr.text = law.dependenciesFr;
-    editdeadline.text = law.deadline;
+
+    editdeadline.text = law.deadline.length >= 10 ? law.deadline.substring(5, 10) : law.deadline;
     editselectedsestemTax = law.taxId;
-    editnoticeDate.text = law.noticeDate;
+    editnoticeDate.text = law.noticeDate.length >= 10 ? law.noticeDate.substring(5, 10) : law.noticeDate;
   }
 
   void setIndexData(Appointmentsmodel law) {
@@ -272,16 +263,14 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
     typeAr = TextEditingController();
     typeFr = TextEditingController();
     deadline = TextEditingController();
-    consequencesAr = TextEditingController();
-    consequencesFr = TextEditingController();
+
     noticeDate = TextEditingController();
     index = TextEditingController();
 
     edittypeAr = TextEditingController();
     edittypeFr = TextEditingController();
     editdeadline = TextEditingController();
-    editconsequencesAr = TextEditingController();
-    editconsequencesFr = TextEditingController();
+
     editnoticeDate = TextEditingController();
     viewdata();
     filteredData = data;

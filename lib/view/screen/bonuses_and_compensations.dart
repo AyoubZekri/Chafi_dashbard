@@ -215,6 +215,34 @@ class _BonusesAndCompensationsState extends State<BonusesAndCompensations> {
                                         ),
                                       ),
                                       DataCell(
+                                        Text(
+                                          item.valueType != null 
+                                            ? controller.valueTypes
+                                                .firstWhere(
+                                                  (e) =>
+                                                      e['key'] == item.valueType,
+                                                  orElse: () => {'label': '-'},
+                                                )['label']
+                                                .toString()
+                                                .tr
+                                            : '-'
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          item.actionType != null 
+                                            ? controller.actionTypes
+                                                .firstWhere(
+                                                  (e) =>
+                                                      e['key'] == item.actionType,
+                                                  orElse: () => {'label': '-'},
+                                                )['label']
+                                                .toString()
+                                                .tr
+                                            : '-'
+                                        ),
+                                      ),
+                                      DataCell(
                                         Row(
                                           children: [
                                             InkWell(
@@ -316,6 +344,8 @@ class _BonusesAndCompensationsState extends State<BonusesAndCompensations> {
       DataColumn(label: Text("#")),
       DataColumn(label: Text('name'.tr)),
       DataColumn(label: Text('الفئة'.tr)),
+      DataColumn(label: Text('نوع القيمة'.tr)),
+      DataColumn(label: Text('نوع العملية'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];
   }

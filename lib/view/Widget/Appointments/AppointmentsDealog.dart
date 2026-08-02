@@ -120,33 +120,7 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                 ),
                 const SizedBox(height: 15),
 
-                // الصف الثالث: التبعيات
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustemtextfromfildInfoUser(
-                        myController: isEdit
-                            ? widget.controller.editconsequencesAr
-                            : widget.controller.consequencesAr,
-                        label: 'consequences_ar'.tr,
-                        hintText: "consequences_ar".tr,
-                        valid: (val) => validateInput(val!, 2, 1000, "text"),
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: CustemtextfromfildInfoUser(
-                        myController: isEdit
-                            ? widget.controller.editconsequencesFr
-                            : widget.controller.consequencesFr,
-                        label: 'consequences_fr'.tr,
-                        hintText: 'consequences_fr'.tr,
-                        valid: (val) => validateInput(val!, 2, 1000, "text"),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
+
 
                 CustemDatePickerInfoUser(
                   label: 'notice_date'.tr,

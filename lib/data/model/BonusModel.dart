@@ -7,6 +7,8 @@ class BonusModel {
   final int category;
   final bool isRequired;
   final String? type;
+  final int? valueType;
+  final int? actionType;
   final bool? hasSpecialLogic;
 
   BonusModel({
@@ -16,6 +18,8 @@ class BonusModel {
     required this.category,
     required this.isRequired,
     this.type,
+    this.valueType,
+    this.actionType,
     this.hasSpecialLogic,
   });
 
@@ -27,6 +31,8 @@ class BonusModel {
       category: json['category'],
       isRequired: json['is_required'] == 1,
       type: json['type'],
+      valueType: json['value_type'],
+      actionType: json['action_type'],
       hasSpecialLogic: json['has_special_logic'] != null
           ? json['has_special_logic'] == 1
           : null,

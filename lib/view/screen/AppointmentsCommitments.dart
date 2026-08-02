@@ -214,19 +214,17 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
 
                                       DataCell(
                                         Text(
-                                          item.deadline.toString().substring(
-                                            5,
-                                            10,
-                                          ),
+                                          item.deadline.length >= 10
+                                              ? item.deadline.toString().substring(5, 10)
+                                              : item.deadline.toString(),
                                         ),
                                       ),
-                                      DataCell(Text(item.dependencies)),
+
                                       DataCell(
                                         Text(
-                                          item.noticeDate.toString().substring(
-                                            5,
-                                            10,
-                                          ),
+                                          item.noticeDate.length >= 10
+                                              ? item.noticeDate.toString().substring(5, 10)
+                                              : item.noticeDate.toString(),
                                         ),
                                       ),
 
@@ -399,7 +397,7 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
       DataColumn(label: Text('declaration_type'.tr)),
       DataColumn(label: Text('نوع النضام'.tr)),
       DataColumn(label: Text('deadline'.tr)),
-      DataColumn(label: Text('consequences'.tr)),
+
       DataColumn(label: Text('notice_date'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];

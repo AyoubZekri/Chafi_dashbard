@@ -21,10 +21,26 @@ class Bonusesandcompensationscontroller extends GetxController {
   int? selectcats;
   int? editselectcats;
 
+  int? selectValueType = 2;
+  int? editSelectValueType;
+  
+  int? selectActionType = 1;
+  int? editSelectActionType;
+
   final List<Map<String, Object>> cat = [
     {'key': 1, 'label': "الخاضعة لي الإشتراك والضريبة"},
     {'key': 2, 'label': "الخاضعة لي الضريبة"},
     {'key': 3, 'label': "غير خاضعة"},
+  ];
+
+  final List<Map<String, Object>> valueTypes = [
+    {'key': 1, 'label': "نسبة"},
+    {'key': 2, 'label': "مبلغ"},
+  ];
+
+  final List<Map<String, Object>> actionTypes = [
+    {'key': 1, 'label': "زيادة"},
+    {'key': 2, 'label': "اقتطاع"},
   ];
 
   Bonusesandcompensationsdata bonusesandcompensationsdata =
@@ -82,6 +98,8 @@ class Bonusesandcompensationscontroller extends GetxController {
       "name_ar": namear.text,
       "name_fr": namefr.text,
       "category": selectcats,
+      "value_type": selectValueType,
+      "action_type": selectActionType,
     };
 
     var response = await bonusesandcompensationsdata.adddata(requestData);
@@ -93,6 +111,8 @@ class Bonusesandcompensationscontroller extends GetxController {
       namear.clear();
       namefr.clear();
       selectcats = null;
+      selectValueType = 2;
+      selectActionType = 1;
       print("===========================");
       viewdata();
       Get.back();
@@ -120,6 +140,8 @@ class Bonusesandcompensationscontroller extends GetxController {
         'name_ar': editnamear.text,
         'name_fr': editnamefr.text,
         "category": editselectcats,
+        "value_type": editSelectValueType,
+        "action_type": editSelectActionType,
       };
       var response = await bonusesandcompensationsdata.editdata(data);
       print("=====================================$response");
@@ -184,6 +206,8 @@ class Bonusesandcompensationscontroller extends GetxController {
     editnamear.text = law.nameAr;
     editnamefr.text = law.nameFr;
     editselectcats = law.category;
+    editSelectValueType = law.valueType;
+    editSelectActionType = law.actionType;
     print("===============${editnamear.text}");
   }
 

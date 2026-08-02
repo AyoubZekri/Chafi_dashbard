@@ -101,6 +101,64 @@ class Cstuembonusesandcompensationsdealog extends StatelessWidget {
                       },
                     ),
 
+                    const SizedBox(height: 15),
+
+                    Dropdownfild(
+                      label: 'نوع القيمة'.tr,
+                      hintText: 'إختر نوع القيمة'.tr,
+                      items: controller.valueTypes
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f['key'] as int,
+                              child: Text(
+                                f['label'].toString().tr,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: isEdit
+                          ? controller.editSelectValueType
+                          : controller.selectValueType,
+                      onChanged: (value) {
+                        if (isEdit) {
+                          controller.editSelectValueType = value;
+                        } else {
+                          controller.selectValueType = value;
+                        }
+                        controller.update();
+                      },
+                    ),
+
+                    const SizedBox(height: 15),
+
+                    Dropdownfild(
+                      label: 'نوع العملية'.tr,
+                      hintText: 'إختر نوع العملية'.tr,
+                      items: controller.actionTypes
+                          .map(
+                            (f) => DropdownMenuItem<int>(
+                              value: f['key'] as int,
+                              child: Text(
+                                f['label'].toString().tr,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      value: isEdit
+                          ? controller.editSelectActionType
+                          : controller.selectActionType,
+                      onChanged: (value) {
+                        if (isEdit) {
+                          controller.editSelectActionType = value;
+                        } else {
+                          controller.selectActionType = value;
+                        }
+                        controller.update();
+                      },
+                    ),
+
                     const SizedBox(height: 30),
 
                     Row(

@@ -48,8 +48,8 @@ class Appointmentsmodel {
       declarationFr: json['declaration_fr'] ?? '',
       deadline: json['deadline'] ?? "",
       noticeDate: json['noticeDate'] ?? "",
-      dependenciesAr: json['dependencies'],
-      dependenciesFr: json['dependencies_fr'],
+      dependenciesAr: json['dependencies'] ?? '',
+      dependenciesFr: json['dependencies_fr'] ?? '',
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
