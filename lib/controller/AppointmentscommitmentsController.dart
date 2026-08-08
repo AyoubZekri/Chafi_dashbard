@@ -8,6 +8,11 @@ import '../core/functions/handlingdatacontroller.dart';
 import '../core/services/Services.dart';
 import '../data/model/AppointmentsModel.dart';
 
+class DateControllerPair {
+  TextEditingController appointmentDate = TextEditingController();
+  TextEditingController alertDate = TextEditingController();
+}
+
 class AppointmentscommitmentscontrollerImp extends GetxController {
   // داخلAppointmentscommitmentscontrollerImp
   late TextEditingController typeAr;
@@ -22,6 +27,29 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   late TextEditingController editdeadline;
 
   late TextEditingController editnoticeDate;
+
+  List<DateControllerPair> dateControllers = [];
+  List<DateControllerPair> editdateControllers = [];
+
+  void addDatePair() {
+    dateControllers.add(DateControllerPair());
+    update();
+  }
+
+  void removeDatePair(int index) {
+    dateControllers.removeAt(index);
+    update();
+  }
+
+  void addEditDatePair() {
+    editdateControllers.add(DateControllerPair());
+    update();
+  }
+
+  void removeEditDatePair(int index) {
+    editdateControllers.removeAt(index);
+    update();
+  }
 
   int? selectedsestemTax;
   int? selectedfiltersestemTax = 0;
@@ -91,6 +119,10 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
       "declaration_fr": typeFr.text,
       "deadline": deadline.text,
       "noticeDate": noticeDate.text,
+      "appointment_dates": dateControllers.map((e) => {
+        "appointment_date": e.appointmentDate.text,
+        "alert_date": e.alertDate.text,
+      }).toList(),
     };
 
     var response = await lawdata.adddata(requestData);
@@ -104,6 +136,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
 
       deadline.clear();
       noticeDate.clear();
+      dateControllers.clear();
       selectedfiltersestemTax = null;
       selectedsestemTax = null;
       viewdata();
@@ -129,6 +162,10 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
         "declaration_fr": edittypeFr.text,
         "deadline": editdeadline.text,
         "noticeDate": editnoticeDate.text,
+        "appointment_dates": editdateControllers.map((e) => {
+          "appointment_date": e.appointmentDate.text,
+          "alert_date": e.alertDate.text,
+        }).toList(),
       };
       var response = await lawdata.editdata(data);
       print("=====================================$response");
@@ -140,6 +177,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
 
           editdeadline.clear();
           editnoticeDate.clear();
+          editdateControllers.clear();
           editselectedsestemTax = null;
           Get.back();
           viewdata();
@@ -211,6 +249,14 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
     editdeadline.text = law.deadline.length >= 10 ? law.deadline.substring(5, 10) : law.deadline;
     editselectedsestemTax = law.taxId;
     editnoticeDate.text = law.noticeDate.length >= 10 ? law.noticeDate.substring(5, 10) : law.noticeDate;
+    
+    editdateControllers.clear();
+    for (var date in law.appointmentDates) {
+      var pair = DateControllerPair();
+      pair.appointmentDate.text = date.appointmentDate;
+      pair.alertDate.text = date.alertDate;
+      editdateControllers.add(pair);
+    }
   }
 
   void setIndexData(Appointmentsmodel law) {

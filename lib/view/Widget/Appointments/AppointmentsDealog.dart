@@ -110,25 +110,72 @@ class _CustemactivitysdealogState extends State<Appointmentsdealog> {
                 ),
                 const SizedBox(height: 15),
 
-                CustemDatePickerInfoUser(
-                  label: 'deadline'.tr,
-                  hintText: 'deadline_hint'.tr,
-                  isDayMonthOnly: true,
-                  controller: isEdit
-                      ? widget.controller.editdeadline
-                      : widget.controller.deadline,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'التواريخ'.tr,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.add, color: AppColor.typography),
+                      onPressed: () {
+                        setState(() {
+                          if (isEdit) {
+                            widget.controller.addEditDatePair();
+                          } else {
+                            widget.controller.addDatePair();
+                          }
+                        });
+                      },
+                    )
+                  ],
                 ),
-                const SizedBox(height: 15),
-
-
-
-                CustemDatePickerInfoUser(
-                  label: 'notice_date'.tr,
-                  hintText: 'notice_date_hint'.tr,
-                  isDayMonthOnly: true,
-                  controller: isEdit
-                      ? widget.controller.editnoticeDate
-                      : widget.controller.noticeDate,
+                const SizedBox(height: 10),
+                Builder(
+                  builder: (context) {
+                    var list = isEdit ? widget.controller.editdateControllers : widget.controller.dateControllers;
+                    return Column(
+                      children: List.generate(list.length, (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: CustemDatePickerInfoUser(
+                                  label: 'الموعد'.tr,
+                                  hintText: 'الموعد'.tr,
+                                  isDayMonthOnly: true,
+                                  controller: list[index].appointmentDate,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: CustemDatePickerInfoUser(
+                                  label: 'التنبيه'.tr,
+                                  hintText: 'التنبيه'.tr,
+                                  isDayMonthOnly: true,
+                                  controller: list[index].alertDate,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  setState(() {
+                                    if (isEdit) {
+                                      widget.controller.removeEditDatePair(index);
+                                    } else {
+                                      widget.controller.removeDatePair(index);
+                                    }
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                    );
+                  }
                 ),
 
                 const SizedBox(height: 30),
@@ -279,3 +326,97 @@ class AppointmentsIndexDialog extends StatelessWidget {
 }
 
 enum AppointmentsdealogMode { add, edit }
+
+class AppointmentsDatesListDialog extends StatelessWidget {
+  final Appointmentsmodel appointmentsmodel;
+
+  const AppointmentsDatesListDialog({
+    super.key,
+    required this.appointmentsmodel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Container(
+        width: 400,
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'التواريخ والتنبيهات'.tr,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            if (appointmentsmodel.appointmentDates.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Center(
+                  child: Text('لا توجد تواريخ'.tr, style: const TextStyle(color: Colors.grey)),
+                ),
+              )
+            else
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 400),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: appointmentsmodel.appointmentDates.length,
+                  itemBuilder: (context, index) {
+                    final dateItem = appointmentsmodel.appointmentDates[index];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('الموعد'.tr, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                              Text(dateItem.appointmentDate.isEmpty ? '-' : dateItem.appointmentDate, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('التنبيه'.tr, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                              Text(dateItem.alertDate.isEmpty ? '-' : dateItem.alertDate, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            const SizedBox(height: 20),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColor.typography,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onPressed: () => Get.back(),
+                child: Text('cancel'.tr, style: const TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

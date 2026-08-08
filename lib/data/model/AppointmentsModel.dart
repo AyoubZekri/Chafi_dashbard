@@ -1,5 +1,28 @@
 import 'package:get/get.dart';
 
+class AppointmentDateModel {
+  final int id;
+  final int appointmentId;
+  final String appointmentDate;
+  final String alertDate;
+
+  AppointmentDateModel({
+    required this.id,
+    required this.appointmentId,
+    required this.appointmentDate,
+    required this.alertDate,
+  });
+
+  factory AppointmentDateModel.fromJson(Map<String, dynamic> json) {
+    return AppointmentDateModel(
+      id: json['id'],
+      appointmentId: json['appointment_id'],
+      appointmentDate: json['appointment_date'] ?? '',
+      alertDate: json['alert_date'] ?? '',
+    );
+  }
+}
+
 class Appointmentsmodel {
   final int id;
   final int index;
@@ -16,6 +39,7 @@ class Appointmentsmodel {
 
   final DateTime createdAt;
   final DateTime updatedAt;
+  final List<AppointmentDateModel> appointmentDates;
 
   Appointmentsmodel({
     required this.id,
@@ -29,6 +53,7 @@ class Appointmentsmodel {
     required this.createdAt,
     required this.updatedAt,
     required this.noticeDate,
+    required this.appointmentDates,
   });
 
   String get declaration {
@@ -40,6 +65,9 @@ class Appointmentsmodel {
   }
 
   factory Appointmentsmodel.fromJson(Map<String, dynamic> json) {
+    var list = json['appointment_dates'] as List? ?? [];
+    List<AppointmentDateModel> datesList = list.map((i) => AppointmentDateModel.fromJson(i)).toList();
+
     return Appointmentsmodel(
       id: json['id'],
       index: json['index'],
@@ -52,6 +80,7 @@ class Appointmentsmodel {
       dependenciesFr: json['dependencies_fr'] ?? '',
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      appointmentDates: datesList,
     );
   }
 }

@@ -34,7 +34,7 @@ class NotificationModel {
       contentFr: json['content_fr'] ?? '',
       typeNotification: json['type_notification'],
       taxId: json['tax_id'],
-      timer: json['timer'],
+      timer: json['timer'] ?? '',
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );

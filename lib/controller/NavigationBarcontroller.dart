@@ -261,7 +261,7 @@ class NavigationBarcontrollerImp extends GetxController {
     },
 
     {
-      'name': "قوانين",
+      'name': "القوانين",
       'icon': Icons.gavel_outlined,
       'route': Approutes.law,
 

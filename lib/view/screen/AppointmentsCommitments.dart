@@ -213,22 +213,6 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                       ),
 
                                       DataCell(
-                                        Text(
-                                          item.deadline.length >= 10
-                                              ? item.deadline.toString().substring(5, 10)
-                                              : item.deadline.toString(),
-                                        ),
-                                      ),
-
-                                      DataCell(
-                                        Text(
-                                          item.noticeDate.length >= 10
-                                              ? item.noticeDate.toString().substring(5, 10)
-                                              : item.noticeDate.toString(),
-                                        ),
-                                      ),
-
-                                      DataCell(
                                         Row(
                                           children: [
                                             InkWell(
@@ -327,6 +311,32 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                                             ),
                                             const SizedBox(width: 10),
                                             InkWell(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      AppointmentsDatesListDialog(
+                                                    appointmentsmodel: item,
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.all(
+                                                  6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.purple,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.calendar_month,
+                                                  color: Colors.white,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),                                            InkWell(
                                               onTap: () async {
                                                 await showCustomConfirmationDialog(
                                                   context,
@@ -396,9 +406,6 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
       DataColumn(label: Text("#")),
       DataColumn(label: Text('declaration_type'.tr)),
       DataColumn(label: Text('نوع النضام'.tr)),
-      DataColumn(label: Text('deadline'.tr)),
-
-      DataColumn(label: Text('notice_date'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];
   }
