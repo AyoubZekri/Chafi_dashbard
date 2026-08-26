@@ -52,7 +52,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
   }
 
   int? selectedsestemTax;
-  int? selectedfiltersestemTax = 0;
+  int? selectedfiltersestemTax = -1;
 
   int? editselectedsestemTax;
 
@@ -77,7 +77,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
     update();
 
     final requst = {
-      "tax_id": selectedfiltersestemTax == 0 ? null : selectedfiltersestemTax,
+      "tax_id": selectedfiltersestemTax == -1 ? null : selectedfiltersestemTax,
     };
 
     var response = await lawdata.viewdata(requst);
@@ -137,7 +137,7 @@ class AppointmentscommitmentscontrollerImp extends GetxController {
       deadline.clear();
       noticeDate.clear();
       dateControllers.clear();
-      selectedfiltersestemTax = null;
+      selectedfiltersestemTax = -1;
       selectedsestemTax = null;
       viewdata();
       Get.back();

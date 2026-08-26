@@ -197,7 +197,7 @@ class _ActivitiesState extends State<Activities> {
                                       DataCell(
                                         Text((realIndex + 1).toString()),
                                       ),
-                                      DataCell(Text(item.localizedName)),
+                                      DataCell(Text(item.localizedBody)),
                                       DataCell(Text(item.nataireName)),
                                       DataCell(
                                         Text(

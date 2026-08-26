@@ -9,7 +9,7 @@ import '../../../core/functions/valiedinput.dart';
 import '../TextFild/LabeledTextField.dart';
 
 class NatureoftheactivityDialog extends StatelessWidget {
-final NatureoftheactivityDialogMode mode;
+  final NatureoftheactivityDialogMode mode;
   final Natureoftheactivitycontroller controller;
   final int? id;
 
@@ -52,7 +52,7 @@ final NatureoftheactivityDialogMode mode;
                       : controller.namear,
                   label: "name_ar".tr,
                   hintText: 'enter_name_here'.tr,
-                  valid: (val) => validateInput(val!, 1, 20, "text"),
+                  valid: (val) => validateInput(val!, 1, 100, "text"),
                 ),
 
                 const SizedBox(height: 15),
@@ -62,7 +62,7 @@ final NatureoftheactivityDialogMode mode;
                       : controller.namefr,
                   label: "name_fr".tr,
                   hintText: 'enter_name_here'.tr,
-                  valid: (val) => validateInput(val!, 1, 20, "text"),
+                  valid: (val) => validateInput(val!, 1, 100, "text"),
                 ),
                 const SizedBox(height: 30),
                 Row(

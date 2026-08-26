@@ -196,6 +196,85 @@ class _PostDialogState extends State<PostDialog> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 15),
+
+                // ===== مدة القراءة =====
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustemtextfromfildInfoUser(
+                        myController: isEdit
+                            ? controller.editReadTime
+                            : controller.readTime,
+                        label: 'مدة القراءة (دقائق)'.tr,
+                        hintText: 'مثال: 5'.tr,
+                        valid: (val) => validateInput(val!, 0, 100, "text"),
+                      ),
+                    ),
+                  ],
+                ),
+                
+                const SizedBox(height: 15),
+
+                // ===== نصيحة شافي =====
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustemtextfromfildInfoUser(
+                        maxLines: 2,
+                        myController: isEdit
+                            ? controller.editChafiAdvice
+                            : controller.chafiAdvice,
+                        label: 'نصيحة شافي (بالعربية)'.tr,
+                        hintText: 'أدخل نصيحة شافي'.tr,
+                        valid: (val) => validateInput(val!, 0, 1000, "text"),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: CustemtextfromfildInfoUser(
+                        maxLines: 2,
+                        myController: isEdit
+                            ? controller.editChafiAdviceFr
+                            : controller.chafiAdviceFr,
+                        label: 'نصيحة شافي (بالفرنسية)'.tr,
+                        hintText: 'أدخل نصيحة شافي'.tr,
+                        valid: (val) => validateInput(val!, 0, 1000, "text"),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 15),
+
+                // ===== المصدر القانوني =====
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustemtextfromfildInfoUser(
+                        maxLines: 2,
+                        myController: isEdit
+                            ? controller.editLegalSource
+                            : controller.legalSource,
+                        label: 'المصدر القانوني (بالعربية)'.tr,
+                        hintText: 'أدخل المصدر القانوني'.tr,
+                        valid: (val) => validateInput(val!, 0, 1000, "text"),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: CustemtextfromfildInfoUser(
+                        maxLines: 2,
+                        myController: isEdit
+                            ? controller.editLegalSourceFr
+                            : controller.legalSourceFr,
+                        label: 'المصدر القانوني (بالفرنسية)'.tr,
+                        hintText: 'أدخل المصدر القانوني'.tr,
+                        valid: (val) => validateInput(val!, 0, 1000, "text"),
+                      ),
+                    ),
+                  ],
+                ),
 
                 const SizedBox(height: 30),
 

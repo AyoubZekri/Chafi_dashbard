@@ -32,6 +32,18 @@ class ReportscontrollerImp extends Reportscontroller {
   final editinfoar = TextEditingController();
   final editinfofr = TextEditingController();
 
+  final readTime = TextEditingController();
+  final chafiAdvice = TextEditingController();
+  final chafiAdviceFr = TextEditingController();
+  final legalSource = TextEditingController();
+  final legalSourceFr = TextEditingController();
+
+  final editReadTime = TextEditingController();
+  final editChafiAdvice = TextEditingController();
+  final editChafiAdviceFr = TextEditingController();
+  final editLegalSource = TextEditingController();
+  final editLegalSourceFr = TextEditingController();
+
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   Postdata postdata = Postdata(Get.find());
@@ -86,6 +98,11 @@ class ReportscontrollerImp extends Reportscontroller {
       'title_fr': titlefr1.text,
       'title2_fr': titlefr2.text,
       'body_fr': infofr.text,
+      'read_time': readTime.text,
+      'chafi_advice': chafiAdvice.text,
+      'chafi_advice_fr': chafiAdviceFr.text,
+      'legal_source': legalSource.text,
+      'legal_source_fr': legalSourceFr.text,
     };
 
     print("=================$requestData");
@@ -102,6 +119,11 @@ class ReportscontrollerImp extends Reportscontroller {
       titlefr2.clear();
       infoar.clear();
       infofr.clear();
+      readTime.clear();
+      chafiAdvice.clear();
+      chafiAdviceFr.clear();
+      legalSource.clear();
+      legalSourceFr.clear();
       file = null;
       Get.back();
       viewdata();
@@ -161,6 +183,11 @@ class ReportscontrollerImp extends Reportscontroller {
       'title_fr': edittitlefr1.text,
       'title2_fr': edittitlefr2.text,
       'body_fr': editinfofr.text,
+      'read_time': editReadTime.text,
+      'chafi_advice': editChafiAdvice.text,
+      'chafi_advice_fr': editChafiAdviceFr.text,
+      'legal_source': editLegalSource.text,
+      'legal_source_fr': editLegalSourceFr.text,
     };
 
     print("=================$requestData");
@@ -177,6 +204,11 @@ class ReportscontrollerImp extends Reportscontroller {
       edittitlefr2.clear();
       editinfoar.clear();
       editinfofr.clear();
+      editReadTime.clear();
+      editChafiAdvice.clear();
+      editChafiAdviceFr.clear();
+      editLegalSource.clear();
+      editLegalSourceFr.clear();
       file = null;
       Get.back();
       viewdata();
@@ -194,6 +226,11 @@ class ReportscontrollerImp extends Reportscontroller {
     editinfofr.text = item.bodyFr;
     edittitlear2.text = item.title2;
     edittitlefr2.text = item.title2Fr;
+    editReadTime.text = item.readTime;
+    editChafiAdvice.text = item.chafiAdvice;
+    editChafiAdviceFr.text = item.chafiAdviceFr;
+    editLegalSource.text = item.legalSource;
+    editLegalSourceFr.text = item.legalSourceFr;
     editfile = item.image;
     file = null;
     update();

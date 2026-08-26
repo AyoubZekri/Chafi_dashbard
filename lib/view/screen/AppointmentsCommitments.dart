@@ -121,6 +121,39 @@ class _AppointmentscommitmentsState extends State<Appointmentscommitments> {
                               ),
                             ],
                           ),
+                          
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('نوع النضام'.tr, style: const TextStyle(color: Color(0xFF5A6A85))),
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                width: 150,
+                                child: CustemDropDownField(
+                                  items: [
+                                    DropdownMenuItem<int>(
+                                      value: -1,
+                                      child: Text("الكل".tr),
+                                    ),
+                                    ...controller.sestemTax.map((f) {
+                                      return DropdownMenuItem<int>(
+                                        value: f['key'] as int,
+                                        child: Text(f['label'].toString().tr, style: const TextStyle(fontSize: 14)),
+                                      );
+                                    }).toList(),
+                                  ],
+                                  value: controller.selectedfiltersestemTax,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      controller.selectedfiltersestemTax = value;
+                                      controller.viewdata();
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+
                           SizedBox(
                             width: isMobile ? constraints.maxWidth : 260,
                             child: SearchField(
