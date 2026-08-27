@@ -34,7 +34,7 @@ class AddappcontrollerImp extends Addappcontroller {
   int? type;
 
   final List<Map<String, Object>> calcelators = [
-    {'key': 0, 'label': "حاسبة النظام الحقيقي", 'route': 'calPersontype'},
+    {'key': 0, 'label': "التسبيقات على الدخل_طويلة", 'route': 'calPersontype'},
     {'key': 1, 'label': "حاسبة G12", 'route': 'calactivityType'},
     {'key': 2, 'label': "حاسبة G12BES", 'route': 'Typeacteviteg12bes'},
     {'key': 3, 'label': "كشف التلخيص السنوي", 'route': 'Lossorprofit'},
@@ -48,7 +48,7 @@ class AddappcontrollerImp extends Addappcontroller {
     },
 
     {'key': 8, 'label': "البحث والتطوير", 'route': 'Researchanddevelopment'},
-    {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueisttype'},
+    {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueistinitialactivity'},
     {'key': 10, 'label': "المداخيل العقارية", 'route': 'Realestateincometype'},
     {
       'key': 11,
