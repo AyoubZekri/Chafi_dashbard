@@ -198,23 +198,6 @@ class _PostDialogState extends State<PostDialog> {
                 ),
                 const SizedBox(height: 15),
 
-                // ===== مدة القراءة =====
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustemtextfromfildInfoUser(
-                        myController: isEdit
-                            ? controller.editReadTime
-                            : controller.readTime,
-                        label: 'مدة القراءة (دقائق)'.tr,
-                        hintText: 'مثال: 5'.tr,
-                        valid: (val) => validateInput(val!, 0, 100, "text"),
-                      ),
-                    ),
-                  ],
-                ),
-                
-                const SizedBox(height: 15),
 
                 // ===== نصيحة شافي =====
                 Row(

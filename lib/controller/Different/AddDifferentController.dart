@@ -43,7 +43,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     },
 
     {'key': 8, 'label': "البحث والتطوير", 'route': 'Researchanddevelopment'},
-    {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueisttype'},
+    {'key': 9, 'label': "المركبات السياحية", 'route': 'Toueistinitialactivity'},
     {'key': 10, 'label': "المداخيل العقارية", 'route': 'Realestateincometype'},
     {
       'key': 11,
