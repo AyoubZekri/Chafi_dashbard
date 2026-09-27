@@ -66,6 +66,17 @@ class Applink {
   static const String taxAndAppadd = "$server/TaxAndApp/add";
   static const String taxAndAppedit = "$server/TaxAndApp/Edit";
   static const String taxAndAppdelet = "$server/TaxAndApp/Delete";
+  
+  static const String taxSearchShow = "$server/TaxSearch/Show";
+  static const String taxSearchAdd = "$server/TaxSearch/add";
+  static const String taxSearchEdit = "$server/TaxSearch/Edit";
+  static const String taxSearchDelete = "$server/TaxSearch/Delete";
+
+  static const String taxArticleShow = "$server/TaxSearch/Article/Show";
+  static const String taxArticleAdd = "$server/TaxSearch/Article/add";
+  static const String taxArticleEdit = "$server/TaxSearch/Article/Edit";
+  static const String taxArticleDelete = "$server/TaxSearch/Article/Delete";
+  
   static const String usersShow = "$server/User/Show";
 
   static const String login = "$server/login";

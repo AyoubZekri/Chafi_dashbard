@@ -11,6 +11,73 @@ import '../services/Services.dart';
 import 'Statusrequest.dart';
 
 class Crud {
+  /// آخر رسالة خطأ مقروءة من السيرفر (لعرضها للمستخدم إن احتجنا)
+  static String? lastError;
+
+  /// يحوّل رد السيرفر الفاشل إلى رسالة قصيرة مقروءة:
+  /// JSON -> حقل message (أو أول خطأ تحقق)، HTML -> العنوان والفقرة بدون وسوم
+  static String describeError(http.Response response) {
+    final body = response.body.trim();
+    String detail = '';
+
+    try {
+      final json = jsonDecode(body);
+      if (json is Map) {
+        final errors = json['errors'];
+        if (errors is Map && errors.isNotEmpty) {
+          final first = errors.values.first;
+          detail = first is List && first.isNotEmpty
+              ? first.first.toString()
+              : first.toString();
+        } else if (json['message'] != null) {
+          detail = json['message'].toString();
+        }
+      }
+    } catch (_) {
+      if (body.startsWith('<')) {
+        String? tag(String name) {
+          final m = RegExp('<$name[^>]*>([\\s\\S]*?)</$name>',
+                  caseSensitive: false)
+              .firstMatch(body);
+          if (m == null) return null;
+          final text = m
+              .group(1)!
+              .replaceAll(RegExp(r'<[^>]+>'), ' ')
+              .replaceAll(RegExp(r'\s+'), ' ')
+              .trim();
+          return text.isEmpty ? null : text;
+        }
+
+        detail = [tag('title') ?? tag('h1'), tag('p')]
+            .whereType<String>()
+            .toSet()
+            .join(' - ');
+      } else {
+        detail = body.length > 200 ? '${body.substring(0, 200)}...' : body;
+      }
+    }
+
+    final reason = response.reasonPhrase ?? '';
+    return detail.isEmpty
+        ? '${response.statusCode} $reason'.trim()
+        : '${response.statusCode}: $detail';
+  }
+
+  /// حماية الاستضافة (WAF) ترفض بـ 403 أي ملف في اسمه ' أو ; أو = (مثل l'impot.pdf)
+  /// لذلك نبقي فقط الحروف والأرقام والمسافة و . _ - ( ). الباك اند يعطي
+  /// الملف اسماً عشوائياً عند التخزين، فالاسم الأصلي لا يهم.
+  static String safeFileName(String name) {
+    final cleaned = name
+        .replaceAll(RegExp(r'[^\p{L}\p{N}\s._()-]', unicode: true), '_')
+        .replaceAll(RegExp(r'_+'), '_');
+    return cleaned.trim().isEmpty ? 'file' : cleaned.trim();
+  }
+
+  void _logError(String label, String url, http.Response response) {
+    lastError = describeError(response);
+    print("❌ $label: $url\n   -> $lastError");
+  }
+
   // =========================
   // Helpers (TOKEN + HEADERS)
   // =========================
@@ -61,7 +128,7 @@ class Crud {
         return Right(jsonDecode(response.body));
       }
 
-      print("❌ API Error: ${response.body}");
+      _logError("API Error", linkurl, response);
       return const Left(Statusrequest.failure);
     } catch (e) {
       print("❌ Exception postDataheaders: $e");
@@ -92,7 +159,7 @@ class Crud {
         return Right(jsonDecode(response.body));
       }
 
-      print("❌ Logout Error: ${response.body}");
+      _logError("Logout Error", linkurl, response);
       return const Left(Statusrequest.failure);
     } catch (e) {
       print("❌ Exception postDataheadersLogout: $e");
@@ -123,7 +190,7 @@ class Crud {
         return Right(jsonDecode(response.body));
       }
 
-      print("❌ API Error: ${response.body}");
+      _logError("API Error", linkurl, response);
       return const Left(Statusrequest.failure);
     } catch (e, s) {
       print("❌ Exception postData: $e");
@@ -153,7 +220,7 @@ class Crud {
         return Right(jsonDecode(response.body));
       }
 
-      print("❌ GET Error: ${response.body}");
+      _logError("GET Error", linkurl, response);
       return const Left(Statusrequest.failure);
     } catch (e) {
       print("❌ Exception getData: $e");
@@ -188,7 +255,7 @@ class Crud {
           await http.MultipartFile.fromPath(
             namerequest,
             image.path,
-            filename: basename(image.path),
+            filename: safeFileName(basename(image.path)),
           ),
         );
       }
@@ -204,7 +271,7 @@ class Crud {
         return Right(jsonDecode(response.body));
       }
 
-      print("❌ Multipart Error: ${response.statusCode} - ${response.body}");
+      _logError("Multipart Error", url, response);
       return const Left(Statusrequest.failure);
     } catch (e) {
       print("❌ Exception addRequestWithImageOne: $e");

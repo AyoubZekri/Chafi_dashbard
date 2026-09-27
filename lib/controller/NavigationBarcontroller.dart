@@ -35,6 +35,8 @@ import '../view/screen/bonuses_and_compensations.dart';
 import '../view/screen/different.dart';
 import '../view/screen/institutions/ChildCategories.dart';
 import '../view/screen/institutions/JoiningCategories.dart';
+import '../view/screen/TaxSearchFiles.dart';
+import '../view/screen/TaxSearchArticles.dart';
 
 abstract class NavigationBarcontroller extends GetxController {
   // ignore: non_constant_identifier_names
@@ -71,6 +73,23 @@ class NavigationBarcontrollerImp extends GetxController {
       'icon': Icons.people,
       'page': () => Users(),
       'subPages': [],
+    },
+    {
+      'name': 'جبايتك',
+      'icon': Icons.folder_shared_outlined,
+      'page': "",
+      'subPages': [
+        {
+          'name': 'الملفات',
+          'icon': Icons.folder_open_outlined,
+          'page': () => TaxSearchFiles(),
+        },
+        {
+          'name': 'المواد',
+          'icon': Icons.article_outlined,
+          'page': () => TaxSearchArticles(),
+        },
+      ],
     },
 
     {
