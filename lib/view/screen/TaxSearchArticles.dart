@@ -38,7 +38,7 @@ class _TaxSearchArticlesState extends State<TaxSearchArticles> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(item.label),
+        title: Text(item.localizedLabel),
         content: SizedBox(
           width: 700,
           child: SingleChildScrollView(
@@ -46,7 +46,18 @@ class _TaxSearchArticlesState extends State<TaxSearchArticles> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SelectableText(item.text),
+                if (item.missingTranslation)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      'لا توجد ترجمة إنجليزية لهذه المادة'.tr,
+                      style: TextStyle(color: Colors.orange.shade700),
+                    ),
+                  ),
+                SelectableText(
+                  item.localizedText,
+                  textDirection: item.textDirection,
+                ),
                 if (item.notes.isNotEmpty) ...[
                   const Divider(height: 32),
                   Text(
@@ -92,7 +103,7 @@ class _TaxSearchArticlesState extends State<TaxSearchArticles> {
                 children: [
                   Expanded(
                     child: Text(
-                      '${'جداول'.tr} ${item.label}',
+                      '${'جداول'.tr} ${item.localizedLabel}',
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -341,7 +352,19 @@ class _TaxSearchArticlesState extends State<TaxSearchArticles> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(item.label, softWrap: true),
+                                            Text(
+                                              item.localizedLabel,
+                                              softWrap: true,
+                                            ),
+                                            if (item.missingTranslation)
+                                              Text(
+                                                'بدون ترجمة إنجليزية'.tr,
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  color:
+                                                      Colors.orange.shade700,
+                                                ),
+                                              ),
                                             if (item.tablesCount > 0)
                                               Row(
                                                 children: [
@@ -366,7 +389,7 @@ class _TaxSearchArticlesState extends State<TaxSearchArticles> {
                                       SizedBox(
                                         width: 180,
                                         child: Text(
-                                          item.documentTitle ?? '-',
+                                          item.localizedDocumentTitle ?? '-',
                                           softWrap: true,
                                         ),
                                       ),

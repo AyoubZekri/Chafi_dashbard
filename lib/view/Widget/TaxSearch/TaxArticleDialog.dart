@@ -217,6 +217,27 @@ class _TaxArticleDialogState extends State<TaxArticleDialog> {
                 ),
                 const SizedBox(height: 15),
 
+                // النسخة الإنجليزية (اختيارية)
+                CustemtextfromfildInfoUser(
+                  hintText: 'Article 12 bis',
+                  label: 'التسمية (بالإنجليزية)'.tr,
+                  myController: controller.labelEnController,
+                  valid: (val) => val == null || val.isEmpty
+                      ? null
+                      : validateInput(val, 1, 255, "text"),
+                ),
+                const SizedBox(height: 15),
+                CustemtextfromfildInfoUser(
+                  hintText: 'Article text in English',
+                  label: 'نص المادة (بالإنجليزية)'.tr,
+                  maxLines: 8,
+                  myController: controller.textEnController,
+                  valid: (val) => val == null || val.isEmpty
+                      ? null
+                      : validateInput(val, 1, 16000000, "text"),
+                ),
+                const SizedBox(height: 15),
+
                 // الترتيب + الصفحات + الحالة
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

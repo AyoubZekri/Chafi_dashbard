@@ -119,7 +119,7 @@ class TaxSearchController extends GetxController {
       fileController.clear();
       file = null;
       viewdata();
-      showSnackbar("نجاح".tr, "تمت الإضافة بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تمت الإضافة بنجاح".tr, Colors.green);
     } else {
       showSnackbar("خطأ".tr, _failMessage(response, "فشلت الإضافة"), Colors.red);
     }
@@ -154,7 +154,7 @@ class TaxSearchController extends GetxController {
       editFileController.clear();
       file = null;
       viewdata();
-      showSnackbar("نجاح".tr, "تم التعديل بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم التعديل بنجاح".tr, Colors.green);
     } else {
       showSnackbar("خطأ".tr, _failMessage(response, "فشل التعديل"), Colors.red);
     }
@@ -177,9 +177,11 @@ class TaxSearchController extends GetxController {
   // رسالة الباك اند إن وجدت، وإلا رسالة السيرفر (مثل 403) المستخرجة في Crud
   String _failMessage(dynamic response, String fallback) {
     if (response is Map && response["message"] != null) {
-      return "$fallback: ${response["message"]}";
+      return "${fallback.tr}: ${response["message"]}";
     }
-    return Crud.lastError == null ? fallback : "$fallback (${Crud.lastError})";
+    return Crud.lastError == null
+        ? fallback.tr
+        : "${fallback.tr} (${Crud.lastError})";
   }
 
   void filterData(String query) {

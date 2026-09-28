@@ -1,7 +1,5 @@
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
 import '../LawDocumentArticleMixin.dart';
-import '../../data/model/TaxArticleModel.dart';
-import '../../data/model/TaxSearchModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,8 +8,6 @@ import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
-import '../../data/datasource/Remote/TaxArticlesData.dart';
-import '../../data/datasource/Remote/TaxSearchData.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';

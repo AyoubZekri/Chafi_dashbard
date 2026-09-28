@@ -14,6 +14,8 @@ class TaxArticlesController extends GetxController {
   final numberController = TextEditingController();
   final numberIntController = TextEditingController();
   final textController = TextEditingController();
+  final labelEnController = TextEditingController();
+  final textEnController = TextEditingController();
   final sortOrderController = TextEditingController();
   final pageStartController = TextEditingController();
   final pageEndController = TextEditingController();
@@ -99,6 +101,8 @@ class TaxArticlesController extends GetxController {
     numberController.clear();
     numberIntController.clear();
     textController.clear();
+    labelEnController.clear();
+    textEnController.clear();
     sortOrderController.clear();
     pageStartController.clear();
     pageEndController.clear();
@@ -114,6 +118,8 @@ class TaxArticlesController extends GetxController {
     numberController.text = item.number ?? '';
     numberIntController.text = item.numberInt?.toString() ?? '';
     textController.text = item.text;
+    labelEnController.text = item.labelEn ?? '';
+    textEnController.text = item.textEn ?? '';
     sortOrderController.text = item.sortOrder.toString();
     pageStartController.text = item.pageStart?.toString() ?? '';
     pageEndController.text = item.pageEnd?.toString() ?? '';
@@ -154,6 +160,8 @@ class TaxArticlesController extends GetxController {
       "number": numberController.text.trim(),
       "number_int": numberIntController.text.trim(),
       "text": textController.text,
+      "label_en": labelEnController.text.trim(),
+      "text_en": textEnController.text,
       "is_repealed": formIsRepealed ? "1" : "0",
       "page_start": pageStartController.text.trim(),
       "page_end": pageEndController.text.trim(),
@@ -175,7 +183,7 @@ class TaxArticlesController extends GetxController {
   String _errorMessage(dynamic response, String fallback) {
     return response is Map && response["message"] != null
         ? response["message"].toString()
-        : fallback;
+        : fallback.tr;
   }
 
   Future<void> adddata() async {
@@ -191,7 +199,7 @@ class TaxArticlesController extends GetxController {
         (response["status"] == 1 || response["status"] == true)) {
       clearForm();
       viewdata();
-      showSnackbar("نجاح".tr, "تمت الإضافة بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تمت الإضافة بنجاح".tr, Colors.green);
     } else {
       viewdata();
       showSnackbar("خطأ".tr, _errorMessage(response, "فشلت الإضافة"), Colors.red);
@@ -214,7 +222,7 @@ class TaxArticlesController extends GetxController {
         (response["status"] == 1 || response["status"] == true)) {
       clearForm();
       viewdata();
-      showSnackbar("نجاح".tr, "تم التعديل بنجاح", Colors.green);
+      showSnackbar("نجاح".tr, "تم التعديل بنجاح".tr, Colors.green);
     } else {
       viewdata();
       showSnackbar("خطأ".tr, _errorMessage(response, "فشل التعديل"), Colors.red);

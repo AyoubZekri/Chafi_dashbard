@@ -60,7 +60,7 @@ class LawDocumentArticleRow extends StatelessWidget {
             searchHint: "ابحث بالرقم أو التسمية".tr,
             searchText: (id) {
               final article = articles.firstWhere((a) => a.id == id);
-              return '${article.label} ${article.number ?? ''}';
+              return '${article.label} ${article.labelEn ?? ''} ${article.number ?? ''}';
             },
             hintText: documentId == null
                 ? "إختر الملف أولاً".tr
@@ -72,7 +72,7 @@ class LawDocumentArticleRow extends StatelessWidget {
                   (article) => DropdownMenuItem<int>(
                     value: article.id,
                     child: Text(
-                      article.label,
+                      article.localizedLabel,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 14),
                     ),

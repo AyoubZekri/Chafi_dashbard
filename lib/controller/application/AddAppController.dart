@@ -2,10 +2,6 @@ import 'package:chafi_dashboard/data/datasource/Remote/Categorydata.dart';
 import '../LawDocumentArticleMixin.dart';
 import 'package:chafi_dashboard/data/datasource/Remote/TaxAndAppData.dart';
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
-import '../../data/model/TaxArticleModel.dart';
-import '../../data/model/TaxSearchModel.dart';
-import '../../data/datasource/Remote/TaxSearchData.dart';
-import '../../data/datasource/Remote/TaxArticlesData.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

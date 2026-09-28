@@ -1,3 +1,6 @@
+import 'package:flutter/widgets.dart' show TextDirection;
+import 'package:get/get.dart';
+
 int? _toInt(dynamic v) => v == null ? null : int.tryParse(v.toString());
 
 bool _toBool(dynamic v) => v == true || v.toString() == '1';
@@ -8,14 +11,17 @@ class TaxArticleModel {
   final int? nodeId;
   final String part;
   final String label;
+  final String? labelEn;
   final String? number;
   final int? numberInt;
   final int sortOrder;
   final String text;
+  final String? textEn;
   final bool isRepealed;
   final int? pageStart;
   final int? pageEnd;
   final String? documentTitle;
+  final String? documentTitleFr;
   final String? nodeLabel;
   final List<String> notes;
   final List<TaxArticleTable> tables;
@@ -27,14 +33,17 @@ class TaxArticleModel {
     this.nodeId,
     required this.part,
     required this.label,
+    this.labelEn,
     this.number,
     this.numberInt,
     required this.sortOrder,
     required this.text,
+    this.textEn,
     required this.isRepealed,
     this.pageStart,
     this.pageEnd,
     this.documentTitle,
+    this.documentTitleFr,
     this.nodeLabel,
     required this.notes,
     required this.tables,
@@ -42,6 +51,25 @@ class TaxArticleModel {
   });
 
   int get tablesCount => tables.length;
+
+  bool get _isArabic => (Get.locale?.languageCode ?? 'ar') == 'ar';
+
+  bool get hasTranslation => (textEn ?? '').trim().isNotEmpty;
+
+  /// العرض حسب لغة الداشبورد: العربية أو الترجمة (مع الرجوع للعربية إن لم توجد)
+  String get localizedLabel =>
+      !_isArabic && (labelEn ?? '').trim().isNotEmpty ? labelEn! : label;
+  String get localizedText => !_isArabic && hasTranslation ? textEn! : text;
+  TextDirection get textDirection =>
+      !_isArabic && hasTranslation ? TextDirection.ltr : TextDirection.rtl;
+
+  /// في غير العربية: تنبيه أن المادة غير مترجمة بعد
+  bool get missingTranslation => !_isArabic && !hasTranslation;
+
+  String? get localizedDocumentTitle =>
+      !_isArabic && (documentTitleFr ?? '').trim().isNotEmpty
+          ? documentTitleFr
+          : documentTitle;
 
   factory TaxArticleModel.fromJson(Map<String, dynamic> json) {
     final document = json['document'];
@@ -54,14 +82,17 @@ class TaxArticleModel {
       nodeId: _toInt(json['node_id']),
       part: json['part'] ?? 'code',
       label: json['label'] ?? '',
+      labelEn: json['label_en']?.toString(),
       number: json['number']?.toString(),
       numberInt: _toInt(json['number_int']),
       sortOrder: _toInt(json['sort_order']) ?? 0,
       text: json['text'] ?? '',
+      textEn: json['text_en']?.toString(),
       isRepealed: _toBool(json['is_repealed']),
       pageStart: _toInt(json['page_start']),
       pageEnd: _toInt(json['page_end']),
       documentTitle: document is Map ? document['title_ar'] : null,
+      documentTitleFr: document is Map ? document['title_fr']?.toString() : null,
       nodeLabel: node is Map
           ? [node['label'], node['title']]
               .where((e) => e != null && e.toString().isNotEmpty)

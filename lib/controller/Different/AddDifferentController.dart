@@ -10,12 +10,8 @@ import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
 import '../../data/datasource/Remote/LawData.dart';
-import '../../data/datasource/Remote/TaxArticlesData.dart';
-import '../../data/datasource/Remote/TaxSearchData.dart';
 import '../../data/model/CategoryModel.dart';
 import '../../data/model/LawModel.dart';
-import '../../data/model/TaxArticleModel.dart';
-import '../../data/model/TaxSearchModel.dart';
 import '../NavigationBarcontroller.dart';
 
 abstract class Adddifferentcontroller extends GetxController {}
