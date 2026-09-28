@@ -1,6 +1,9 @@
 import 'package:chafi_dashboard/data/datasource/Remote/Categorydata.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:chafi_dashboard/data/datasource/Remote/TaxAndAppData.dart';
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
+import '../../data/model/TaxArticleModel.dart';
+import '../../data/model/TaxSearchModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +12,8 @@ import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/LawData.dart';
+import '../../data/datasource/Remote/TaxSearchData.dart';
+import '../../data/datasource/Remote/TaxArticlesData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';
 import '../../data/model/TaxAndAppModel.dart';
@@ -19,7 +24,8 @@ import '../NavigationBarcontroller.dart';
 
 abstract class Editappcontroller extends GetxController {}
 
-class EditappcontrollerImp extends Editappcontroller {
+class EditappcontrollerImp extends Editappcontroller
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -81,12 +87,7 @@ class EditappcontrollerImp extends Editappcontroller {
   List<Map<String, dynamic>> lawsList = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -94,6 +95,8 @@ class EditappcontrollerImp extends Editappcontroller {
     lawsList[index]['law_id'] = value;
     update();
   }
+
+
 
   void removeLaw(int index) {
     lawsList.removeAt(index);
@@ -114,6 +117,8 @@ class EditappcontrollerImp extends Editappcontroller {
     lawsList[index]['name_fr'] = value;
     update();
   }
+
+  
 
   Future<void> editdata() async {
     if (!formState.currentState!.validate()) return;
@@ -152,7 +157,7 @@ class EditappcontrollerImp extends Editappcontroller {
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
       // "law_id": law?.id,
-      "laws": lawsList,
+      "laws": lawsForRequest,
 
       "calcul": calculator?['route'],
       // "index_link": numperindex.text,
@@ -257,6 +262,8 @@ class EditappcontrollerImp extends Editappcontroller {
       for (var law in model.laws!) {
         lawsList.add({
           "law_id": law['law_id'],
+          "document_id": LawDocumentArticleMixin.readId(law['document_id']),
+          "article_id": LawDocumentArticleMixin.readId(law['article_id']),
           "name_ar": law['name_ar'] ?? "",
           "name_fr": law['name_fr'] ?? "",
           "index_link": law['index_link'],
@@ -266,6 +273,7 @@ class EditappcontrollerImp extends Editappcontroller {
 
     selectedCategory = model.catId;
 
+    restoreLawArticles();
     update();
   }
 
@@ -273,6 +281,7 @@ class EditappcontrollerImp extends Editappcontroller {
   void onInit() {
     viewdata();
     viewdataCategory();
+    viewdataDocuments();
     super.onInit();
   }
 }

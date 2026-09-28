@@ -184,6 +184,18 @@ class _UsersState extends State<Users> {
 
                                       DataCell(Text(item.email)),
                                       DataCell(
+                                        Text(
+                                          (item.isTaxpayer ?? '').isEmpty
+                                              ? '-'
+                                              : item.isTaxpayer!.tr,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        _registeredBadge(
+                                          item.isRegisteredTaxAdmin,
+                                        ),
+                                      ),
+                                      DataCell(
                                         Text(item.statsCount?.toString() ?? "0"),
                                       ),
                                       DataCell(
@@ -271,6 +283,23 @@ class _UsersState extends State<Users> {
     );
   }
 
+  // نعم / لا / غير محدد
+  Widget _registeredBadge(bool? value) {
+    if (value == null) return const Text('-');
+    final color = value ? Colors.green : Colors.red;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        value ? 'نعم'.tr : 'لا'.tr,
+        style: TextStyle(color: color, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
   List<DataColumn> buildColumns() {
     return [
       const DataColumn(label: Text("#")),
@@ -278,6 +307,8 @@ class _UsersState extends State<Users> {
       DataColumn(label: Text('رقم الهاتف'.tr)),
       DataColumn(label: Text('الولاية'.tr)),
       DataColumn(label: Text('بريد الإلكتروني'.tr)),
+      DataColumn(label: Text('المكلف بالضريبة'.tr)),
+      DataColumn(label: Text('مسجل في الإدارة الجبائية'.tr)),
       DataColumn(label: Text('total_access_count'.tr)),
       DataColumn(label: Text('user_opinion'.tr)),
       DataColumn(label: Text('created_at'.tr)),

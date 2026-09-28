@@ -10,6 +10,8 @@ class UserModel {
   final int notificationStatus;
   final int? statsCount;
   final List<UserFeedback>? feedback;
+  final String? isTaxpayer; // المكلف بالضريبة (نوع أو وصف)
+  final bool? isRegisteredTaxAdmin; // مسجل في الإدارة الجبائية
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -25,6 +27,8 @@ class UserModel {
     required this.notificationStatus,
     this.statsCount,
     this.feedback,
+    this.isTaxpayer,
+    this.isRegisteredTaxAdmin,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -46,6 +50,11 @@ class UserModel {
               .map((e) => UserFeedback.fromJson(e))
               .toList()
           : null,
+      isTaxpayer: json['is_taxpayer']?.toString(),
+      isRegisteredTaxAdmin: json['is_registered_tax_admin'] == null
+          ? null
+          : json['is_registered_tax_admin'] == true ||
+              json['is_registered_tax_admin'].toString() == '1',
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -57,24 +66,18 @@ class UserModel {
 }
 
 class UserFeedback {
-  final int id;
-  final int userId;
-  final int type;
-  final DateTime createdAt;
+  final String date;
+  final List<int> types;
 
   UserFeedback({
-    required this.id,
-    required this.userId,
-    required this.type,
-    required this.createdAt,
+    required this.date,
+    required this.types,
   });
 
   factory UserFeedback.fromJson(Map<String, dynamic> json) {
     return UserFeedback(
-      id: json['id'],
-      userId: json['user_id'],
-      type: json['type'],
-      createdAt: DateTime.parse(json['created_at']),
+      date: json['date'] ?? '',
+      types: json['types'] != null ? List<int>.from(json['types']) : [],
     );
   }
 }

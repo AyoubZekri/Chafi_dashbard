@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:get/get.dart';
 
 import '../../core/class/Statusrequest.dart';
 import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
+import '../../data/datasource/Remote/TaxArticlesData.dart';
+import '../../data/datasource/Remote/TaxSearchData.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/CategoryModel.dart';
+import '../../data/model/TaxArticleModel.dart';
+import '../../data/model/TaxSearchModel.dart';
 import '../../data/model/InstitutionModel.dart';
 import '../../data/model/LawModel.dart';
 import '../../view/screen/GeneralDefinitions.dart' show Generaldefinitions;
@@ -15,7 +20,8 @@ import '../../view/screen/Institutions.dart';
 import '../../view/screen/Regulated.dart';
 import '../NavigationBarcontroller.dart';
 
-class EditinstitutionscontrollerImp extends GetxController {
+class EditinstitutionscontrollerImp extends GetxController
+    with LawDocumentArticleMixin {
   final titleAr = TextEditingController();
   final infoAr = TextEditingController();
   final titleFr = TextEditingController();
@@ -98,12 +104,7 @@ class EditinstitutionscontrollerImp extends GetxController {
   List<Map<String, dynamic>> lawsList = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -111,6 +112,8 @@ class EditinstitutionscontrollerImp extends GetxController {
     lawsList[index]['law_id'] = value;
     update();
   }
+
+
 
   void removeLaw(int index) {
     lawsList.removeAt(index);
@@ -155,6 +158,8 @@ class EditinstitutionscontrollerImp extends GetxController {
       for (var law in model.laws!) {
         lawsList.add({
           "law_id": law['law_id'],
+          "document_id": LawDocumentArticleMixin.readId(law['document_id']),
+          "article_id": LawDocumentArticleMixin.readId(law['article_id']),
           "name_ar": law['name_ar'] ?? "",
           "name_fr": law['name_fr'] ?? "",
           "index_link": law['index_link'],
@@ -163,6 +168,7 @@ class EditinstitutionscontrollerImp extends GetxController {
     }
 
     print("=====================$type");
+    restoreLawArticles();
     update();
   }
 
@@ -240,7 +246,7 @@ class EditinstitutionscontrollerImp extends GetxController {
       "cat_id": childSelectcat,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
-      "laws": lawsList,
+      "laws": lawsForRequest,
 
       // "index_link": numPerIndex.text,
     };
@@ -298,6 +304,7 @@ class EditinstitutionscontrollerImp extends GetxController {
 
   @override
   void onInit() {
+    viewdataDocuments();
     super.onInit();
     viewLaws();
   }

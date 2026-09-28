@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/data/datasource/Remote/Categorydata.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:chafi_dashboard/data/datasource/Remote/TaxAndAppData.dart';
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ import '../NavigationBarcontroller.dart';
 
 abstract class EditTaxCollectionController extends GetxController {}
 
-class EditTaxCollectionControllerImp extends EditTaxCollectionController {
+class EditTaxCollectionControllerImp extends EditTaxCollectionController
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -87,12 +89,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
   List<Map<String, dynamic>> lawsList = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -161,7 +158,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
       // "law_id": law?.id,
-      "laws": lawsList,
+      "laws": lawsForRequest,
 
       "calcul": calculator?['route'],
       // "index_link": numperindex.text,
@@ -274,6 +271,8 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
       for (var law in model.laws!) {
         lawsList.add({
           "law_id": law['law_id'],
+          "document_id": LawDocumentArticleMixin.readId(law['document_id']),
+          "article_id": LawDocumentArticleMixin.readId(law['article_id']),
           "name_ar": law['name_ar'] ?? "",
           "name_fr": law['name_fr'] ?? "",
           "index_link": law['index_link'],
@@ -283,6 +282,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
 
     selectedCategory = model.catId;
 
+    restoreLawArticles();
     update();
   }
 
@@ -303,6 +303,7 @@ class EditTaxCollectionControllerImp extends EditTaxCollectionController {
 
   @override
   void onInit() {
+    viewdataDocuments();
     cleardata();
     print("=============");
     viewdata();

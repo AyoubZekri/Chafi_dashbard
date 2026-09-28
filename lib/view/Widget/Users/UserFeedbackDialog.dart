@@ -55,16 +55,16 @@ class UserFeedbackDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       child: Container(
         width: 500,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFFF8F9FA),
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           boxShadow: const [
             BoxShadow(
               color: Colors.black26,
-              blurRadius: 10.0,
-              offset: Offset(0.0, 10.0),
+              blurRadius: 15.0,
+              offset: Offset(0.0, 8.0),
             ),
           ],
         ),
@@ -116,78 +116,106 @@ class UserFeedbackDialog extends StatelessWidget {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: feedback.length,
-                  itemBuilder: (context, index) {
+                                    itemBuilder: (context, index) {
                     final f = feedback[index];
-                    String questionTitle = "غير معروف";
-                    String optionName = "غير معروف";
-
-                    for (var question in questions) {
-                      var options = question['options'] as List<dynamic>;
-                      var matches = options.where((o) => o['id'] == f.type);
-                      if (matches.isNotEmpty) {
-                        var opt = matches.first;
-                        questionTitle = question['title'];
-                        optionName = opt['name'];
-                        break;
-                      }
-                    }
-                    final color = _getColor(f.type);
-                    final icon = _getIcon(f.type);
 
                     return Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: color.withOpacity(0.1)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                        border: Border.all(color: Colors.grey.shade200),
                       ),
-                      child: Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: color.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(icon, color: color, size: 24),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: AppColor.typography.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.forum_outlined, size: 18, color: AppColor.typography),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                "الرأي رقم ${index + 1}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColor.typography,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 15),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  questionTitle,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey.shade700,
+                          const SizedBox(height: 10),
+                          ...f.types.map((type) {
+                            String questionTitle = "غير معروف";
+                            String optionName = "غير معروف";
+
+                            for (var question in questions) {
+                              var options = question['options'] as List<dynamic>;
+                              var matches = options.where((o) => o['id'] == type);
+                              if (matches.isNotEmpty) {
+                                var opt = matches.first;
+                                questionTitle = question['title'];
+                                optionName = opt['name'];
+                                break;
+                              }
+                            }
+                            final color = _getColor(type);
+                            final icon = _getIcon(type);
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0, right: 10),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: color.withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(icon, color: color, size: 20),
                                   ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  optionName,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: color.darken(0.2),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          questionTitle,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                        Text(
+                                          optionName,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: color.darken(0.2),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  f.createdAt
-                                      .toString()
-                                      .substring(0, 16)
-                                      .replaceAll('T', ' '),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                         ],
                       ),
                     );

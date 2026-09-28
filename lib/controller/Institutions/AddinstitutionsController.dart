@@ -1,4 +1,7 @@
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
+import '../LawDocumentArticleMixin.dart';
+import '../../data/model/TaxArticleModel.dart';
+import '../../data/model/TaxSearchModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +10,8 @@ import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
+import '../../data/datasource/Remote/TaxArticlesData.dart';
+import '../../data/datasource/Remote/TaxSearchData.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/datasource/Remote/institution.dart';
 import '../../data/model/LawModel.dart';
@@ -15,7 +20,8 @@ import '../../view/screen/Institutions.dart';
 import '../../view/screen/Regulated.dart';
 import '../NavigationBarcontroller.dart';
 
-class AddinstitutionscontrollerImp extends GetxController {
+class AddinstitutionscontrollerImp extends GetxController
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -98,12 +104,7 @@ class AddinstitutionscontrollerImp extends GetxController {
   List<Map<String, dynamic>> lawsList = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -111,6 +112,8 @@ class AddinstitutionscontrollerImp extends GetxController {
     lawsList[index]['law_id'] = value;
     update();
   }
+
+
 
   void removeLaw(int index) {
     lawsList.removeAt(index);
@@ -169,6 +172,8 @@ class AddinstitutionscontrollerImp extends GetxController {
     update();
   }
 
+  
+
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
     if (childSelectcat == null) {
@@ -213,7 +218,7 @@ class AddinstitutionscontrollerImp extends GetxController {
       "cat_id": childSelectcat,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
-      "laws": lawsList,
+      "laws": lawsForRequest,
       // "index_link": numperindex.text,
     };
 
@@ -283,6 +288,7 @@ class AddinstitutionscontrollerImp extends GetxController {
     print("===================$type");
     getCategory();
     viewdata();
+    viewdataDocuments();
     super.onInit();
   }
 }

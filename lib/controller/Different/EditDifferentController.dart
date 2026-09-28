@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/data/model/DifferantModel.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,15 +10,20 @@ import '../../core/functions/Snacpar copy.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
+import '../../data/datasource/Remote/TaxArticlesData.dart';
+import '../../data/datasource/Remote/TaxSearchData.dart';
 import '../../data/datasource/Remote/LawData.dart';
 import '../../data/model/CategoryModel.dart';
+import '../../data/model/TaxArticleModel.dart';
+import '../../data/model/TaxSearchModel.dart';
 import '../../data/model/LawModel.dart';
 import '../../view/screen/different.dart';
 import '../NavigationBarcontroller.dart';
 
 abstract class Editdifferentcontroller extends GetxController {}
 
-class EditdifferentcontrollerImp extends Editdifferentcontroller {
+class EditdifferentcontrollerImp extends Editdifferentcontroller
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -83,12 +89,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
   List<CategoryModel> category = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -96,6 +97,8 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
     lawsList[index]['law_id'] = value;
     update();
   }
+
+
 
   void removeLaw(int index) {
     lawsList.removeAt(index);
@@ -116,6 +119,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
     lawsList[index]['name_fr'] = value;
     update();
   }
+
 
   Future<void> editdata() async {
     if (!formState.currentState!.validate()) return;
@@ -154,7 +158,7 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
       "body": infoar.text,
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
-      "laws": lawsList,
+      "laws": lawsForRequest,
       "calcul": calculator?['route'],
     };
 
@@ -254,6 +258,8 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
       for (var law in model.laws!) {
         lawsList.add({
           "law_id": law['law_id'],
+          "document_id": LawDocumentArticleMixin.readId(law['document_id']),
+          "article_id": LawDocumentArticleMixin.readId(law['article_id']),
           "name_ar": law['name_ar'] ?? "",
           "name_fr": law['name_fr'] ?? "",
           "index_link": law['index_link'],
@@ -263,12 +269,15 @@ class EditdifferentcontrollerImp extends Editdifferentcontroller {
 
     selectedCategory = model.catId;
 
+    restoreLawArticles();
     update();
   }
 
   @override
   void onInit() {
     viewdata();
+    viewdataDocuments();
     super.onInit();
   }
 }
+

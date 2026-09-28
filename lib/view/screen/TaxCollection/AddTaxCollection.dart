@@ -7,6 +7,7 @@ import '../../Widget/Button/AddLawButton.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
+import '../../Widget/Law/LawDocumentArticleRow.dart';
 
 class Addtaxcollection extends StatefulWidget {
   const Addtaxcollection({super.key});
@@ -315,6 +316,12 @@ class _AddtaxcollectionState extends State<Addtaxcollection> {
                                     ),
                                   ),
                                 ],
+                              ),
+                              const SizedBox(height: 12),
+                              LawDocumentArticleRow(
+                                controller: controller,
+                                lawItem: lawItem,
+                                index: index,
                               ),
                             ],
                           ),

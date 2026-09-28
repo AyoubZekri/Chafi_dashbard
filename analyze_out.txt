@@ -1,0 +1,7 @@
+Analyzing different.dart...
+
+  error - different.dart:8:8 - Target of URI doesn't exist: 'package:chafi_dashboard/view/screen/Different/EditDifferent.dart'. Try creating the file referenced by the URI, or try using a URI for a file that does exist. - uri_does_not_exist
+  error - different.dart:219:70 - The name 'Editdifferent' isn't a class. Try correcting the name to match an existing class. - creation_with_non_type
+   info - different.dart:46:39 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+
+3 issues found.

@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/data/datasource/Remote/Categorydata.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:chafi_dashboard/data/datasource/Remote/TaxAndAppData.dart';
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
 import 'package:chafi_dashboard/view/screen/TaxCollection/SimplifiedSystem.dart';
@@ -17,7 +18,8 @@ import '../NavigationBarcontroller.dart';
 
 abstract class Addtaxcollectioncontroller extends GetxController {}
 
-class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
+class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -79,12 +81,7 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
   List<Map<String, dynamic>> lawsList = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -154,7 +151,7 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
       "body_fr": infofr.text,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
-      "laws": lawsList,
+      "laws": lawsForRequest,
 
       // "index_link": numperindex.text,
     };
@@ -251,6 +248,7 @@ class AddtaxcollectioncontrollerImp extends Addtaxcollectioncontroller {
 
   @override
   void onInit() {
+    viewdataDocuments();
     viewdata();
     super.onInit();
   }

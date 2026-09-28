@@ -1,6 +1,11 @@
 import 'package:chafi_dashboard/data/datasource/Remote/Categorydata.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:chafi_dashboard/data/datasource/Remote/TaxAndAppData.dart';
 import 'package:chafi_dashboard/data/model/CategoryModel.dart';
+import '../../data/model/TaxArticleModel.dart';
+import '../../data/model/TaxSearchModel.dart';
+import '../../data/datasource/Remote/TaxSearchData.dart';
+import '../../data/datasource/Remote/TaxArticlesData.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +23,8 @@ import '../NavigationBarcontroller.dart';
 
 abstract class Addappcontroller extends GetxController {}
 
-class AddappcontrollerImp extends Addappcontroller {
+class AddappcontrollerImp extends Addappcontroller
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -81,12 +87,7 @@ class AddappcontrollerImp extends Addappcontroller {
   List<Map<String, dynamic>> lawsList = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -94,6 +95,8 @@ class AddappcontrollerImp extends Addappcontroller {
     lawsList[index]['law_id'] = value;
     update();
   }
+
+
 
   void removeLaw(int index) {
     lawsList.removeAt(index);
@@ -114,6 +117,8 @@ class AddappcontrollerImp extends Addappcontroller {
     lawsList[index]['name_fr'] = value;
     update();
   }
+
+  
 
   Future<void> adddata() async {
     if (!formState.currentState!.validate()) return;
@@ -150,7 +155,7 @@ class AddappcontrollerImp extends Addappcontroller {
       "body_fr": infofr.text,
       // "law_id": law?.id,
       "calcul": calculator?['route'],
-      "laws": lawsList,
+      "laws": lawsForRequest,
 
       // "index_link": numperindex.text,
     };
@@ -249,6 +254,7 @@ class AddappcontrollerImp extends Addappcontroller {
   void onInit() {
     viewdata();
     viewdataCategory();
+    viewdataDocuments();
     super.onInit();
   }
 }

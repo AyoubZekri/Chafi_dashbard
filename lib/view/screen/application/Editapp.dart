@@ -8,6 +8,7 @@ import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
 import '../../Widget/Button/AddLawButton.dart';
+import '../../Widget/Law/LawDocumentArticleRow.dart';
 
 class Editapp extends StatefulWidget {
   const Editapp({super.key});
@@ -315,6 +316,12 @@ class _EditappState extends State<Editapp> {
                                     ),
                                   ),
                                 ],
+                              ),
+const SizedBox(height: 12),
+                              LawDocumentArticleRow(
+                                controller: controller,
+                                lawItem: lawItem,
+                                index: index,
                               ),
                             ],
                           ),

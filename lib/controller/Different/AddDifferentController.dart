@@ -1,4 +1,5 @@
 import 'package:chafi_dashboard/data/datasource/Remote/Differentdata.dart';
+import '../LawDocumentArticleMixin.dart';
 import 'package:chafi_dashboard/view/screen/different.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,13 +10,18 @@ import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/Services.dart';
 import '../../data/datasource/Remote/Categorydata.dart';
 import '../../data/datasource/Remote/LawData.dart';
+import '../../data/datasource/Remote/TaxArticlesData.dart';
+import '../../data/datasource/Remote/TaxSearchData.dart';
 import '../../data/model/CategoryModel.dart';
 import '../../data/model/LawModel.dart';
+import '../../data/model/TaxArticleModel.dart';
+import '../../data/model/TaxSearchModel.dart';
 import '../NavigationBarcontroller.dart';
 
 abstract class Adddifferentcontroller extends GetxController {}
 
-class AdddifferentcontrollerImp extends Adddifferentcontroller {
+class AdddifferentcontrollerImp extends Adddifferentcontroller
+    with LawDocumentArticleMixin {
   final titlear = TextEditingController();
   final infoar = TextEditingController();
   final titlefr = TextEditingController();
@@ -80,12 +86,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
   List<CategoryModel> category = [];
 
   void addLaw() {
-    lawsList.add({
-      "law_id": null,
-      "name_ar": "",
-      "name_fr": "",
-      "index_link": null,
-    });
+    lawsList.add(newLawEntry());
     update();
   }
 
@@ -93,6 +94,8 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     lawsList[index]['law_id'] = value;
     update();
   }
+
+
 
   void removeLaw(int index) {
     lawsList.removeAt(index);
@@ -150,7 +153,7 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
       "body": infoar.text,
       "title_fr": titlefr.text,
       "body_fr": infofr.text,
-      "laws": lawsList, // Added laws array
+      "laws": lawsForRequest, // Added laws array
       "calcul": calculator?['route'],
     };
 
@@ -232,10 +235,12 @@ class AdddifferentcontrollerImp extends Adddifferentcontroller {
     update();
   }
 
+
   @override
   void onInit() {
     viewdataCategory();
     viewdata();
+    viewdataDocuments();
     super.onInit();
   }
 }

@@ -9,6 +9,7 @@ import '../../Widget/Button/AddLawButton.dart';
 import '../../Widget/TextFild/DropdownFild.dart';
 import '../../Widget/TextFild/LabeledTextField.dart';
 import '../../Widget/institutions/ToggleRow.dart';
+import '../../Widget/Law/LawDocumentArticleRow.dart';
 
 class Adddifferent extends StatefulWidget {
   const Adddifferent({super.key});
@@ -335,6 +336,12 @@ class _AdddifferentState extends State<Adddifferent> {
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 12),
+                              LawDocumentArticleRow(
+                                controller: controller,
+                                lawItem: lawItem,
+                                index: index,
+                              ),
                             ],
                           ),
                         );
@@ -383,3 +390,4 @@ class _AdddifferentState extends State<Adddifferent> {
     );
   }
 }
+
