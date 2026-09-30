@@ -133,6 +133,12 @@ class DashboardStats {
   final ChartGroup<ChartStatsDataPoint> chartStatsData;
   final ChartGroup<ChartUsersGuestsDataPoint> chartUsersGuestsData;
 
+  /// عدد المستخدمين لكل صفة مكلف (startup, student, ..., unknown)
+  final Map<String, int> taxpayerTypes;
+
+  /// التسجيل في الإدارة الجبائية للمؤسسات: registered / not_registered / unknown
+  final Map<String, int> taxRegistration;
+
   DashboardStats({
     required this.totalUsersEnter,
     required this.totalGuestsEnter,
@@ -156,7 +162,14 @@ class DashboardStats {
     required this.data,
     required this.chartStatsData,
     required this.chartUsersGuestsData,
+    this.taxpayerTypes = const {},
+    this.taxRegistration = const {},
   });
+
+  static Map<String, int> _counts(dynamic json) => json is Map
+      ? json.map((k, v) =>
+          MapEntry(k.toString(), int.tryParse(v.toString()) ?? 0))
+      : const {};
 
   factory DashboardStats.fromJson(Map<String, dynamic> json) {
     return DashboardStats(
@@ -190,6 +203,8 @@ class DashboardStats {
       chartUsersGuestsData: ChartGroup.fromJson(
           json['chart_users_guests_data'] ?? {},
           (j) => ChartUsersGuestsDataPoint.fromJson(j)),
+      taxpayerTypes: _counts(json['taxpayer_types']),
+      taxRegistration: _counts(json['tax_registration']),
     );
   }
 

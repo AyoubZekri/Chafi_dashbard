@@ -78,6 +78,7 @@ class Applink {
   static const String taxArticleDelete = "$server/TaxSearch/Article/Delete";
   
   static const String usersShow = "$server/User/Show";
+  static const String feedbackCompare = "$server/Feedback/Compare";
 
   static const String login = "$server/login";
   static const String signIn = "$server/Register";

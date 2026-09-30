@@ -184,11 +184,7 @@ class _UsersState extends State<Users> {
 
                                       DataCell(Text(item.email)),
                                       DataCell(
-                                        Text(
-                                          (item.isTaxpayer ?? '').isEmpty
-                                              ? '-'
-                                              : item.isTaxpayer!.tr,
-                                        ),
+                                        Text(_taxpayerLabel(item.isTaxpayer)),
                                       ),
                                       DataCell(
                                         _registeredBadge(
@@ -281,6 +277,28 @@ class _UsersState extends State<Users> {
         },
       ),
     );
+  }
+
+  // is_taxpayer يُحفظ كرمز (startup, student, ...) من التطبيق.
+  // القيم القديمة المحفوظة كنص عربي تُعرف أيضاً وتُترجم حسب لغة الداشبورد.
+  static const Map<String, String> _taxpayerArabic = {
+    'مؤسسة ناشئة': 'startup',
+    'مؤسسة مصغرة': 'micro_enterprise',
+    'مؤسسة أخرى': 'other_enterprise',
+    'مؤسسة اخرى': 'other_enterprise',
+    'طالب جامعي': 'student',
+    'باحث': 'researcher',
+    'مهتم بالجباية': 'tax_interested',
+    'مهتم بي الجباية': 'tax_interested',
+    'محاسب القطاع الخاص': 'private_accountant',
+    'محاسب القطاع العام': 'public_accountant',
+  };
+
+  String _taxpayerLabel(String? value) {
+    final v = (value ?? '').trim();
+    if (v.isEmpty) return '-';
+    final code = _taxpayerArabic.containsValue(v) ? v : _taxpayerArabic[v];
+    return code != null ? 'taxpayer_$code'.tr : v.tr;
   }
 
   // نعم / لا / غير محدد

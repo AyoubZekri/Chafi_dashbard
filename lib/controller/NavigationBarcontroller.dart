@@ -36,6 +36,7 @@ import '../view/screen/different.dart';
 import '../view/screen/institutions/ChildCategories.dart';
 import '../view/screen/institutions/JoiningCategories.dart';
 import '../view/screen/TaxSearchFiles.dart';
+import '../view/screen/FeedbackCompare.dart';
 import '../view/screen/TaxSearchArticles.dart';
 
 abstract class NavigationBarcontroller extends GetxController {
@@ -72,6 +73,12 @@ class NavigationBarcontrollerImp extends GetxController {
       'name': 'Users',
       'icon': Icons.people,
       'page': () => Users(),
+      'subPages': [],
+    },
+    {
+      'name': 'إحصائيات الآراء',
+      'icon': Icons.insights,
+      'page': () => FeedbackCompare(),
       'subPages': [],
     },
     {

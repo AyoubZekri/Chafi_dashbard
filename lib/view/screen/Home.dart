@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:chafi_dashboard/controller/DashboardHomeController.dart';
 import 'package:chafi_dashboard/core/constant/Colorapp.dart';
 import 'package:chafi_dashboard/data/model/DashboardStats.dart';
+import 'package:chafi_dashboard/view/Widget/Home/TaxpayerStatsCards.dart';
 import 'package:chafi_dashboard/view/Widget/TextFild/SearchFild.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -166,6 +167,16 @@ class DashboardHome extends StatelessWidget {
                     },
                   ),
 
+                  const SizedBox(height: 20),
+                  // المكلفون بالضريبة والتسجيل في الإدارة الجبائية
+                  TaxpayerStatsCards(
+                    taxpayerTypes: controller.data.isNotEmpty
+                        ? controller.data[0].taxpayerTypes
+                        : const {},
+                    taxRegistration: controller.data.isNotEmpty
+                        ? controller.data[0].taxRegistration
+                        : const {},
+                  ),
                   const SizedBox(height: 20),
                   _buildServiceStatsGrid(controller),
                   const SizedBox(height: 20),
