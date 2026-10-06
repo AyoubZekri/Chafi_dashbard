@@ -92,8 +92,6 @@ class EditappcontrollerImp extends Editappcontroller
     update();
   }
 
-
-
   void removeLaw(int index) {
     lawsList.removeAt(index);
     update();
@@ -113,8 +111,6 @@ class EditappcontrollerImp extends Editappcontroller
     lawsList[index]['name_fr'] = value;
     update();
   }
-
-  
 
   Future<void> editdata() async {
     if (!formState.currentState!.validate()) return;

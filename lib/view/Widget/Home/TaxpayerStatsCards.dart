@@ -39,13 +39,16 @@ class TaxpayerStatsCards extends StatelessWidget {
           children: [types, const SizedBox(height: 20), registration],
         );
       }
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(flex: 3, child: types),
-          const SizedBox(width: 20),
-          Expanded(flex: 2, child: registration),
-        ],
+      // البطاقتان بنفس العرض ونفس الطول
+      return IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: types),
+            const SizedBox(width: 20),
+            Expanded(child: registration),
+          ],
+        ),
       );
     });
   }
@@ -55,7 +58,6 @@ class TaxpayerStatsCards extends StatelessWidget {
 
 class _C {
   static const bar = AppColor.typography;
-  static const unknownBar = Color(0xFFCBD5E1);
   static const track = Color(0xFFF1F5F9);
   static const title = Color(0xFF2D3748);
   static const ink = Color(0xFF1E293B);
@@ -63,11 +65,9 @@ class _C {
   static const faint = Color(0xFF94A3B8);
   static const line = Color(0xFFEDF2F7);
 
-  // لونان فئويان مُتحقق منهما (قابلان للتمييز لعمى الألوان)،
-  // و"بدون إجابة" رمادي محايد لأنها بيانات ناقصة وليست فئة
+  // لونان فئويان مُتحقق منهما (قابلان للتمييز لعمى الألوان)
   static const registered = Color(0xFF2A78D6);
   static const notRegistered = Color(0xFFEB6834);
-  static const noAnswer = Color(0xFFCBD5E1);
 }
 
 /// إطار البطاقة: أيقونة، عنوان، وصف، وشارة الإجمالي
@@ -176,13 +176,18 @@ class _TaxpayerTypesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = counts.values.fold<int>(0, (a, b) => a + b);
+    // من اختاروا صفة فقط ("غير محدد" لا يظهر ولا يدخل في النسب)
+    final total = [
+      ...TaxpayerStatsCards.enterprises,
+      ...TaxpayerStatsCards.individuals,
+    ].map(_count).fold<int>(0, (a, b) => a + b);
     List<String> sorted(List<String> types) =>
         [...types]..sort((a, b) => _count(b).compareTo(_count(a)));
-    final ent = sorted(TaxpayerStatsCards.enterprises);
+    // المؤسسات بترتيب ثابت: ناشئة، مصغرة، أخرى
+    const ent = TaxpayerStatsCards.enterprises;
     final ind = sorted(TaxpayerStatsCards.individuals);
     // طول الشريط نسبةً لأكبر قيمة، والنسبة المكتوبة من الإجمالي
-    final maxCount = [...ent, ...ind, 'unknown']
+    final maxCount = [...ent, ...ind]
         .map(_count)
         .fold<int>(0, (a, b) => a > b ? a : b);
 
@@ -237,15 +242,6 @@ class _TaxpayerTypesCard extends StatelessWidget {
           const SizedBox(height: 8),
           groupHeader('الأفراد والمهنيون'.tr, ind),
           for (final t in ind) bar(t),
-          const SizedBox(height: 8),
-          _BarRow(
-            label: 'غير محدد'.tr,
-            count: _count('unknown'),
-            total: total,
-            maxCount: maxCount,
-            color: _C.unknownBar,
-            muted: true,
-          ),
         ],
       ),
     );
@@ -258,7 +254,6 @@ class _BarRow extends StatelessWidget {
   final int total;
   final int maxCount;
   final Color color;
-  final bool muted;
 
   const _BarRow({
     required this.label,
@@ -266,7 +261,6 @@ class _BarRow extends StatelessWidget {
     required this.total,
     required this.maxCount,
     required this.color,
-    this.muted = false,
   });
 
   @override
@@ -286,7 +280,7 @@ class _BarRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 13.5,
-                  color: muted ? _C.muted : _C.ink,
+                  color: _C.ink,
                 ),
               ),
             ),
@@ -367,7 +361,6 @@ class _RegistrationCardState extends State<_RegistrationCard> {
       ('مسجل في الإدارة الجبائية'.tr, widget.counts['registered'] ?? 0,
           _C.registered),
       ('غير مسجل'.tr, widget.counts['not_registered'] ?? 0, _C.notRegistered),
-      ('بدون إجابة'.tr, widget.counts['unknown'] ?? 0, _C.noAnswer),
     ];
     final total = parts.fold<int>(0, (a, p) => a + p.$2);
     double pct(int v) => total == 0 ? 0 : v * 100 / total;

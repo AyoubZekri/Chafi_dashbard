@@ -291,7 +291,9 @@ class _UsersState extends State<Users> {
     'مهتم بالجباية': 'tax_interested',
     'مهتم بي الجباية': 'tax_interested',
     'محاسب القطاع الخاص': 'private_accountant',
+    'محاسب في القطاع الخاص': 'private_accountant',
     'محاسب القطاع العام': 'public_accountant',
+    'محاسب في القطاع العام': 'public_accountant',
   };
 
   String _taxpayerLabel(String? value) {
