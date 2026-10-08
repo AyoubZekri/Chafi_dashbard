@@ -5,6 +5,11 @@ class MyTranslation extends Translations {
   Map<String, Map<String, String>> get keys => {
     "ar": {
       // ===== جبايتك =====
+      "النوع": "النوع",
+      "مقننة": "مقننة",
+      "فيها جداول": "فيها جداول",
+      "بدون جداول": "بدون جداول",
+      "غير مقننة": "غير مقننة",
       "المؤسسات": "المؤسسات",
       "الأفراد والمهنيون": "الأفراد والمهنيون",
       "مؤسسة": "مؤسسة",
@@ -793,6 +798,11 @@ class MyTranslation extends Translations {
     ///
     "fr": {
       // ===== جبايتك =====
+      "النوع": "Type",
+      "مقننة": "Codifiées",
+      "فيها جداول": "Avec tableaux",
+      "بدون جداول": "Sans tableaux",
+      "غير مقننة": "Non codifiées",
       "المؤسسات": "Entreprises",
       "الأفراد والمهنيون": "Particuliers et professionnels",
       "مؤسسة": "entreprises",

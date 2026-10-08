@@ -68,7 +68,10 @@ class _TaxArticleDialogState extends State<TaxArticleDialog> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('cancel'.tr, style: const TextStyle(color: Colors.grey)),
+            child: Text(
+              'cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
@@ -87,284 +90,319 @@ class _TaxArticleDialogState extends State<TaxArticleDialog> {
       child: Container(
         width: 900,
         padding: const EdgeInsets.all(24),
-        child: SingleChildScrollView(
-          child: Form(
-            key: controller.formState,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  isEdit ? 'تعديل المادة'.tr : 'إضافة مادة جديدة'.tr,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
+        child: Form(
+          key: controller.formState,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                isEdit ? 'تعديل المادة'.tr : 'إضافة مادة جديدة'.tr,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 20),
+              ),
+              const SizedBox(height: 20),
 
-                // الملف + الجزء
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
+              // المحتوى فقط يتمرر، والعنوان وأزرار الحفظ تبقى ظاهرة دائماً
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // الملف + الجزء
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Dropdownfild<int>(
-                            label: 'الملف'.tr,
-                            hintText: 'اختر الملف'.tr,
-                            items: controller.documents
-                                .map((doc) => DropdownMenuItem<int>(
-                                      value: doc.id,
-                                      child: Text(
-                                        doc.localizedTitle,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ))
-                                .toList(),
-                            value: controller.documents.any(
-                                    (d) => d.id == controller.formDocumentId)
-                                ? controller.formDocumentId
-                                : null,
-                            onChanged: (val) => setState(() {
-                              controller.formDocumentId = val;
-                              documentError = false;
-                            }),
-                          ),
-                          if (documentError)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 6, right: 12),
-                              child: Text(
-                                "الحقل لا يمكن أن يكون فارغًا".tr,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Dropdownfild<int>(
+                                  label: 'الملف'.tr,
+                                  hintText: 'اختر الملف'.tr,
+                                  items: controller.documents
+                                      .map(
+                                        (doc) => DropdownMenuItem<int>(
+                                          value: doc.id,
+                                          child: Text(
+                                            doc.localizedTitle,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  value:
+                                      controller.documents.any(
+                                        (d) =>
+                                            d.id == controller.formDocumentId,
+                                      )
+                                      ? controller.formDocumentId
+                                      : null,
+                                  onChanged: (val) => setState(() {
+                                    controller.formDocumentId = val;
+                                    documentError = false;
+                                  }),
                                 ),
+                                if (documentError)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 6,
+                                      right: 12,
+                                    ),
+                                    child: Text(
+                                      "الحقل لا يمكن أن يكون فارغًا".tr,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Dropdownfild<String>(
+                              label: 'الجزء'.tr,
+                              hintText: 'الجزء'.tr,
+                              items: [
+                                DropdownMenuItem(
+                                  value: 'code',
+                                  child: Text(
+                                    'مقنن'.tr,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'non_codified',
+                                  child: Text(
+                                    'غير مقنن'.tr,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                              value: controller.formPart,
+                              onChanged: (val) => setState(
+                                () => controller.formPart = val ?? 'code',
                               ),
                             ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: Dropdownfild<String>(
-                        label: 'الجزء'.tr,
-                        hintText: 'الجزء'.tr,
-                        items: [
-                          DropdownMenuItem(
-                            value: 'code',
-                            child: Text('مقنن'.tr,
-                                style: const TextStyle(fontSize: 14)),
-                          ),
-                          DropdownMenuItem(
-                            value: 'non_codified',
-                            child: Text('غير مقنن'.tr,
-                                style: const TextStyle(fontSize: 14)),
                           ),
                         ],
-                        value: controller.formPart,
-                        onChanged: (val) => setState(
-                            () => controller.formPart = val ?? 'code'),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
+                      const SizedBox(height: 15),
 
-                // التسمية + الرقم
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: CustemtextfromfildInfoUser(
-                        hintText: 'مثال: المادة 12 مكرر'.tr,
-                        label: 'التسمية'.tr,
-                        myController: controller.labelController,
-                        valid: (val) => validateInput(val!, 1, 255, "text"),
+                      // التسمية + الرقم
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: CustemtextfromfildInfoUser(
+                              hintText: 'مثال: المادة 12 مكرر'.tr,
+                              label: 'التسمية'.tr,
+                              myController: controller.labelController,
+                              valid: (val) =>
+                                  validateInput(val!, 1, 255, "text"),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: CustemtextfromfildInfoUser(
+                              hintText: 'مثال: 12 مكرر'.tr,
+                              label: 'رقم المادة'.tr,
+                              myController: controller.numberController,
+                              valid: (val) => val == null || val.isEmpty
+                                  ? null
+                                  : validateInput(val, 1, 100, "text"),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: _numberField(
+                              'الرقم (عدد)'.tr,
+                              controller.numberIntController,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: CustemtextfromfildInfoUser(
-                        hintText: 'مثال: 12 مكرر'.tr,
-                        label: 'رقم المادة'.tr,
-                        myController: controller.numberController,
+                      const SizedBox(height: 15),
+
+                      CustemtextfromfildInfoUser(
+                        hintText: 'اكتب نص المادة هنا'.tr,
+                        label: 'نص المادة'.tr,
+                        maxLines: 8,
+                        myController: controller.textController,
+                        valid: (val) =>
+                            validateInput(val!, 1, 16000000, "text"),
+                      ),
+                      const SizedBox(height: 15),
+
+                      // النسخة الإنجليزية (اختيارية)
+                      CustemtextfromfildInfoUser(
+                        hintText: 'Article 12 bis',
+                        label: 'التسمية (بالإنجليزية)'.tr,
+                        myController: controller.labelEnController,
                         valid: (val) => val == null || val.isEmpty
                             ? null
-                            : validateInput(val, 1, 100, "text"),
+                            : validateInput(val, 1, 255, "text"),
                       ),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: _numberField(
-                          'الرقم (عدد)'.tr, controller.numberIntController),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
+                      const SizedBox(height: 15),
+                      CustemtextfromfildInfoUser(
+                        hintText: 'Article text in English',
+                        label: 'نص المادة (بالإنجليزية)'.tr,
+                        maxLines: 8,
+                        myController: controller.textEnController,
+                        valid: (val) => val == null || val.isEmpty
+                            ? null
+                            : validateInput(val, 1, 16000000, "text"),
+                      ),
+                      const SizedBox(height: 15),
 
-                CustemtextfromfildInfoUser(
-                  hintText: 'اكتب نص المادة هنا'.tr,
-                  label: 'نص المادة'.tr,
-                  maxLines: 8,
-                  myController: controller.textController,
-                  valid: (val) => validateInput(val!, 1, 16000000, "text"),
-                ),
-                const SizedBox(height: 15),
-
-                // النسخة الإنجليزية (اختيارية)
-                CustemtextfromfildInfoUser(
-                  hintText: 'Article 12 bis',
-                  label: 'التسمية (بالإنجليزية)'.tr,
-                  myController: controller.labelEnController,
-                  valid: (val) => val == null || val.isEmpty
-                      ? null
-                      : validateInput(val, 1, 255, "text"),
-                ),
-                const SizedBox(height: 15),
-                CustemtextfromfildInfoUser(
-                  hintText: 'Article text in English',
-                  label: 'نص المادة (بالإنجليزية)'.tr,
-                  maxLines: 8,
-                  myController: controller.textEnController,
-                  valid: (val) => val == null || val.isEmpty
-                      ? null
-                      : validateInput(val, 1, 16000000, "text"),
-                ),
-                const SizedBox(height: 15),
-
-                // الترتيب + الصفحات + الحالة
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: _numberField(
-                          'الترتيب'.tr, controller.sortOrderController),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: _numberField(
-                          'صفحة البداية'.tr, controller.pageStartController),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: _numberField(
-                          'صفحة النهاية'.tr, controller.pageEndController),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: Dropdownfild<bool>(
-                        label: 'الحالة'.tr,
-                        hintText: 'الحالة'.tr,
-                        items: [
-                          DropdownMenuItem(
-                            value: false,
-                            child: Text('سارية'.tr,
-                                style: const TextStyle(fontSize: 14)),
+                      // الترتيب + الصفحات + الحالة
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: _numberField(
+                              'الترتيب'.tr,
+                              controller.sortOrderController,
+                            ),
                           ),
-                          DropdownMenuItem(
-                            value: true,
-                            child: Text('ملغاة'.tr,
-                                style: const TextStyle(fontSize: 14)),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: _numberField(
+                              'صفحة البداية'.tr,
+                              controller.pageStartController,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: _numberField(
+                              'صفحة النهاية'.tr,
+                              controller.pageEndController,
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                          Expanded(
+                            child: Dropdownfild<bool>(
+                              label: 'الحالة'.tr,
+                              hintText: 'الحالة'.tr,
+                              items: [
+                                DropdownMenuItem(
+                                  value: false,
+                                  child: Text(
+                                    'سارية'.tr,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: true,
+                                  child: Text(
+                                    'ملغاة'.tr,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              ],
+                              value: controller.formIsRepealed,
+                              onChanged: (val) => setState(
+                                () => controller.formIsRepealed = val ?? false,
+                              ),
+                            ),
                           ),
                         ],
-                        value: controller.formIsRepealed,
-                        onChanged: (val) => setState(
-                            () => controller.formIsRepealed = val ?? false),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 25),
+                      const SizedBox(height: 25),
 
-                // الجداول
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        '${'الجداول'.tr} (${controller.formTables.length})',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: AppColor.grey,
-                        ),
+                      // الجداول
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${'الجداول'.tr} (${controller.formTables.length})',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: AppColor.grey,
+                              ),
+                            ),
+                          ),
+                          OutlinedButton.icon(
+                            onPressed: () => setState(controller.addTable),
+                            icon: const Icon(Icons.add, size: 18),
+                            label: Text('إضافة جدول'.tr),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColor.typography,
+                              side: const BorderSide(
+                                color: AppColor.typography,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    OutlinedButton.icon(
-                      onPressed: () => setState(controller.addTable),
-                      icon: const Icon(Icons.add, size: 18),
-                      label: Text('إضافة جدول'.tr),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColor.typography,
-                        side: const BorderSide(color: AppColor.typography),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                      const SizedBox(height: 12),
+                      for (int i = 0; i < controller.formTables.length; i++)
+                        TaxTableEditor(
+                          key: ObjectKey(controller.formTables[i]),
+                          table: controller.formTables[i],
+                          index: i,
+                          total: controller.formTables.length,
+                          onChanged: controller.markTablesChanged,
+                          onMove: (newIndex) =>
+                              setState(() => controller.moveTable(i, newIndex)),
+                          onRemove: () => _confirmRemoveTable(i),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                for (int i = 0; i < controller.formTables.length; i++)
-                  TaxTableEditor(
-                    key: ObjectKey(controller.formTables[i]),
-                    table: controller.formTables[i],
-                    index: i,
-                    total: controller.formTables.length,
-                    onChanged: controller.markTablesChanged,
-                    onMove: (newIndex) =>
-                        setState(() => controller.moveTable(i, newIndex)),
-                    onRemove: () => _confirmRemoveTable(i),
+                    ],
                   ),
-
-                const SizedBox(height: 30),
-
-                // الأزرار
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => Get.back(),
-                      child: Text(
-                        'cancel'.tr,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.typography,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: _submit,
-                      child: Text(
-                        'save'.tr,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              ],
-            ),
+              ),
+
+              const Divider(height: 24),
+
+              // الأزرار
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      'cancel'.tr,
+                      style: const TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.typography,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: _submit,
+                    child: Text(
+                      'save'.tr,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

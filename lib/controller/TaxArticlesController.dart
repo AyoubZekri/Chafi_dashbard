@@ -43,6 +43,9 @@ class TaxArticlesController extends GetxController {
   List<TaxArticleModel> filteredData = [];
   String searchQuery = '';
 
+  /// فلتر النوع: 'all' / 'code' (مقننة) / 'non_codified' (غير مقننة)
+  String partFilter = 'all';
+
   // Pagination properties
   int currentPage = 0;
   int rowsPerPage = 10;
@@ -245,17 +248,23 @@ class TaxArticlesController extends GetxController {
 
   void applyFilter() {
     final query = searchQuery.toLowerCase();
-    if (query.isEmpty) {
-      filteredData = List.from(data);
-    } else {
-      filteredData = data
-          .where((element) =>
-              element.label.toLowerCase().contains(query) ||
-              (element.number ?? '').toLowerCase().contains(query) ||
-              element.text.toLowerCase().contains(query))
-          .toList();
-    }
+    filteredData = data.where((element) {
+      if (partFilter == 'code' && element.part == 'non_codified') return false;
+      if (partFilter == 'non_codified' && element.part != 'non_codified') {
+        return false;
+      }
+      if (query.isEmpty) return true;
+      return element.label.toLowerCase().contains(query) ||
+          (element.number ?? '').toLowerCase().contains(query) ||
+          element.text.toLowerCase().contains(query);
+    }).toList();
     currentPage = 0;
+  }
+
+  void changePartFilter(String? value) {
+    partFilter = value ?? 'all';
+    applyFilter();
+    update();
   }
 
   void filterData(String query) {

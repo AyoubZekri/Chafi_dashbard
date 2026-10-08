@@ -26,6 +26,7 @@ class TaxSearchArticles extends StatefulWidget {
 class _TaxSearchArticlesState extends State<TaxSearchArticles> {
   final ScrollController horizontalController = ScrollController();
 
+
   String _pages(TaxArticleModel item) {
     if (item.pageStart == null) return '-';
     if (item.pageEnd == null || item.pageEnd == item.pageStart) {
@@ -185,108 +186,94 @@ class _TaxSearchArticlesState extends State<TaxSearchArticles> {
                 ),
                 const SizedBox(height: 20),
 
-                // فلتر الملف + البحث + Rows per page
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    bool isMobile = constraints.maxWidth < 600;
-                    return SizedBox(
-                      width: double.infinity,
-                      child: Wrap(
-                        alignment: isMobile
-                            ? WrapAlignment.center
-                            : WrapAlignment.spaceBetween,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        runSpacing: 16,
-                        spacing: 16,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'show'.tr,
-                                style: const TextStyle(
-                                  color: Color(0xFF5A6A85),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 150,
-                                child: CustemDropDownField(
-                                  items: [10, 25, 50, 100].map((int value) {
-                                    return DropdownMenuItem<int>(
-                                      value: value,
-                                      child: Text(value.toString()),
-                                    );
-                                  }).toList(),
-                                  value: controller.rowsPerPage,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      controller.rowsPerPage = value!;
-                                      controller.currentPage = 0;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Text(
-                                'entries'.tr,
-                                style: const TextStyle(
-                                  color: Color(0xFF5A6A85),
-                                ),
-                              ),
-                            ],
+                // كل الفلاتر والبحث جنب بعض في سطر واحد
+                Row(
+                  children: [
+                    // عرض كافٍ ليظهر الرقم كاملاً في سطر واحد
+                    SizedBox(
+                      width: 130,
+                      child: CustemDropDownField(
+                        items: [10, 25, 50, 100].map((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text(
+                              value.toString(),
+                              maxLines: 1,
+                              softWrap: false,
+                            ),
+                          );
+                        }).toList(),
+                        value: controller.rowsPerPage,
+                        onChanged: (value) {
+                          setState(() {
+                            controller.rowsPerPage = value!;
+                            controller.currentPage = 0;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      flex: 3,
+                      child: CustemDropDownField<int>(
+                        // أسماء الملفات طويلة: سطران لكل ملف
+                        itemHeight: 64,
+                        // 0 = كل الملفات
+                        items: [
+                          DropdownMenuItem<int>(
+                            value: 0,
+                            child: Text('كل الملفات'.tr),
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'الملف'.tr,
-                                style: const TextStyle(
-                                  color: Color(0xFF5A6A85),
-                                ),
+                          ...controller.documents.map(
+                            (doc) => DropdownMenuItem<int>(
+                              value: doc.id,
+                              child: Text(
+                                doc.localizedTitle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(
-                                width: isMobile
-                                    ? constraints.maxWidth - 60
-                                    : 320,
-                                child: CustemDropDownField<int>(
-                                  // 0 = كل الملفات
-                                  items: [
-                                    DropdownMenuItem<int>(
-                                      value: 0,
-                                      child: Text('كل الملفات'.tr),
-                                    ),
-                                    ...controller.documents.map(
-                                      (doc) => DropdownMenuItem<int>(
-                                        value: doc.id,
-                                        child: Text(
-                                          doc.localizedTitle,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  value: controller.selectedDocumentId ?? 0,
-                                  onChanged: (value) {
-                                    controller.changeDocumentFilter(
-                                        value == null || value == 0
-                                            ? null
-                                            : value);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: isMobile ? constraints.maxWidth : 260,
-                            child: SearchField(
-                              onChanged: controller.filterData,
-                              hint: "search".tr,
-                              vertical: 5,
                             ),
                           ),
                         ],
+                        value: controller.selectedDocumentId ?? 0,
+                        onChanged: (value) {
+                          controller.changeDocumentFilter(
+                              value == null || value == 0 ? null : value);
+                        },
                       ),
-                    );
-                  },
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      flex: 2,
+                      child: CustemDropDownField<String>(
+                        items: [
+                          for (final e in {
+                            'all': 'الكل'.tr,
+                            'code': 'مقننة'.tr,
+                            'non_codified': 'غير مقننة'.tr,
+                          }.entries)
+                            DropdownMenuItem<String>(
+                              value: e.key,
+                              child: Text(
+                                e.value,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                        ],
+                        value: controller.partFilter,
+                        onChanged: controller.changePartFilter,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      flex: 3,
+                      child: SearchField(
+                        onChanged: controller.filterData,
+                        hint: "search".tr,
+                        vertical: 5,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
 

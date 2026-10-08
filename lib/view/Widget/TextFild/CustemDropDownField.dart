@@ -8,11 +8,15 @@ class CustemDropDownField<T> extends StatelessWidget {
   final T? value;
   final void Function(T?) onChanged;
 
+  /// ارتفاع كل عنصر في القائمة (أكبر من الافتراضي للنصوص ذات السطرين)
+  final double? itemHeight;
+
   const CustemDropDownField({
     super.key,
     required this.items,
     required this.value,
     required this.onChanged,
+    this.itemHeight,
   });
 
   @override
@@ -56,6 +60,9 @@ class CustemDropDownField<T> extends StatelessWidget {
             ),
             elevation: 8,
           ),
+          menuItemStyleData: itemHeight == null
+              ? const MenuItemStyleData()
+              : MenuItemStyleData(height: itemHeight!),
 
           iconStyleData: const IconStyleData(
             icon: Icon(Icons.keyboard_arrow_down_rounded),
