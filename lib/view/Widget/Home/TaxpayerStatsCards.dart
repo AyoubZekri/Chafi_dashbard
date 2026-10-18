@@ -498,3 +498,149 @@ class _RegistrationCardState extends State<_RegistrationCard> {
     );
   }
 }
+
+// ============================ سنوات التسجيل ============================
+
+/// فترة من سنوات التسجيل وعدد المسجلين فيها (من السيرفر)
+class RegistrationYearPeriod {
+  final String label;
+  final int total;
+
+  const RegistrationYearPeriod({required this.label, required this.total});
+
+  factory RegistrationYearPeriod.fromJson(Map json) => RegistrationYearPeriod(
+        label: json['label']?.toString() ?? '',
+        total: int.tryParse(json['total']?.toString() ?? '') ?? 0,
+      );
+
+  static List<RegistrationYearPeriod> fromList(dynamic list) => list is List
+      ? [
+          for (final e in list)
+            if (e is Map) RegistrationYearPeriod.fromJson(e),
+        ]
+      : const [];
+}
+
+/// أعمدة: عدد المسجلين في الإدارة الجبائية حسب سنة التسجيل.
+/// السنوات القديمة مجمعة في فترات، ومن 2020 كل سنة عمود
+class RegistrationYearsChart extends StatelessWidget {
+  final List<RegistrationYearPeriod> periods;
+
+  const RegistrationYearsChart({super.key, required this.periods});
+
+  @override
+  Widget build(BuildContext context) {
+    final total = periods.fold<int>(0, (a, p) => a + p.total);
+    final maxCount = periods.fold<int>(0, (a, p) => a > p.total ? a : p.total);
+    // سقف المحور: أكبر قيمة + هامش، ومضاعف لخطوة الشبكة
+    final step = maxCount <= 5 ? 1.0 : (maxCount / 5).ceilToDouble();
+    final maxY = ((maxCount / step).ceil() + 1) * step;
+
+    return _Card(
+      icon: Icons.bar_chart_rounded,
+      title: "سنوات التسجيل في الإدارة الجبائية".tr,
+      subtitle: "عدد المسجلين حسب سنة التسجيل".tr,
+      badge: "$total ${"مسجل".tr}",
+      child: SizedBox(
+        height: 300,
+        child: total == 0
+            ? Center(
+                child: Text(
+                  "لا توجد بيانات لعرضها".tr,
+                  style: const TextStyle(color: _C.muted, fontSize: 14),
+                ),
+              )
+            : BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: maxY,
+                  barTouchData: BarTouchData(
+                    touchTooltipData: BarTouchTooltipData(
+                      tooltipBgColor: _C.title,
+                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        final p = periods[group.x];
+                        return BarTooltipItem(
+                          "${p.label}\n",
+                          const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: "${p.total} ${"مسجل".tr}",
+                              style: const TextStyle(
+                                color: Color(0xFFCBD5E1),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  titlesData: FlTitlesData(
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 32,
+                        getTitlesWidget: (value, meta) => SideTitleWidget(
+                          axisSide: meta.axisSide,
+                          space: 8,
+                          child: Text(
+                            periods[value.toInt()].label,
+                            style: const TextStyle(
+                              color: _C.muted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 36,
+                        interval: step,
+                        getTitlesWidget: (value, meta) => Text(
+                          value.toInt().toString(),
+                          style: const TextStyle(color: _C.faint, fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                  ),
+                  gridData: FlGridData(
+                    drawVerticalLine: false,
+                    horizontalInterval: step,
+                    getDrawingHorizontalLine: (value) =>
+                        const FlLine(color: _C.line, strokeWidth: 1),
+                  ),
+                  borderData: FlBorderData(show: false),
+                  barGroups: [
+                    for (int i = 0; i < periods.length; i++)
+                      BarChartGroupData(
+                        x: i,
+                        barRods: [
+                          BarChartRodData(
+                            toY: periods[i].total.toDouble(),
+                            color: _C.bar,
+                            width: 22,
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(6),
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+}

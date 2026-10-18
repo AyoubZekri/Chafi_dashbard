@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../core/class/Statusrequest.dart';
 import '../core/constant/FeedbackQuestions.dart';
+import '../core/functions/Snacpar copy.dart';
 import '../core/functions/handlingdatacontroller.dart';
 import '../core/services/Services.dart';
 
@@ -47,6 +48,22 @@ class Userscontroller extends GetxController {
     }
 
     update();
+  }
+
+  /// حذف مستخدم مع كل بياناته (من السيرفر ثم من الجدول)
+  Future<void> deletdata(int id) async {
+    var response = await usersdata.deletdata(id);
+    if (handlingData(response) == Statusrequest.success &&
+        response["status"] == 1) {
+      data.removeWhere((u) => u.id == id);
+      filteredData.removeWhere((u) => u.id == id);
+      // إذا فرغت الصفحة الحالية نرجع للصفحة السابقة
+      if (currentPage > 0 && currentPage >= totalPages) currentPage--;
+      update();
+      showSnackbar("نجاح".tr, "تم الحذف بنجاح".tr, Colors.green);
+    } else {
+      showSnackbar("خطأ".tr, "فشل الحذف".tr, Colors.red);
+    }
   }
 
   List<UserModel> get pagedData =>

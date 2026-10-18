@@ -1,3 +1,4 @@
+import '../../view/Widget/Home/TaxpayerStatsCards.dart' show RegistrationYearPeriod;
 class StateStats {
   final String state;
   final int dailyUser;
@@ -139,6 +140,9 @@ class DashboardStats {
   /// التسجيل في الإدارة الجبائية للمؤسسات: registered / not_registered / unknown
   final Map<String, int> taxRegistration;
 
+  /// المسجلون حسب سنة التسجيل (فترات)
+  final List<RegistrationYearPeriod> registrationYears;
+
   DashboardStats({
     required this.totalUsersEnter,
     required this.totalGuestsEnter,
@@ -164,6 +168,7 @@ class DashboardStats {
     required this.chartUsersGuestsData,
     this.taxpayerTypes = const {},
     this.taxRegistration = const {},
+    this.registrationYears = const [],
   });
 
   static Map<String, int> _counts(dynamic json) => json is Map
@@ -205,6 +210,8 @@ class DashboardStats {
           (j) => ChartUsersGuestsDataPoint.fromJson(j)),
       taxpayerTypes: _counts(json['taxpayer_types']),
       taxRegistration: _counts(json['tax_registration']),
+      registrationYears:
+          RegistrationYearPeriod.fromList(json['registration_years']),
     );
   }
 

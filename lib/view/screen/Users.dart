@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../Widget/Users/UserFeedbackDialog.dart';
 import '../../core/class/handlingview.dart';
+import '../../core/functions/Dealog.dart';
 
 import '../../data/model/UsersModel.dart';
 import '../Widget/TablePaginationFooter.dart';
@@ -112,7 +113,7 @@ class _UsersState extends State<Users> {
                     );
                   },
                 ),
-            
+
                 const SizedBox(height: 24),
 
                 // الجدول
@@ -192,7 +193,18 @@ class _UsersState extends State<Users> {
                                         ),
                                       ),
                                       DataCell(
-                                        Text(item.statsCount?.toString() ?? "0"),
+                                        Text(
+                                          item.isRegisteredTaxAdmin == true
+                                              ? item.registrationYear
+                                                        ?.toString() ??
+                                                    '-'
+                                              : '-',
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          item.statsCount?.toString() ?? "0",
+                                        ),
                                       ),
                                       DataCell(
                                         InkWell(
@@ -205,16 +217,30 @@ class _UsersState extends State<Users> {
                                             );
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 6,
+                                            ),
                                             decoration: BoxDecoration(
-                                              color: Colors.blue.withOpacity(0.1),
-                                              borderRadius: BorderRadius.circular(8),
-                                              border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                                              color: Colors.blue.withOpacity(
+                                                0.1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: Colors.blue.withOpacity(
+                                                  0.3,
+                                                ),
+                                              ),
                                             ),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                const Icon(Icons.remove_red_eye_outlined, size: 16, color: Colors.blue),
+                                                const Icon(
+                                                  Icons.remove_red_eye_outlined,
+                                                  size: 16,
+                                                  color: Colors.blue,
+                                                ),
                                                 const SizedBox(width: 8),
                                                 Text(
                                                   "view_feedback".tr,
@@ -224,17 +250,26 @@ class _UsersState extends State<Users> {
                                                     fontSize: 12,
                                                   ),
                                                 ),
-                                                if ((item.feedback?.length ?? 0) > 0) ...[
+                                                if ((item.feedback?.length ??
+                                                        0) >
+                                                    0) ...[
                                                   const SizedBox(width: 6),
                                                   Container(
-                                                    padding: const EdgeInsets.all(4),
-                                                    decoration: const BoxDecoration(
-                                                      color: Colors.blue,
-                                                      shape: BoxShape.circle,
-                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(4),
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                          color: Colors.blue,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
                                                     child: Text(
-                                                      item.feedback!.length.toString(),
-                                                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                                                      item.feedback!.length
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 10,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -248,6 +283,38 @@ class _UsersState extends State<Users> {
                                           item.createdAt.toString().substring(
                                             0,
                                             10,
+                                          ),
+                                        ),
+                                      ),
+                                      // حذف المستخدم مع كل بياناته
+                                      DataCell(
+                                        Tooltip(
+                                          message: "حذف المستخدم".tr,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              await showCustomConfirmationDialog(
+                                                context,
+                                                title: "تنبيه".tr,
+                                                message:
+                                                    "${"هل أنت متأكد من حذف المستخدم".tr} ${item.username}؟\n${"سيتم حذف كل بياناته نهائياً".tr}",
+                                                onConfirmAction: () {
+                                                  controller.deletdata(item.id);
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(6),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                color: Colors.white,
+                                                size: 18,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -329,9 +396,11 @@ class _UsersState extends State<Users> {
       DataColumn(label: Text('بريد الإلكتروني'.tr)),
       DataColumn(label: Text('المكلف بالضريبة'.tr)),
       DataColumn(label: Text('مسجل في الإدارة الجبائية'.tr)),
+      DataColumn(label: Text('سنة التسجيل'.tr)),
       DataColumn(label: Text('total_access_count'.tr)),
       DataColumn(label: Text('user_opinion'.tr)),
       DataColumn(label: Text('created_at'.tr)),
+      DataColumn(label: Text('actions'.tr)),
     ];
   }
 }

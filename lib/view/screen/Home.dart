@@ -178,6 +178,13 @@ class DashboardHome extends StatelessWidget {
                         : const {},
                   ),
                   const SizedBox(height: 20),
+                  // المسجلون حسب سنة التسجيل (أعمدة)
+                  RegistrationYearsChart(
+                    periods: controller.data.isNotEmpty
+                        ? controller.data[0].registrationYears
+                        : const [],
+                  ),
+                  const SizedBox(height: 20),
                   _buildServiceStatsGrid(controller),
                   const SizedBox(height: 20),
                   _buildAdvancedCharts(controller),
