@@ -65,23 +65,22 @@ class _C {
   static const faint = Color(0xFF94A3B8);
   static const line = Color(0xFFEDF2F7);
 
-  // لونان فئويان مُتحقق منهما (قابلان للتمييز لعمى الألوان)
+  // ألوان فئوية قابلة للتمييز لعمى الألوان
   static const registered = Color(0xFF2A78D6);
   static const notRegistered = Color(0xFFEB6834);
+  static const third = Color(0xFF14A38B);
 }
 
-/// إطار البطاقة: أيقونة، عنوان، وصف، وشارة الإجمالي
+/// إطار البطاقة: أيقونة، عنوان، وشارة الإجمالي
 class _Card extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String subtitle;
   final String badge;
   final Widget child;
 
   const _Card({
     required this.icon,
     required this.title,
-    required this.subtitle,
     required this.badge,
     required this.child,
   });
@@ -117,24 +116,13 @@ class _Card extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: _C.title,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12.5, color: _C.muted),
-                    ),
-                  ],
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: _C.title,
+                  ),
                 ),
               ),
               Container(
@@ -232,7 +220,6 @@ class _TaxpayerTypesCard extends StatelessWidget {
     return _Card(
       icon: Icons.badge_outlined,
       title: 'المكلفون بالضريبة'.tr,
-      subtitle: 'توزيع المستخدمين حسب الصفة'.tr,
       badge: '$total ${'مستخدم'.tr}',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -339,16 +326,46 @@ class _BarRow extends StatelessWidget {
 
 // ============================ التسجيل في الإدارة الجبائية ============================
 
-class _RegistrationCard extends StatefulWidget {
+class _RegistrationCard extends StatelessWidget {
   final Map<String, int> counts;
 
   const _RegistrationCard({required this.counts});
 
   @override
-  State<_RegistrationCard> createState() => _RegistrationCardState();
+  Widget build(BuildContext context) {
+    return _DonutCard(
+      icon: Icons.account_balance_outlined,
+      title: 'التسجيل في الإدارة الجبائية'.tr,
+      unit: 'مؤسسة'.tr,
+      parts: [
+        ('مسجل في الإدارة الجبائية'.tr, counts['registered'] ?? 0,
+            _C.registered),
+        ('غير مسجل'.tr, counts['not_registered'] ?? 0, _C.notRegistered),
+      ],
+    );
+  }
 }
 
-class _RegistrationCardState extends State<_RegistrationCard> {
+/// بطاقة دائرة (Donut): الوسط يعرض نسبة الجزء الأول أو الجزء تحت الفأرة،
+/// وتحتها قائمة الأجزاء بالعدد والنسبة
+class _DonutCard extends StatefulWidget {
+  final IconData icon;
+  final String title;
+  final String unit;
+  final List<(String, int, Color)> parts;
+
+  const _DonutCard({
+    required this.icon,
+    required this.title,
+    required this.unit,
+    required this.parts,
+  });
+
+  @override
+  State<_DonutCard> createState() => _DonutCardState();
+}
+
+class _DonutCardState extends State<_DonutCard> {
   int? hovered;
 
   void _hover(int? i) {
@@ -357,22 +374,21 @@ class _RegistrationCardState extends State<_RegistrationCard> {
 
   @override
   Widget build(BuildContext context) {
-    final parts = <(String, int, Color)>[
-      ('مسجل في الإدارة الجبائية'.tr, widget.counts['registered'] ?? 0,
-          _C.registered),
-      ('غير مسجل'.tr, widget.counts['not_registered'] ?? 0, _C.notRegistered),
-    ];
+    final parts = widget.parts;
     final total = parts.fold<int>(0, (a, p) => a + p.$2);
     double pct(int v) => total == 0 ? 0 : v * 100 / total;
 
-    // الوسط: المسجلون افتراضياً، أو الجزء الذي تمر عليه الفأرة
-    final focus = hovered ?? 0;
+    // الوسط: الجزء الأكبر افتراضياً، أو الجزء الذي تمر عليه الفأرة
+    int largest = 0;
+    for (int i = 1; i < parts.length; i++) {
+      if (parts[i].$2 > parts[largest].$2) largest = i;
+    }
+    final focus = hovered ?? largest;
 
     return _Card(
-      icon: Icons.account_balance_outlined,
-      title: 'التسجيل في الإدارة الجبائية'.tr,
-      subtitle: 'المؤسسات (ناشئة، مصغرة، أخرى)'.tr,
-      badge: '$total ${'مؤسسة'.tr}',
+      icon: widget.icon,
+      title: widget.title,
+      badge: '$total ${widget.unit}',
       child: Column(
         children: [
           SizedBox(
@@ -499,6 +515,59 @@ class _RegistrationCardState extends State<_RegistrationCard> {
   }
 }
 
+// ======================= طبيعة الشخص والنظام الجبائي =======================
+
+/// للمسجلين في الإدارة الجبائية: توزيعهم حسب طبيعة الشخص وحسب النظام الجبائي
+/// ("غير محدد" لمن سجلوا قبل إضافة الحقلين لا يظهر ولا يدخل في النسب)
+class RegisteredProfileCards extends StatelessWidget {
+  final Map<String, int> personTypes;
+  final Map<String, int> taxSystems;
+
+  const RegisteredProfileCards({
+    super.key,
+    required this.personTypes,
+    required this.taxSystems,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final person = _DonutCard(
+      icon: Icons.person_outline,
+      title: 'طبيعة الشخص'.tr,
+      unit: 'مسجل'.tr,
+      parts: [
+        ('شخص طبيعي'.tr, personTypes['natural'] ?? 0, _C.registered),
+        ('شخص معنوي'.tr, personTypes['legal'] ?? 0, _C.notRegistered),
+      ],
+    );
+    final system = _DonutCard(
+      icon: Icons.account_tree_outlined,
+      title: 'النظام الجبائي'.tr,
+      unit: 'مسجل'.tr,
+      parts: [
+        ('النظام الحقيقي'.tr, taxSystems['real'] ?? 0, _C.registered),
+        ('النظام الجزافي'.tr, taxSystems['flat_rate'] ?? 0, _C.notRegistered),
+        ('النظام المبسط'.tr, taxSystems['simplified'] ?? 0, _C.third),
+      ],
+    );
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < 900) {
+        return Column(children: [person, const SizedBox(height: 20), system]);
+      }
+      return IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: person),
+            const SizedBox(width: 20),
+            Expanded(child: system),
+          ],
+        ),
+      );
+    });
+  }
+}
+
 // ============================ سنوات التسجيل ============================
 
 /// فترة من سنوات التسجيل وعدد المسجلين فيها (من السيرفر)
@@ -539,7 +608,6 @@ class RegistrationYearsChart extends StatelessWidget {
     return _Card(
       icon: Icons.bar_chart_rounded,
       title: "سنوات التسجيل في الإدارة الجبائية".tr,
-      subtitle: "عدد المسجلين حسب سنة التسجيل".tr,
       badge: "$total ${"مسجل".tr}",
       child: SizedBox(
         height: 300,

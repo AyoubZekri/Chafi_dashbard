@@ -19,6 +19,27 @@ class Dashboardhomecontroller extends GetxController {
   int currentPage = 0;
   int rowsPerPage = 10;
 
+  /// فلتر الإقليم في جدول الولايات: 0 الكل، 1 الشمال، 2 الهضاب العليا، 3 الجنوب
+  int selectedRegion = 0;
+
+  /// فلتر الولاية: رمزها ("39")، فارغ = كل الولايات
+  String selectedWilaya = '';
+  String _query = '';
+
+  /// الولايات المتاحة في قائمة الفلتر (حسب الإقليم المختار، بدون غير المحدد)
+  List<StateStats> get wilayaOptions => alldata
+      .where(
+        (s) =>
+            s.code.isNotEmpty &&
+            (selectedRegion == 0 || s.region == selectedRegion),
+      )
+      .toList();
+
+  /// عدد الدخول (مستخدمون + ضيوف) في إقليم، 0 = كل الأقاليم
+  int regionTotal(int region) => alldata
+      .where((s) => region == 0 || s.region == region)
+      .fold(0, (sum, s) => sum + s.totalUser + s.totalG);
+
   Future<void> viewdata() async {
     statusrequest = Statusrequest.loadeng;
     update();
@@ -32,7 +53,7 @@ class Dashboardhomecontroller extends GetxController {
         var item = DashboardStats.fromJson(response['data']);
         data.add(item);
         alldata = item.data;
-        filteredData = List.from(alldata);
+        _applyFilters();
       } else {
         statusrequest = Statusrequest.failure;
       }
@@ -46,18 +67,40 @@ class Dashboardhomecontroller extends GetxController {
   int get totalPages => (filteredData.length / rowsPerPage).ceil();
 
   void filterData(String query) {
-    currentPage = 0;
-    if (query.isEmpty) {
-      filteredData = List.from(alldata);
-    } else {
-      filteredData = alldata
-          .where(
-            (item) => item.state.toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList();
-    }
-
+    _query = query.trim().toLowerCase();
+    _applyFilters();
     update();
+  }
+
+  void changeRegion(int region) {
+    selectedRegion = region;
+    // الولاية المختارة من إقليم آخر تُلغى
+    if (wilayaOptions.every((s) => s.code != selectedWilaya)) {
+      selectedWilaya = '';
+    }
+    _applyFilters();
+    update();
+  }
+
+  void changeWilaya(String code) {
+    selectedWilaya = code;
+    _applyFilters();
+    update();
+  }
+
+  /// البحث بالاسم (عربي/فرنسي) أو الرقم، مع فلتر الإقليم والولاية
+  void _applyFilters() {
+    currentPage = 0;
+    filteredData = alldata.where((item) {
+      final inRegion = selectedRegion == 0 || item.region == selectedRegion;
+      final inWilaya = selectedWilaya.isEmpty || item.code == selectedWilaya;
+      final matches =
+          _query.isEmpty ||
+          item.state.toLowerCase().contains(_query) ||
+          item.stateFr.toLowerCase().contains(_query) ||
+          item.code.contains(_query);
+      return inRegion && inWilaya && matches;
+    }).toList();
   }
 
   void nextPage() {
@@ -101,20 +144,32 @@ class Dashboardhomecontroller extends GetxController {
     if (rawData.isEmpty) return [];
 
     int padCount = 0;
-    if (usersGuestsFilter == 'daily') padCount = 7;
-    else if (usersGuestsFilter == 'weekly') padCount = 4;
-    else if (usersGuestsFilter == 'monthly') padCount = 6;
-    else if (usersGuestsFilter == 'yearly') padCount = 3;
+    if (usersGuestsFilter == 'daily')
+      padCount = 7;
+    else if (usersGuestsFilter == 'weekly')
+      padCount = 4;
+    else if (usersGuestsFilter == 'monthly')
+      padCount = 6;
+    else if (usersGuestsFilter == 'yearly')
+      padCount = 3;
 
     if (rawData.length < padCount) {
       List<ChartUsersGuestsDataPoint> paddedData = [];
       String lastDateStr = rawData.last.date;
-      
+
       for (int i = padCount - 1; i >= 0; i--) {
-        String targetDateStr = _calculatePreviousPeriod(lastDateStr, usersGuestsFilter, i);
+        String targetDateStr = _calculatePreviousPeriod(
+          lastDateStr,
+          usersGuestsFilter,
+          i,
+        );
         var existing = rawData.firstWhere(
           (element) => element.date == targetDateStr,
-          orElse: () => ChartUsersGuestsDataPoint(date: targetDateStr, usersCount: 0, guestsCount: 0),
+          orElse: () => ChartUsersGuestsDataPoint(
+            date: targetDateStr,
+            usersCount: 0,
+            guestsCount: 0,
+          ),
         );
         paddedData.add(existing);
       }
@@ -148,20 +203,34 @@ class Dashboardhomecontroller extends GetxController {
     if (rawData.isEmpty) return [];
 
     int padCount = 0;
-    if (statsFilter == 'daily') padCount = 7;
-    else if (statsFilter == 'weekly') padCount = 4;
-    else if (statsFilter == 'monthly') padCount = 6;
-    else if (statsFilter == 'yearly') padCount = 3;
+    if (statsFilter == 'daily')
+      padCount = 7;
+    else if (statsFilter == 'weekly')
+      padCount = 4;
+    else if (statsFilter == 'monthly')
+      padCount = 6;
+    else if (statsFilter == 'yearly')
+      padCount = 3;
 
     if (rawData.length < padCount) {
       List<ChartStatsDataPoint> paddedData = [];
       String lastDateStr = rawData.last.date;
-      
+
       for (int i = padCount - 1; i >= 0; i--) {
-        String targetDateStr = _calculatePreviousPeriod(lastDateStr, statsFilter, i);
+        String targetDateStr = _calculatePreviousPeriod(
+          lastDateStr,
+          statsFilter,
+          i,
+        );
         var existing = rawData.firstWhere(
           (element) => element.date == targetDateStr,
-          orElse: () => ChartStatsDataPoint(date: targetDateStr, type1: 0, type2: 0, type3: 0, type4: 0),
+          orElse: () => ChartStatsDataPoint(
+            date: targetDateStr,
+            type1: 0,
+            type2: 0,
+            type3: 0,
+            type4: 0,
+          ),
         );
         paddedData.add(existing);
       }
@@ -171,11 +240,23 @@ class Dashboardhomecontroller extends GetxController {
     return rawData;
   }
 
-  String _calculatePreviousPeriod(String lastDateStr, String filter, int subtractCount) {
+  String _calculatePreviousPeriod(
+    String lastDateStr,
+    String filter,
+    int subtractCount,
+  ) {
     try {
-      if (filter == 'daily' || (filter == 'weekly' && lastDateStr.contains('-') && lastDateStr.split('-').length == 3)) {
+      if (filter == 'daily' ||
+          (filter == 'weekly' &&
+              lastDateStr.contains('-') &&
+              lastDateStr.split('-').length == 3)) {
         DateTime date = DateTime.parse(lastDateStr);
-        return date.subtract(Duration(days: subtractCount * (filter == 'weekly' ? 7 : 1))).toString().split(' ')[0];
+        return date
+            .subtract(
+              Duration(days: subtractCount * (filter == 'weekly' ? 7 : 1)),
+            )
+            .toString()
+            .split(' ')[0];
       } else if (filter == 'monthly') {
         // Format: YYYY-MM
         int year = int.parse(lastDateStr.split('-')[0]);

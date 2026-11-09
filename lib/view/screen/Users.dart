@@ -4,7 +4,6 @@ import 'package:chafi_dashboard/controller/UsersController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../Widget/Users/UserFeedbackDialog.dart';
 import '../../core/class/handlingview.dart';
 import '../../core/functions/Dealog.dart';
 
@@ -193,6 +192,12 @@ class _UsersState extends State<Users> {
                                         ),
                                       ),
                                       DataCell(
+                                        Text(_personTypeLabel(item.personType)),
+                                      ),
+                                      DataCell(
+                                        Text(_taxSystemLabel(item.taxSystem)),
+                                      ),
+                                      DataCell(
                                         Text(
                                           item.isRegisteredTaxAdmin == true
                                               ? item.registrationYear
@@ -204,78 +209,6 @@ class _UsersState extends State<Users> {
                                       DataCell(
                                         Text(
                                           item.statsCount?.toString() ?? "0",
-                                        ),
-                                      ),
-                                      DataCell(
-                                        InkWell(
-                                          onTap: () {
-                                            Get.dialog(
-                                              UserFeedbackDialog(
-                                                feedback: item.feedback ?? [],
-                                                questions: controller.questions,
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 6,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue.withOpacity(
-                                                0.1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                color: Colors.blue.withOpacity(
-                                                  0.3,
-                                                ),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const Icon(
-                                                  Icons.remove_red_eye_outlined,
-                                                  size: 16,
-                                                  color: Colors.blue,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  "view_feedback".tr,
-                                                  style: const TextStyle(
-                                                    color: Colors.blue,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                  ),
-                                                ),
-                                                if ((item.feedback?.length ??
-                                                        0) >
-                                                    0) ...[
-                                                  const SizedBox(width: 6),
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.all(4),
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                          color: Colors.blue,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                    child: Text(
-                                                      item.feedback!.length
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 10,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ],
-                                            ),
-                                          ),
                                         ),
                                       ),
                                       DataCell(
@@ -363,6 +296,20 @@ class _UsersState extends State<Users> {
     'محاسب في القطاع العام': 'public_accountant',
   };
 
+  // طبيعة الشخص والنظام الجبائي للمسجل في الإدارة الجبائية
+  String _personTypeLabel(String? value) => switch (value) {
+    'natural' => 'شخص طبيعي'.tr,
+    'legal' => 'شخص معنوي'.tr,
+    _ => '-',
+  };
+
+  String _taxSystemLabel(String? value) => switch (value) {
+    'real' => 'النظام الحقيقي'.tr,
+    'flat_rate' => 'النظام الجزافي'.tr,
+    'simplified' => 'النظام المبسط'.tr,
+    _ => '-',
+  };
+
   String _taxpayerLabel(String? value) {
     final v = (value ?? '').trim();
     if (v.isEmpty) return '-';
@@ -396,9 +343,10 @@ class _UsersState extends State<Users> {
       DataColumn(label: Text('بريد الإلكتروني'.tr)),
       DataColumn(label: Text('المكلف بالضريبة'.tr)),
       DataColumn(label: Text('مسجل في الإدارة الجبائية'.tr)),
+      DataColumn(label: Text('طبيعة الشخص'.tr)),
+      DataColumn(label: Text('النظام الجبائي'.tr)),
       DataColumn(label: Text('سنة التسجيل'.tr)),
       DataColumn(label: Text('total_access_count'.tr)),
-      DataColumn(label: Text('user_opinion'.tr)),
       DataColumn(label: Text('created_at'.tr)),
       DataColumn(label: Text('actions'.tr)),
     ];

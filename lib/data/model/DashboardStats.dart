@@ -1,6 +1,12 @@
 import '../../view/Widget/Home/TaxpayerStatsCards.dart' show RegistrationYearPeriod;
 class StateStats {
+  /// رقم الولاية ("39")، فارغ لغير المحدد
+  final String code;
   final String state;
+  final String stateFr;
+
+  /// الإقليم: 1 الشمال، 2 الهضاب العليا، 3 الجنوب، 0 غير محدد
+  final int region;
   final int dailyUser;
   final int dailyG;
   final int totalUser;
@@ -8,7 +14,10 @@ class StateStats {
   final double dailyPercent;
 
   StateStats({
+    this.code = '',
     required this.state,
+    this.stateFr = '',
+    this.region = 0,
     required this.dailyUser,
     required this.dailyG,
     required this.totalUser,
@@ -18,7 +27,10 @@ class StateStats {
 
   factory StateStats.fromJson(Map<String, dynamic> json) {
     return StateStats(
+      code: json['code']?.toString() ?? '',
       state: json['state'] ?? '',
+      stateFr: json['state_fr']?.toString() ?? '',
+      region: int.tryParse(json['region']?.toString() ?? '') ?? 0,
       dailyUser: int.parse((json['dailyUser'] ?? 0).toString()),
       dailyG: int.parse((json['dailyG'] ?? 0).toString()),
       totalUser: int.parse((json['totalUser'] ?? 0).toString()),
@@ -143,6 +155,12 @@ class DashboardStats {
   /// المسجلون حسب سنة التسجيل (فترات)
   final List<RegistrationYearPeriod> registrationYears;
 
+  /// المسجلون حسب طبيعة الشخص: natural / legal / unknown
+  final Map<String, int> personTypes;
+
+  /// المسجلون حسب النظام الجبائي: real / flat_rate / simplified / unknown
+  final Map<String, int> taxSystems;
+
   DashboardStats({
     required this.totalUsersEnter,
     required this.totalGuestsEnter,
@@ -169,6 +187,8 @@ class DashboardStats {
     this.taxpayerTypes = const {},
     this.taxRegistration = const {},
     this.registrationYears = const [],
+    this.personTypes = const {},
+    this.taxSystems = const {},
   });
 
   static Map<String, int> _counts(dynamic json) => json is Map
@@ -210,6 +230,8 @@ class DashboardStats {
           (j) => ChartUsersGuestsDataPoint.fromJson(j)),
       taxpayerTypes: _counts(json['taxpayer_types']),
       taxRegistration: _counts(json['tax_registration']),
+      personTypes: _counts(json['person_types']),
+      taxSystems: _counts(json['tax_systems']),
       registrationYears:
           RegistrationYearPeriod.fromList(json['registration_years']),
     );

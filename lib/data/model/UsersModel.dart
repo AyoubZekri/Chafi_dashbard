@@ -13,6 +13,8 @@ class UserModel {
   final String? isTaxpayer; // المكلف بالضريبة (نوع أو وصف)
   final bool? isRegisteredTaxAdmin; // مسجل في الإدارة الجبائية
   final int? registrationYear; // سنة التسجيل (للمسجل فقط)
+  final String? personType; // طبيعة الشخص للمسجل: natural / legal
+  final String? taxSystem; // النظام الجبائي للمسجل: real / flat_rate / simplified
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -31,6 +33,8 @@ class UserModel {
     this.isTaxpayer,
     this.isRegisteredTaxAdmin,
     this.registrationYear,
+    this.personType,
+    this.taxSystem,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -60,6 +64,8 @@ class UserModel {
       registrationYear: int.tryParse(
         json['registration_year']?.toString() ?? '',
       ),
+      personType: json['person_type']?.toString(),
+      taxSystem: json['tax_system']?.toString(),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
