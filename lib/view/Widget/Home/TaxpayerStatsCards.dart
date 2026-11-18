@@ -22,11 +22,11 @@ class TaxpayerStatsCards extends StatelessWidget {
     'other_enterprise',
   ];
   static const List<String> individuals = [
+    'private_accountant',
+    'public_accountant',
     'student',
     'researcher',
     'tax_interested',
-    'private_accountant',
-    'public_accountant',
   ];
 
   @override
@@ -169,11 +169,10 @@ class _TaxpayerTypesCard extends StatelessWidget {
       ...TaxpayerStatsCards.enterprises,
       ...TaxpayerStatsCards.individuals,
     ].map(_count).fold<int>(0, (a, b) => a + b);
-    List<String> sorted(List<String> types) =>
-        [...types]..sort((a, b) => _count(b).compareTo(_count(a)));
-    // المؤسسات بترتيب ثابت: ناشئة، مصغرة، أخرى
+    // نفس ترتيب الصفات في التطبيق (ناشئة، مصغرة، أخرى، محاسب خاص، محاسب عام،
+    // طالب، باحث، مهتم) مهما كان العدد
     const ent = TaxpayerStatsCards.enterprises;
-    final ind = sorted(TaxpayerStatsCards.individuals);
+    const ind = TaxpayerStatsCards.individuals;
     // طول الشريط نسبةً لأكبر قيمة، والنسبة المكتوبة من الإجمالي
     final maxCount = [...ent, ...ind]
         .map(_count)
@@ -336,7 +335,7 @@ class _RegistrationCard extends StatelessWidget {
     return _DonutCard(
       icon: Icons.account_balance_outlined,
       title: 'التسجيل في الإدارة الجبائية'.tr,
-      unit: 'مؤسسة'.tr,
+      unit: 'مستخدم'.tr,
       parts: [
         ('مسجل في الإدارة الجبائية'.tr, counts['registered'] ?? 0,
             _C.registered),
@@ -546,8 +545,8 @@ class RegisteredProfileCards extends StatelessWidget {
       unit: 'مسجل'.tr,
       parts: [
         ('النظام الحقيقي'.tr, taxSystems['real'] ?? 0, _C.registered),
-        ('النظام الجزافي'.tr, taxSystems['flat_rate'] ?? 0, _C.notRegistered),
-        ('النظام المبسط'.tr, taxSystems['simplified'] ?? 0, _C.third),
+        ('النظام المبسط'.tr, taxSystems['simplified'] ?? 0, _C.notRegistered),
+        ('النظام الجزافي'.tr, taxSystems['flat_rate'] ?? 0, _C.third),
       ],
     );
     return LayoutBuilder(builder: (context, constraints) {
